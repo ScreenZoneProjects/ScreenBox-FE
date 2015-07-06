@@ -18,8 +18,7 @@
 #
 #
 
-
-QT       += core gui xml
+QT += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,8 +27,36 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-
 SOURCES += src/main.cpp\
-        src/Frontend.cpp
+    src/Frontend.cpp \
+    src/CRom.cpp \
+    src/CGame.cpp \
+    src/CGenre.cpp \
+    src/CRegion.cpp \
+    src/CDeveloper.cpp \
+    src/CSystem.cpp \
+    src/CManufacturer.cpp \
+    src/CPlatform.cpp \
+    src/CHyperSpinTheme.cpp \
+    src/CFranchise.cpp \
+    src/CRocketLauncher.cpp \
+    src/CHyperSpinThemeVideo.cpp \
+    src/CHyperSpinThemeArtwork.cpp \
+    src/CHyperSpinThemeParticle.cpp
 
-HEADERS  += src/Frontend.h
+HEADERS  += \
+    src/CRom.hpp \
+    src/CGame.hpp \
+    src/CGenre.hpp \
+    src/CRegion.hpp \
+    src/CDeveloper.hpp \
+    src/CSystem.hpp \
+    src/CManufacturer.hpp \
+    src/CPlatform.hpp \
+    src/Frontend.hpp \
+    src/CHyperSpinTheme.hpp \
+    src/CFranchise.hpp \
+    src/CRocketLauncher.hpp \
+    src/CHyperSpinThemeVideo.hpp \
+    src/CHyperSpinThemeArtwork.hpp \
+    src/CHyperSpinThemeParticle.hpp

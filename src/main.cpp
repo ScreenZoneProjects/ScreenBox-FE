@@ -18,7 +18,7 @@
 *
 */
 
-#include "Frontend.h"
+#include "Frontend.hpp"
 #include <QApplication>
 
 int main(int argc, char *argv[])
