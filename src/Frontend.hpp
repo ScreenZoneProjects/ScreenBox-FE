@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef FRONTEND_H
-#define FRONTEND_H
+#pragma once
 
 #include <QMainWindow>
 
@@ -31,5 +30,3 @@ public:
     Frontend(QWidget *parent = 0);
     ~Frontend();
 };
-
-#endif // FRONTEND_H

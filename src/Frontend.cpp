@@ -18,7 +18,7 @@
 *
 */
 
-#include "Frontend.h"
+#include "Frontend.hpp"
 
 Frontend::Frontend(QWidget *parent)
     : QMainWindow(parent)
