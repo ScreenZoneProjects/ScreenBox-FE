@@ -1,9 +1,19 @@
 #pragma once
 
+#include "CHyperSpinThemeMedia.hpp"
+
 class CHyperSpinThemeVideo
 {
 public:
 	CHyperSpinThemeVideo();
+
+	enum EForceAspect
+	{
+		EForceAspect_None,
+		EForceAspect_Horizontal,
+		EForceAspect_Vertical,
+		EForceAspect_Both
+	};
 
 private:
 	float m_f32Width;
@@ -17,7 +27,7 @@ private:
 	bool m_bIsOverlayBelow;
 	float m_f32OverlayOffsetX;
 	float m_f32OverlayOffsetY;
-	// forceaspect
+
 	float m_f32Delay;
 	float m_f32Time;
 	int m_int32BSize;
@@ -26,8 +36,11 @@ private:
 	int m_int32BColor;
 	int m_int32BColor2;
 	int m_int32BColor3;
-	//int m_int32BShape;
-	//int m_int32Type;
-	//int m_int32Start;
-	//int m_int32Rest;
+
+
+	CHyperSpinThemeMedia::EStartingPosition m_eStartingPosition;
+	CHyperSpinThemeMedia::EAnimationType m_eAnimationType;
+	CHyperSpinThemeMedia::ERestingAnimation m_eRestingAnimation;
+
+	bool m_bIsBelowWheel;
 };

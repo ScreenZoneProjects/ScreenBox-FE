@@ -42,7 +42,8 @@ SOURCES += src/main.cpp\
     src/CRocketLauncher.cpp \
     src/CHyperSpinThemeVideo.cpp \
     src/CHyperSpinThemeArtwork.cpp \
-    src/CHyperSpinThemeParticle.cpp
+    src/CHyperSpinThemeParticle.cpp \
+    src/CHyperSpinThemeMedia.cpp
 
 HEADERS  += \
     src/CRom.hpp \
@@ -59,4 +60,13 @@ HEADERS  += \
     src/CRocketLauncher.hpp \
     src/CHyperSpinThemeVideo.hpp \
     src/CHyperSpinThemeArtwork.hpp \
-    src/CHyperSpinThemeParticle.hpp
+    src/CHyperSpinThemeParticle.hpp \
+    src/CHyperSpinThemeMedia.hpp
+
+RESOURCES += \
+    Resource.qrc \
+    qml.qrc
+
+DISTFILES += \
+    MainForm.ui.qml \
+    HyperSpinWheel.qml
