@@ -18,14 +18,30 @@
 *
 */
 
-#include "Frontend.hpp"
+#include "core/Frontend.hpp"
+#include "utils/AppIntegrity.hpp"
 #include <QApplication>
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
+
+    AppIntegrity ai;
+
+    if(ai.getStatus() == AppIntegrity::ERROR){
+        QMessageBox alert(QMessageBox::Icon::Critical,"Error","Error(s) found in your application directories !");
+        alert.setInformativeText("Error code : ");
+        alert.setDetailedText(ai.getDetails());
+        alert.exec();
+        return -1;
+    }
+
     Frontend frontend;
     frontend.show();
 
+
     return application.exec();
 }
+
+

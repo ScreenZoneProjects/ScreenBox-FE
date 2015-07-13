@@ -28,45 +28,46 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += src/main.cpp\
-    src/Frontend.cpp \
-    src/CRom.cpp \
-    src/CGame.cpp \
-    src/CGenre.cpp \
-    src/CRegion.cpp \
-    src/CDeveloper.cpp \
-    src/CSystem.cpp \
-    src/CManufacturer.cpp \
-    src/CPlatform.cpp \
-    src/CHyperSpinTheme.cpp \
-    src/CFranchise.cpp \
-    src/CRocketLauncher.cpp \
-    src/CHyperSpinThemeVideo.cpp \
-    src/CHyperSpinThemeArtwork.cpp \
-    src/CHyperSpinThemeParticle.cpp \
-    src/CHyperSpinThemeMedia.cpp
+    src/core/Frontend.cpp \
+#    src/core/CRom.cpp \
+#    src/core/CGame.cpp \
+#    src/core/CGenre.cpp \
+#    src/core/CRegion.cpp \
+#    src/core/CDeveloper.cpp \
+#    src/core/CSystem.cpp \
+#    src/core/CManufacturer.cpp \
+#    src/core/CPlatform.cpp \
+#    src/core/CHyperSpinTheme.cpp \
+#    src/core/CFranchise.cpp \
+#    src/core/CRocketLauncher.cpp \
+#    src/core/CHyperSpinThemeVideo.cpp \
+#    src/core/CHyperSpinThemeArtwork.cpp \
+#    src/core/CHyperSpinThemeParticle.cpp \
+#    src/core/CHyperSpinThemeMedia.cpp \
+    src/utils/IniParser.cpp \
+    src/utils/XmlParser.cpp \
+    src/utils/AppIntegrity.cpp
 
-HEADERS  += \
-    src/CRom.hpp \
-    src/CGame.hpp \
-    src/CGenre.hpp \
-    src/CRegion.hpp \
-    src/CDeveloper.hpp \
-    src/CSystem.hpp \
-    src/CManufacturer.hpp \
-    src/CPlatform.hpp \
-    src/Frontend.hpp \
-    src/CHyperSpinTheme.hpp \
-    src/CFranchise.hpp \
-    src/CRocketLauncher.hpp \
-    src/CHyperSpinThemeVideo.hpp \
-    src/CHyperSpinThemeArtwork.hpp \
-    src/CHyperSpinThemeParticle.hpp \
-    src/CHyperSpinThemeMedia.hpp
+HEADERS  += src/core/Frontend.hpp \
+#    src/core/CRom.hpp \
+#    src/core/CGame.hpp \
+#    src/core/CGenre.hpp \
+#    src/coreCRegion.hpp \
+#    src/core/CDeveloper.hpp \
+#    src/core/CSystem.hpp \
+#    src/core/CManufacturer.hpp \
+#    src/core/CPlatform.hpp \
+#    src/core/CHyperSpinTheme.hpp \
+#    src/core/CFranchise.hpp \
+#    src/core/CRocketLauncher.hpp \
+#    src/core/CHyperSpinThemeVideo.hpp \
+#    src/core/CHyperSpinThemeArtwork.hpp \
+#    src/core/CHyperSpinThemeParticle.hpp \
+#    src/core/CHyperSpinThemeMedia.hpp \
+    src/utils/IniParser.hpp \
+    src/utils/XmlParser.hpp \
+    src/utils/AppIntegrity.hpp
 
-RESOURCES += \
-    Resource.qrc \
-    qml.qrc
+RESOURCES +=
 
-DISTFILES += \
-    MainForm.ui.qml \
-    HyperSpinWheel.qml
+DISTFILES +=
