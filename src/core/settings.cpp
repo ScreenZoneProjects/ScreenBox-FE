@@ -51,23 +51,18 @@ Settings::~Settings()
 
 QString Settings::Frontend(QString section, QString key)
 {
-    std::map<QString, std::map<QString, QString> > map = m_frontendSettings;
-    std::map<QString, QString> secMap = map[section];
-    return secMap[key];
+    return m_frontendSettings[section][key];
 }
 
 QString Settings::MainMenu(QString section, QString key)
 {
-    std::map<QString, std::map<QString, QString> > map = m_mainMenuSettings;
-    std::map<QString, QString> secMap = map[section];
-    return secMap[key];
+    return m_mainMenuSettings[section][key];
 }
 
 QString Settings::System(QString systemName, QString section, QString key)
 {
     std::map<QString, std::map<QString, QString> > map = m_systemSettings(systemName);
-    std::map<QString, QString> secMap = map[section];
-    return secMap[key];
+    return map[section][key];
 }
 
 void Settings::initMenuSettings()

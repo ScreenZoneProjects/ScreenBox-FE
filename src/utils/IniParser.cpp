@@ -26,7 +26,6 @@
 #include <QString>
 #include "IniParser.hpp"
 
-
 int IniParser::read(const QString filePath){
 
     QFileInfo pathInfo = QFileInfo(QString(filePath));
@@ -52,9 +51,11 @@ int IniParser::read(const QString filePath){
     {
         QString line = in.readLine();
 
+
         line.remove(QRegExp("/\r?\n|\r/"));
 
         if (line.indexOf("[") == 0) {
+
             std::map<QString, QString> sectionMap;
             m_sectionName = line.remove(QChar('[')).remove(QChar(']'));
             m_iniMap[m_sectionName] = sectionMap;
@@ -63,12 +64,12 @@ int IniParser::read(const QString filePath){
         {
             if (line.size() > 0)
             {
+
                 QStringList keyValue = line.split("=");
                 if (keyValue.size() == 2){
                     QString entryName = keyValue.at(0);
                     QString value = keyValue.at(1);
-                    std::map <QString, QString> section = m_iniMap[m_sectionName];
-                    section[entryName] = value;
+                    m_iniMap[m_sectionName][entryName] = value;
                 }
 
             }
