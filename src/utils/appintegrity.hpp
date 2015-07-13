@@ -50,6 +50,8 @@ public:
 
             NO_FRONTEND_MEDIA_DIR,
                 NO_FRONTEND_IMAGES_MEDIA_DIR,
+                    NO_SCANLINES_DIR,
+                        NO_SCANLINES_PNG,
                     NO_Menu_Exit_Arrow_PNG,
                     NO_Menu_Exit_Background_PNG,
                     NO_Menu_Favorites_Arrow_PNG,
@@ -73,6 +75,7 @@ public:
                     NO_No_Video_FLV,
 
             NO_MAIN_MENU_MEDIA_DIR,
+                NO_Sound_Wheel_Click_MP3,
                 NO_MAIN_MENU_IMAGES_MEDIA_DIR,
                     NO_MAIN_MENU_OTHER_IMAGES_MEDIA_DIR,
                         NO_Pointer_PNG,

@@ -52,6 +52,9 @@ AppIntegrity::AppIntegrity(Settings settings)
     QString fSoundsMediaDirPath  = frontendMediaDirPath+QString("/Sounds");
     QString fVideoMediaDirPath   = frontendMediaDirPath+QString("/Video");
 
+    if(settings.MainMenu("video default","path") != fVideoMediaDirPath && settings.MainMenu("video default","path") != ""){
+        fVideoMediaDirPath = settings.MainMenu("video default","path");
+    }
 
     QString menuExitArrowImg     = fImagesMediaDirPath+QString("/Menu_Exit_Arrow.png");
     QString menuExitBgImg        = fImagesMediaDirPath+QString("/Menu_Exit_Background.png");
@@ -71,9 +74,13 @@ AppIntegrity::AppIntegrity(Settings settings)
     QString soundWheelIn         = fSoundsMediaDirPath+QString("/Sound_Wheel_In.mp3");
     QString soundWheelJump       = fSoundsMediaDirPath+QString("/Sound_Wheel_Jump.mp3");
     QString soundWheelOut        = fSoundsMediaDirPath+QString("/Sound_Wheel_Out.mp3");
+    QString soundWheelClick      = mainMenuMediaDirPath+QString("/Sound/Wheel Click.mp3");
+
 
     QString intro                = fVideoMediaDirPath+QString("/Intro.flv");
     QString noVideo              = fVideoMediaDirPath+QString("/No Video.flv");
+
+    QString scanlinesDirPath     = fImagesMediaDirPath+QString("/Scanlines");
 
 
     if(!QDir(databasesDirPath).exists()){
@@ -152,30 +159,41 @@ AppIntegrity::AppIntegrity(Settings settings)
         m_details += "Dir Not Found : " +fVideoMediaDirPath + "\n";
     }
 
-    if(!QFileInfo(menuExitArrowImg).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Menu_Exit_Arrow_PNG);
-        m_details += "File Not Found : " +menuExitArrowImg + "\n";
+    if(settings.Frontend("Main", "Enable_Exit_Menu") == "true"){
+
+        if(!QFileInfo(menuExitArrowImg).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Menu_Exit_Arrow_PNG);
+            m_details += "File Not Found : " +menuExitArrowImg + "\n";
+        }
+
+        if(!QFileInfo(menuExitBgImg).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Menu_Exit_Background_PNG);
+            m_details += "File Not Found : " +menuExitBgImg + "\n";
+        }
+
+        if(!QFileInfo(textEditNoImg).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Text_Edit_No_PNG);
+            m_details += "File Not Found : " +textEditNoImg + "\n";
+        }
+
+        if(!QFileInfo(textEditWouldImg).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Text_Edit_WouldYouLikeToExit_PNG);
+            m_details += "File Not Found : " +textEditWouldImg + "\n";
+        }
+
+        if(!QFileInfo(textEditYesImg).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Text_Edit_Yes_PNG);
+            m_details += "File Not Found : " +textEditYesImg + "\n";
+        }
+
     }
 
-    if(!QFileInfo(menuExitBgImg).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Menu_Exit_Background_PNG);
-        m_details += "File Not Found : " +menuExitBgImg + "\n";
-    }
 
-    if(!QFileInfo(textEditNoImg).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Text_Edit_No_PNG);
-        m_details += "File Not Found : " +textEditNoImg + "\n";
-    }
 
-    if(!QFileInfo(textEditWouldImg).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Text_Edit_WouldYouLikeToExit_PNG);
-        m_details += "File Not Found : " +textEditWouldImg + "\n";
-    }
 
-    if(!QFileInfo(textEditYesImg).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Text_Edit_Yes_PNG);
-        m_details += "File Not Found : " +textEditYesImg + "\n";
-    }
+
+
+
 
     if(!QFileInfo(textFavAddImg).exists()){
         m_errors.append(AppIntegrity::ERR::NO_Text_Favorites_AddToFavorites_PNG);
@@ -203,40 +221,54 @@ AppIntegrity::AppIntegrity(Settings settings)
     }
 
 
-    if(!QFileInfo(soundLetterClick).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Sound_Letter_Click_MP3);
-        m_details += "File Not Found : " +soundLetterClick + "\n";
+    if(settings.MainMenu("sounds","game_sounds") == "true"){
+
+        if(!QFileInfo(soundLetterClick).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Sound_Letter_Click_MP3);
+            m_details += "File Not Found : " +soundLetterClick + "\n";
+        }
+
+        if(!QFileInfo(soundScreenClick).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Sound_Screen_Click_MP3);
+            m_details += "File Not Found : " +soundScreenClick + "\n";
+        }
+
+        if(!QFileInfo(soundScreenIn).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Sound_Screen_In_MP3);
+            m_details += "File Not Found : " +soundScreenIn + "\n";
+        }
+
+        if(!QFileInfo(soundScreenOut).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Sound_Screen_Out_MP3);
+            m_details += "File Not Found : " +soundScreenOut + "\n";
+        }
+
+        if(settings.MainMenu("sounds","wheel_click") == "true"){
+
+            if(!QFileInfo(soundWheelIn).exists()){
+                m_errors.append(AppIntegrity::ERR::NO_Sound_Wheel_In_MP3);
+                m_details += "File Not Found : " +soundWheelIn + "\n";
+            }
+
+            if(!QFileInfo(soundWheelJump).exists()){
+                m_errors.append(AppIntegrity::ERR::NO_Sound_Wheel_Jump_MP3);
+                m_details += "File Not Found : " +soundWheelJump + "\n";
+            }
+
+            if(!QFileInfo(soundWheelOut).exists()){
+                m_errors.append(AppIntegrity::ERR::NO_Sound_Wheel_Out_MP3);
+                m_details += "File Not Found : " +soundWheelOut + "\n";
+            }
+
+            if(!QFileInfo(soundWheelClick).exists()){
+                 m_errors.append(AppIntegrity::ERR::NO_Sound_Wheel_Click_MP3);
+                 m_details += "File Not Found : " +soundWheelClick + "\n";
+            }
+
+        }
+
     }
 
-    if(!QFileInfo(soundScreenClick).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Sound_Screen_Click_MP3);
-        m_details += "File Not Found : " +soundScreenClick + "\n";
-    }
-
-    if(!QFileInfo(soundScreenIn).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Sound_Screen_In_MP3);
-        m_details += "File Not Found : " +soundScreenIn + "\n";
-    }
-
-    if(!QFileInfo(soundScreenOut).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Sound_Screen_Out_MP3);
-        m_details += "File Not Found : " +soundScreenOut + "\n";
-    }
-
-    if(!QFileInfo(soundWheelIn).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Sound_Wheel_In_MP3);
-        m_details += "File Not Found : " +soundWheelIn + "\n";
-    }
-
-    if(!QFileInfo(soundWheelJump).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Sound_Wheel_Jump_MP3);
-        m_details += "File Not Found : " +soundWheelJump + "\n";
-    }
-
-    if(!QFileInfo(soundWheelOut).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Sound_Wheel_Out_MP3);
-        m_details += "File Not Found : " +soundWheelOut + "\n";
-    }
 
 
     if(!QFileInfo(wheelPointerImg).exists()){
@@ -244,15 +276,33 @@ AppIntegrity::AppIntegrity(Settings settings)
         m_details += "File Not Found : " +wheelPointerImg + "\n";
     }
 
-    if(!QFileInfo(intro).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_Intro_FLV);
-        m_details += "File Not Found : " +intro + "\n";
+
+    if(settings.Frontend("IntroVideo","Use_intro") == "false"){
+        if(!QFileInfo(intro).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_Intro_FLV);
+            m_details += "File Not Found : " +intro + "\n";
+        }
+    }
+    else {
+        if(!QFileInfo(noVideo).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_No_Video_FLV);
+            m_details += "File Not Found : " +noVideo + "\n";
+        }
     }
 
-    if(!QFileInfo(noVideo).exists()){
-        m_errors.append(AppIntegrity::ERR::NO_No_Video_FLV);
-        m_details += "File Not Found : " +noVideo + "\n";
+    if(settings.Frontend("Resolution","Scanlines_Active") == "true"){
+        if(!QDir(scanlinesDirPath).exists()){
+            m_errors.append(AppIntegrity::ERR::NO_SCANLINES_DIR);
+            m_details += "Dir Not Found : " +scanlinesDirPath + "\n";
+        }
+        else if(QDir(scanlinesDirPath).entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries).count() == 0) {
+            m_errors.append(AppIntegrity::ERR::NO_SCANLINES_PNG);
+            m_details += "Files Not Found : " +scanlinesDirPath + "\n";
+        }
     }
+
+
+
 
 
 
