@@ -28,7 +28,8 @@ int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
 
-    AppIntegrity ai;
+    Settings settings;
+    AppIntegrity ai(settings);
 
     if(ai.getStatus() == AppIntegrity::ERROR){
         QMessageBox alert(QMessageBox::Icon::Critical,"Error","Error(s) found in your application directories !");
@@ -38,7 +39,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    Settings settings;
+
 
     Frontend frontend;
     frontend.show();

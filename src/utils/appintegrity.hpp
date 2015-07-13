@@ -23,6 +23,7 @@
 
 #include <QList>
 #include <QString>
+#include "../core/Settings.hpp"
 
 class AppIntegrity
 {
@@ -80,7 +81,7 @@ public:
 
     };
 
-    AppIntegrity();
+    AppIntegrity(Settings settings);
 
     QList<int> getErrors();
 

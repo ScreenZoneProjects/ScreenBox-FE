@@ -24,8 +24,9 @@
 #include <QString>
 #include <QList>
 #include <QFileInfo>
+#include "../core/Settings.hpp"
 
-AppIntegrity::AppIntegrity()
+AppIntegrity::AppIntegrity(Settings settings)
 {
     m_details = "Checking application directory :\n";
     QString currentDir           = QDir().currentPath();
