@@ -52,6 +52,69 @@ QString Settings::System(QString systemName, QString section, QString key)
 
 void Settings::initMenuSettings()
 {
+    m_ms_wheel["alpha"]                          = ".15";
+    m_ms_wheel["small"]                          = "1";
+    m_ms_wheel["style"]                          = "normal";
+    m_ms_wheel["speed"]                          = "high";
+    m_ms_wheel["vert_wheel_position"]            = "right";
+    m_ms_wheel["norm_large"]                     = "468";
+    m_ms_wheel["norm_small"]                     = "230";
+    m_ms_wheel["vert_large"]                     = "400";
+    m_ms_wheel["vert_small"]                     = "240";
+    m_ms_wheel["pin_large"]                      = "500";
+    m_ms_wheel["pin_small"]                      = "200";
+    m_ms_wheel["horz_large"]                     = "400";
+    m_ms_wheel["horz_small"]                     = "100";
+    m_ms_wheel["horz_wheel_y"]                   = "700";
+    m_ms_wheel["text_width"]                     = "700";
+    m_ms_wheel["text_font"]                      = "Style4";
+    m_ms_wheel["small_text_width"]               = "260";
+    m_ms_wheel["large_text_width"]               = "400";
+    m_ms_wheel["text_stroke_size"]               = "7";
+    m_ms_wheel["text_stroke_color"]              = "0x000000";
+    m_ms_wheel["text_color1"]                    = "0x00BFFD";
+    m_ms_wheel["text_color2"]                    = "0xFFFFFF";
+    m_ms_wheel["text_color3"]                    = "0x00BFFD";
+    m_ms_wheel["color_ratio"]                    = "1";
+    m_ms_wheel["shadow_distance"]                = "6";
+    m_ms_wheel["shadow_angle"]                   = "45";
+    m_ms_wheel["shadow_color"]                   = "0x000000";
+    m_ms_wheel["shadow_alpha"]                   = "1";
+    m_ms_wheel["shadow_blur"]                    = "0";
+
+    m_ms_pointer["animated"]                     = "true";
+    m_ms_pointer["x"]                            = "965";
+    m_ms_pointer["y"]                            = "384";
+
+    m_ms_videodefaults["path"]                   = "Media/Main Menu/Video";
+
+    m_ms_sounds["game_sounds"]                   = "true";
+    m_ms_sounds["wheel_click"]                   = "true";
+
+    m_ms_spearta["default"]                      = "true";
+    m_ms_spearta["active"]                       = "true";
+    m_ms_spearta["x"]                            = "512";
+    m_ms_spearta["y"]                            = "720";
+    m_ms_spearta["in"]                           = ".4";
+    m_ms_spearta["out"]                          = ".4";
+    m_ms_spearta["length"]                       = "3";
+    m_ms_spearta["delay"]                        = ".1";
+    m_ms_spearta["type"]                         = "normal";
+    m_ms_spearta["start"]                        = "bottom";
+
+    m_ms_speartb["default"]                      = "true";
+    m_ms_speartb["active"]                       = "true";
+    m_ms_speartb["x"]                            = "512";
+    m_ms_speartb["y"]                            = "720";
+    m_ms_speartb["in"]                           = ".4";
+    m_ms_speartb["out"]                          = ".4";
+    m_ms_speartb["length"]                       = "3";
+    m_ms_speartb["delay"]                        = ".1";
+    m_ms_speartb["type"]                         = "fade";
+    m_ms_speartb["start"]                        = "none";
+
+
+
     m_mainMenuSettings["wheel"]                  = m_ms_wheel;
     m_mainMenuSettings["pointer"]                = m_ms_pointer;
     m_mainMenuSettings["video defaults"]         = m_ms_videodefaults;
