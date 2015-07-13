@@ -46,7 +46,8 @@ SOURCES += src/main.cpp\
 #    src/core/CHyperSpinThemeMedia.cpp \
     src/utils/IniParser.cpp \
     src/utils/XmlParser.cpp \
-    src/utils/AppIntegrity.cpp
+    src/utils/AppIntegrity.cpp \
+    src/core/Settings.cpp
 
 HEADERS  += src/core/Frontend.hpp \
 #    src/core/CRom.hpp \
@@ -66,7 +67,8 @@ HEADERS  += src/core/Frontend.hpp \
 #    src/core/CHyperSpinThemeMedia.hpp \
     src/utils/IniParser.hpp \
     src/utils/XmlParser.hpp \
-    src/utils/AppIntegrity.hpp
+    src/utils/AppIntegrity.hpp \
+    src/core/Settings.hpp
 
 RESOURCES +=
 

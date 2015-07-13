@@ -20,6 +20,7 @@
 
 #include "core/Frontend.hpp"
 #include "utils/AppIntegrity.hpp"
+#include "core/Settings.hpp"
 #include <QApplication>
 #include <QMessageBox>
 
@@ -36,6 +37,8 @@ int main(int argc, char *argv[])
         alert.exec();
         return -1;
     }
+
+    Settings settings;
 
     Frontend frontend;
     frontend.show();

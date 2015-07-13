@@ -26,21 +26,26 @@
 #include <QString>
 #include "IniParser.hpp"
 
+#include <iostream>
+
 int IniParser::read(const QString filePath){
 
     QFileInfo pathInfo = QFileInfo(QString(filePath));
     QDir dirPath = pathInfo.absoluteDir();
 
     if (!dirPath.exists()){
+        std::cout << "no dir" << std::endl;
         return IniParser::ERR::NO_DIRECTORY;
     }
 
     if(!pathInfo.exists()){
+        std::cout << "no file" << std::endl;
         return IniParser::ERR::NO_FILE;
     }
 
     QFile file(pathInfo.absoluteFilePath());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        std::cout << "no access" << std::endl;
         return IniParser::ERR::NO_READ_ACCESS;
     }
 
@@ -86,10 +91,15 @@ int IniParser::write(const QString filePath, std::map<QString, std::map<QString,
     QDir dirPath = pathInfo.absoluteDir();
 
     if(!dirPath.exists())
+    {
+        std::cout << "no dir" << std::endl;
         if(!QDir().mkpath(pathInfo.absolutePath()))
+        {
+            std::cout << "can't mkdir" << std::endl;
             return IniParser::ERR::NO_WRITE_ACCESS;
-
-    QFile file(pathInfo.absolutePath());
+        }
+    }
+    QFile file(pathInfo.absoluteFilePath());
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         return IniParser::ERR::NO_WRITE_ACCESS;
