@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef APPINTEGRITY_H
-#define APPINTEGRITY_H
+#pragma once
 
 #include <QList>
 #include <QString>
@@ -94,5 +93,3 @@ public:
 
     QString getDetails();
 };
-
-#endif // APPINTEGRITY_H

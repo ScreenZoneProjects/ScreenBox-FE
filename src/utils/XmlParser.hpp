@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef XMLPARSER_H
-#define XMLPARSER_H
+#pragma once
 
 #include <QDomDocument>
 #include <QList>
@@ -29,7 +28,8 @@ class XmlParser
 {
 public:
 
-    enum ERR : unsigned int {
+	enum ERR : unsigned int
+	{
         NONE,
         NO_READ_ACCESS,
         NO_FILE,
@@ -54,8 +54,7 @@ private:
 
     int fillThemeMap(QDomElement theme);
 
-    std::map<QString, QString> populateThemeNode(QDomElement element, const char * type);
+	std::map<QString, QString> populateThemeNode(QDomElement element, QString type);
 
 };
 
-#endif // XMLPARSER_H

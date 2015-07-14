@@ -24,14 +24,16 @@
 #include <QTextStream>
 #include <QFileInfo>
 #include <QString>
+
 #include "IniParser.hpp"
 
-int IniParser::read(const QString filePath){
-
+int IniParser::read(const QString filePath)
+{
     QFileInfo pathInfo = QFileInfo(QString(filePath));
     QDir dirPath = pathInfo.absoluteDir();
 
-    if (!dirPath.exists()){
+	if (!dirPath.exists())
+	{
         return IniParser::ERR::NO_DIRECTORY;
     }
 
@@ -40,7 +42,8 @@ int IniParser::read(const QString filePath){
     }
 
     QFile file(pathInfo.absoluteFilePath());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
         return IniParser::ERR::NO_READ_ACCESS;
     }
 
@@ -54,8 +57,8 @@ int IniParser::read(const QString filePath){
 
         line.remove(QRegExp("/\r?\n|\r/"));
 
-        if (line.indexOf("[") == 0) {
-
+		if (line.indexOf("[") == 0)
+		{
             std::map<QString, QString> sectionMap;
             m_sectionName = line.remove(QChar('[')).remove(QChar(']'));
             m_iniMap[m_sectionName] = sectionMap;
@@ -64,9 +67,10 @@ int IniParser::read(const QString filePath){
         {
             if (line.size() > 0)
             {
-
                 QStringList keyValue = line.split("=");
-                if (keyValue.size() == 2){
+
+				if (keyValue.size() == 2)
+				{
                     QString entryName = keyValue.at(0);
                     QString value = keyValue.at(1);
                     m_iniMap[m_sectionName][entryName] = value;
@@ -81,9 +85,8 @@ int IniParser::read(const QString filePath){
     return IniParser::ERR::NONE;
 }
 
-
-int IniParser::write(const QString filePath, std::map<QString, std::map<QString, QString> > map){
-
+int IniParser::write(const QString filePath, std::map<QString, std::map<QString, QString> > map)
+{
     QFileInfo pathInfo = QFileInfo(filePath);
     QDir dirPath = pathInfo.absoluteDir();
 
@@ -115,7 +118,6 @@ int IniParser::write(const QString filePath, std::map<QString, std::map<QString,
     file.close();
     return IniParser::ERR::NONE;
 }
-
 
 std::map<QString, std::map<QString, QString> > IniParser::getMap()
 {
