@@ -5,7 +5,7 @@ CRocketLauncher::CRocketLauncher()
 
 }
 
-CRocketLauncher::launchGame(const CRom& oRom)
+bool CRocketLauncher::launchGame(const CRom& oRom)
 {
 	QStringList parameters; parameters << "-r \"" << oRom.m_oFileInfo.absoluteFilePath() << "\""
 									   //<< "-s \"" + oRom.m_pPlatform->getName()<< "\""
@@ -13,5 +13,7 @@ CRocketLauncher::launchGame(const CRom& oRom)
 									   << "-p \"" << "ScreenZone" << "\"";
 	QProcess *l_pProcess = new QProcess();
 	l_pProcess->startDetached(m_oExecutable.absoluteFilePath(), parameters);
+
+	return true;
 }
 

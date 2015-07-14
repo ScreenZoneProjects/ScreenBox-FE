@@ -13,13 +13,12 @@ public:
 	QFileInfo m_oFileInfo;
 
 private:
-	quint64 m_ui64Id;
+	quint64 m_ui64Id; //< The unique ID of the rom file.
 
-
-	quint64 m_ui64CRC;
-	QByteArray m_vbMD5;
-	QByteArray m_vbSHA1;
-	quint64 m_ui64Size;
+	quint64 m_ui64CRC; //< The CRC of the rom file.
+	QByteArray m_vbMD5; //< The MD5 of the rom file
+	QByteArray m_vbSHA1; //< The SHA1 of the rom file.
+	quint64 m_ui64Size; //< The size of the rom file.
 
 	bool m_bIsPrototype;
 	bool m_bIsPirate;

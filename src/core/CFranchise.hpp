@@ -1,6 +1,4 @@
-#ifndef CFRANCHISE_HPP
-#define CFRANCHISE_HPP
-
+#pragma once
 
 class CFranchise
 {
@@ -8,4 +6,3 @@ public:
 	CFranchise();
 };
 
-#endif // CFRANCHISE_HPP

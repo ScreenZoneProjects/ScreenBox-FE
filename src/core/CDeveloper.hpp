@@ -2,6 +2,8 @@
 
 #include <QtGlobal>
 #include <QString>
+#include <QMap>
+#include <QLocale>
 
 class CDeveloper
 {
@@ -15,12 +17,8 @@ public:
 	QString getName() const;
 	void setName(const QString &sName);
 
-	QString getDescription() const;
-	void setDescription(const QString &sDescription);
-
 private:
-	quint32 m_ui32Id;
+	quint32 m_ui32Id; // Unique ID.
 	QString m_sName; //< The name of the developer studio/team.
-	QString m_sDescription; //< A description of the developer studio/team.
-
+	QMap<QLocale::Language, QString> m_vsDescriptions; //< A description of the developer studio/team.
 };

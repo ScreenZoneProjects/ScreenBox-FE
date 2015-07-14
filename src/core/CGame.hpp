@@ -12,7 +12,11 @@
 #include <QFileInfo>
 #include <QVector>
 #include <QDate>
+#include <QMap>
 
+/**
+ * @brief The CGame class
+ */
 class CGame
 {
 
@@ -20,9 +24,10 @@ public:
 	CGame();
 
 private:
-	quint64 m_ui64Id;
-	QString m_sName;
-	QString m_sSynopsis;
+	quint64 m_ui64Id; //< Unique ID
+	QString m_sName; //< Name of the game
+
+	QMap<QLocale::Language, QString> m_vsSynopsis; //< A short synopsis/brief of the game
 
 	CPlatform* m_pPlatform;
 

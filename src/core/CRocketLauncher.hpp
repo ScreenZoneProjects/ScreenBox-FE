@@ -11,7 +11,7 @@ class CRocketLauncher
 public:
 	CRocketLauncher();
 
-	launchGame(const CRom& oRom);
+	bool launchGame(const CRom& oRom);
 
 private:
 	QFileInfo m_oExecutable;
