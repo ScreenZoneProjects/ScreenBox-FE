@@ -79,3 +79,7 @@ HEADERS  += src/core/Frontend.hpp \
 RESOURCES +=
 
 DISTFILES +=
+
+RC_FILE = resources/ScreenFlow.rc
+
+ICON = resources/images/logo.icns
