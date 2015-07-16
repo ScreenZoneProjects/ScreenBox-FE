@@ -20,26 +20,22 @@
 
 #pragma once
 
-#include <QGraphicsView>
+#include <QGraphicsScene>
 #include "Settings.hpp"
 
-class Frontend : public QGraphicsView
+class MainMenuScene : public QGraphicsScene
 {
     Q_OBJECT
-public slots:
-    void goToMainMenu();
-    void goToExitMenu();
-    void goToSystemMenu(QString systemName);
-    void quitApplication();
-    void shutdownMachine();
-protected:
-    void drawForeground(QPainter *painter, const QRectF &rect);
+signals:
+    void overToSystemMenu(QString systemName);
+    void overToExitMenu();
+    void overToQuit();
+    void overToShutdown();
 private:
     Settings m_settings;
-    QString m_currentItem;
-    QGraphicsScene * m_currentScene;
+    QString m_pointedSystem;
 public:
-    Frontend(Settings settings, QWidget *parent = 0);
-    ~Frontend();
-    Settings getSettings();
+    MainMenuScene(Settings settings, QObject *parent = 0);
+    ~MainMenuScene();
+    void keyPressEvent(QKeyEvent * event);
 };

@@ -18,10 +18,12 @@
 *
 */
 
-#pragma once
+#ifndef INIPARSER_H
+#define INIPARSER_H
 
 #include <map>
 #include <QString>
+
 
 class IniParser
 {
@@ -30,8 +32,7 @@ private:
     QString m_sectionName;
 public:
 
-	enum ERR : unsigned int
-	{
+    enum ERR : unsigned int {
         NONE,
         NO_READ_ACCESS,
         NO_FILE,
@@ -40,20 +41,23 @@ public:
         NO_WRITE_ACCESS
     };
 
-	/**
+    /*
      * Read the ini file, and populate the private map variable.
      */
     int read(const QString filePath);
 
 
-	/**
+    /*
      * Write the ini file entirely, based on a specific map
      */
     int write(const QString filePath, std::map<QString, std::map<QString, QString> > map);
 
-	/**
+    /*
      * Get the map variable containing structured version of the ini file
      */
     std::map<QString, std::map<QString, QString> > getMap();
 
 };
+
+
+#endif // INIPARSER_H

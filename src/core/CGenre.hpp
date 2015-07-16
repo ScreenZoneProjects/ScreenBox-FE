@@ -2,8 +2,6 @@
 
 #include <QtGlobal>
 #include <QString>
-#include <QMap>
-#include <QLocale>
 
 class CGenre
 {
@@ -20,7 +18,7 @@ public:
 	void setDescription(const QString &sDescription);
 
 private:
-	quint32 m_ui32Id; // Unique ID.
+	quint32 m_ui32Id;
 	QString m_sName;
-	QMap<QLocale::Language, QString> m_vsDescriptions;
+	QString m_sDescription;
 };

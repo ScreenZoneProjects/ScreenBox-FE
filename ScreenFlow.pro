@@ -18,7 +18,7 @@
 #
 #
 
-QT += core gui xml qml quick
+QT += core gui xml multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,48 +29,53 @@ CONFIG += c++11
 
 SOURCES += src/main.cpp\
     src/core/Frontend.cpp \
-    src/core/CRom.cpp \
-    src/core/CGame.cpp \
-    src/core/CGenre.cpp \
-    src/core/CRegion.cpp \
-    src/core/CDeveloper.cpp \
-    src/core/CSystem.cpp \
-    src/core/CManufacturer.cpp \
-    src/core/CPlatform.cpp \
-    src/core/CHyperSpinTheme.cpp \
-    src/core/CFranchise.cpp \
-    src/core/CRocketLauncher.cpp \
-    src/core/CHyperSpinThemeVideo.cpp \
-    src/core/CHyperSpinThemeArtwork.cpp \
-    src/core/CHyperSpinThemeParticle.cpp \
-    src/core/CHyperSpinThemeMedia.cpp \
+#    src/core/CRom.cpp \
+#    src/core/CGame.cpp \
+#    src/core/CGenre.cpp \
+#    src/core/CRegion.cpp \
+#    src/core/CDeveloper.cpp \
+#    src/core/CSystem.cpp \
+#    src/core/CManufacturer.cpp \
+#    src/core/CPlatform.cpp \
+#    src/core/CHyperSpinTheme.cpp \
+#    src/core/CFranchise.cpp \
+#    src/core/CRocketLauncher.cpp \
+#    src/core/CHyperSpinThemeVideo.cpp \
+#    src/core/CHyperSpinThemeArtwork.cpp \
+#    src/core/CHyperSpinThemeParticle.cpp \
+#    src/core/CHyperSpinThemeMedia.cpp \
     src/utils/IniParser.cpp \
     src/utils/XmlParser.cpp \
     src/utils/AppIntegrity.cpp \
-    src/core/Settings.cpp
+    src/core/Settings.cpp \
+    src/core/IntroScene.cpp \
+    src/core/MainMenuScene.cpp \
+    src/core/Wheel.cpp
 
 HEADERS  += src/core/Frontend.hpp \
-    src/core/CRom.hpp \
-    src/core/CGame.hpp \
-    src/core/CGenre.hpp \
-    src/coreCRegion.hpp \
-    src/core/CDeveloper.hpp \
-    src/core/CSystem.hpp \
-    src/core/CManufacturer.hpp \
-    src/core/CPlatform.hpp \
-    src/core/CHyperSpinTheme.hpp \
-    src/core/CFranchise.hpp \
-    src/core/CRocketLauncher.hpp \
-    src/core/CHyperSpinThemeVideo.hpp \
-    src/core/CHyperSpinThemeArtwork.hpp \
-    src/core/CHyperSpinThemeParticle.hpp \
-    src/core/CHyperSpinThemeMedia.hpp \
+#    src/core/CRom.hpp \
+#    src/core/CGame.hpp \
+#    src/core/CGenre.hpp \
+#    src/coreCRegion.hpp \
+#    src/core/CDeveloper.hpp \
+#    src/core/CSystem.hpp \
+#    src/core/CManufacturer.hpp \
+#    src/core/CPlatform.hpp \
+#    src/core/CHyperSpinTheme.hpp \
+#    src/core/CFranchise.hpp \
+#    src/core/CRocketLauncher.hpp \
+#    src/core/CHyperSpinThemeVideo.hpp \
+#    src/core/CHyperSpinThemeArtwork.hpp \
+#    src/core/CHyperSpinThemeParticle.hpp \
+#    src/core/CHyperSpinThemeMedia.hpp \
     src/utils/IniParser.hpp \
     src/utils/XmlParser.hpp \
     src/utils/AppIntegrity.hpp \
-    src/core/Settings.hpp
+    src/core/Settings.hpp \
+    src/core/IntroScene.hpp \
+    src/core/MainMenuScene.hpp \
+    src/core/Wheel.hpp
 
-RESOURCES += \
-    qml.qrc
+RESOURCES +=
 
 DISTFILES +=

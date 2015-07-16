@@ -100,8 +100,5 @@ bool CHyperSpinTheme::parseATheme(QString sFilePath)
 	if (l_oXMLStreamReader.hasError())
 	{
 		qWarning() << "Failed to parse the HyperSpin theme file:" << sFilePath << ":" << l_oXMLStreamReader.errorString();
-		return false;
 	}
-
-	return true;
 }

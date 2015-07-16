@@ -19,13 +19,96 @@
 */
 
 #include "Frontend.hpp"
+#include "MainMenuScene.hpp"
+#include "IntroScene.hpp"
+#include <QGraphicsItem>
+#include <QKeyEvent>
+#include <QProcess>
 
-Frontend::Frontend(QWidget *parent)
-    : QMainWindow(parent)
+Frontend::Frontend(Settings settings, QWidget *parent)
+    : QGraphicsView(parent)
 {
+    m_settings = settings;
+
+    int width = m_settings.Frontend("Resolution","Width").toInt();
+    int height = m_settings.Frontend("Resolution","Height").toInt();
+    setFixedSize(width,height);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFocus();
+
+    QString quality = m_settings.Frontend("Optimizer","Quality");
+
+    if(quality == "HIGH"){
+        setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    } else if (quality == "MEDIUM") {
+        setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+    } else if (quality == "LOW") {
+        setRenderHint(QPainter::NonCosmeticDefaultPen);
+    }
+
+    if(m_settings.Frontend("Optimizer","Image_Smoothing") == "true"){
+        setRenderHint(QPainter::SmoothPixmapTransform);
+    }
+
+    if (m_settings.Frontend("IntroVideo","Use_Intro") == "true"){
+        m_currentScene = new IntroScene(m_settings, this);
+    }
+    else if (m_settings.Frontend("Main","Menu_Mode") == "mutli"){
+        m_currentScene = new MainMenuScene(m_settings, this);
+    }
+    else {
+        //QString aloneSystem = m_settings.MainMenu("Main","Single_Mode_Name");
+        //m_currentScene = new SystemMenu(aloneSystem,m_settings,this);
+    }
+    setScene(m_currentScene);
+
+
+
+
 }
 
 Frontend::~Frontend()
 {
 
+}
+
+Settings Frontend::getSettings(){
+    return m_settings;
+}
+
+void Frontend::goToMainMenu(){
+    m_currentScene = new MainMenuScene(m_settings,this);
+    setScene(m_currentScene);
+}
+
+void Frontend::goToExitMenu(){
+    //QGraphicsItem exitMenuItem = new ExitMenuItem();
+    //m_currentScene->addItem(exitMenuItem);
+    //exitMenuItem->setFocus();
+}
+
+void Frontend::goToSystemMenu(QString systemName){
+
+}
+
+void Frontend::quitApplication(){
+    QCoreApplication::quit();
+}
+
+void Frontend::shutdownMachine(){
+    QProcess::startDetached("shutdown -s -f -t 2");
+    QCoreApplication::quit();
+}
+
+void Frontend::drawForeground(QPainter *painter, const QRectF &rect){
+    if (m_settings.Frontend("Resolution","Scanlines_Active") == "true"){
+        float scanAlpha = m_settings.Frontend("Resolution","Scanlines_Alpha").toFloat();
+        QString scanImage = m_settings.Frontend("Resolution","Scanlines_Image");
+        float scanScale = m_settings.Frontend("Resolution","Scanlines_Scale").toFloat();
+        QPixmap img(QString("Media/Frontend/Images/Scanlines/")+scanImage);
+        painter->scale(scanScale,scanScale);
+        painter->setOpacity(scanAlpha);
+        painter->drawTiledPixmap(rect,img);
+    }
 }

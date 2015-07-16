@@ -20,26 +20,27 @@
 
 #pragma once
 
-#include <QGraphicsView>
+#include <QGraphicsScene>
 #include "Settings.hpp"
+#include <QtMultimedia>
+#include <QGraphicsVideoItem>
 
-class Frontend : public QGraphicsView
+class IntroScene : public QGraphicsScene
 {
     Q_OBJECT
+public:
+    IntroScene(Settings settings, QObject *parent = 0);
+    ~IntroScene();
+    void keyPressEvent(QKeyEvent * event);
+signals:
+    void keyPressed(QKeyEvent * event);
+    void over();
+private slots:
+    void onSceneConstructed();
 public slots:
-    void goToMainMenu();
-    void goToExitMenu();
-    void goToSystemMenu(QString systemName);
-    void quitApplication();
-    void shutdownMachine();
-protected:
-    void drawForeground(QPainter *painter, const QRectF &rect);
+    void onHaveToFinish(QMediaPlayer::State state);
 private:
     Settings m_settings;
-    QString m_currentItem;
-    QGraphicsScene * m_currentScene;
-public:
-    Frontend(Settings settings, QWidget *parent = 0);
-    ~Frontend();
-    Settings getSettings();
+    QMediaPlayer * m_player;
+    QString m_videoFileName;
 };

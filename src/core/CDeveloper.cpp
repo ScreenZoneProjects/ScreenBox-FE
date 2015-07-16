@@ -5,6 +5,16 @@ CDeveloper::CDeveloper()
 
 }
 
+QString CDeveloper::getDescription() const
+{
+	return m_sDescription;
+}
+
+void CDeveloper::setDescription(const QString &sDescription)
+{
+	m_sDescription = sDescription;
+}
+
 quint32 CDeveloper::getId() const
 {
 	return m_ui32Id;
@@ -24,6 +34,5 @@ void CDeveloper::setName(const QString &sName)
 {
 	m_sName = sName;
 }
-
 
 
