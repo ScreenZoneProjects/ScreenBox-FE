@@ -18,24 +18,27 @@
 *
 */
 
-#pragma once
+#include <QFileInfoList>
+#include <QFile>
+#include <QTextStream>
 
-#include <QGraphicsScene>
-#include "Settings.hpp"
+Logger::Logger(){
+	m_logFilePath = "log.txt";
+	QFileInfoList logFileInfo(m_logFilePath);
+	if (!logFileInfo.exists()){
+		m_logFilePath = "";
+	}
+}
 
-class MainMenuScene : public QGraphicsScene
-{
-    Q_OBJECT
-signals:
-    void overToSystemMenu(QString systemName);
-    void overToExitMenu();
-    void overToQuit();
-    void overToShutdown();
-private:
-    Settings m_settings;
-    QString m_pointedSystem;
-public:
-    MainMenuScene(Settings settings, QObject *parent = 0);
-    ~MainMenuScene();
-    void keyPressEvent(QKeyEvent * event);
-};
+Logger::~Logger(){
+
+}
+
+void Logger::write(QString message){
+	if(m_logFilePath != ""){
+		QFile logFile(m_logFilePath);
+		if(logFile.open(QIODevice::WriteOnly | QIODevice::Text)){
+			QTextStream out(&logFile);
+		}
+	}
+}

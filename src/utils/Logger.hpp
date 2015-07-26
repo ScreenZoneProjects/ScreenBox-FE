@@ -18,26 +18,21 @@
 *
 */
 
-#pragma once
 
-#include <QGraphicsView>
-#include "Settings.hpp"
 
-class Frontend : public QGraphicsView
+#ifndef LOGGER_H
+#define LOGGER_H
+
+#include <QString>
+
+class Logger
 {
-    Q_OBJECT
-public slots:
-    void goToMenu(QString systemName);
-    void quitApplication();
-    void shutdownMachine();
-protected:
-    void drawForeground(QPainter *painter, const QRectF &rect);
-private:
-    Settings m_settings;
-    QString m_currentItem;
-    QGraphicsScene * m_currentScene;
 public:
-    Frontend(Settings settings, QWidget *parent = 0);
-    ~Frontend();
-    Settings getSettings();
+	Logger();
+	~Logger();
+	void write(QString message);
+private:
+	QString m_logFilePath;
 };
+
+#endif // LOGGER_H

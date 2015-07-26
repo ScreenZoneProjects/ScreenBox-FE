@@ -23,7 +23,7 @@
 IntroScene::IntroScene(Settings settings, QObject * parent) : QGraphicsScene(parent)
 {
     m_settings = settings;
-    connect(this,SIGNAL(over()),parent,SLOT(goToMainMenu()));
+    connect(this,SIGNAL(over(QString)),parent,SLOT(goToMenu(QString)));
     int width = settings.Frontend("Resolution","Width").toInt();
     int height = settings.Frontend("Resolution","Height").toInt();
 
@@ -61,7 +61,7 @@ void IntroScene::onSceneConstructed(){
 
 void IntroScene::onHaveToFinish(QMediaPlayer::State state){
     if (state == QMediaPlayer::State::StoppedState) {
-        emit over();
+        emit over("Main Menu");
     }
 }
 

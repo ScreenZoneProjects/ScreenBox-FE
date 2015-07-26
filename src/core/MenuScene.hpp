@@ -20,24 +20,29 @@
 
 #pragma once
 
-#include <QGraphicsView>
+#include <QGraphicsScene>
 #include "Settings.hpp"
+#include "Wheel.hpp"
 
-class Frontend : public QGraphicsView
+class MenuScene : public QGraphicsScene
 {
     Q_OBJECT
-public slots:
-    void goToMenu(QString systemName);
-    void quitApplication();
-    void shutdownMachine();
-protected:
-    void drawForeground(QPainter *painter, const QRectF &rect);
+signals:
+    void overToMenu(QString itemName);
+    void overToQuit();
+    void overToShutdown();
 private:
+    Wheel * m_wheel;
+    QGraphicsItemGroup * m_exitMenuItem;
     Settings m_settings;
-    QString m_currentItem;
-    QGraphicsScene * m_currentScene;
+    bool m_isInExitMenu;
+    QString m_selectedExitItem;
+    QString m_pointedItem;
+    QString m_sectionName;
 public:
-    Frontend(Settings settings, QWidget *parent = 0);
-    ~Frontend();
-    Settings getSettings();
+    MenuScene(QString sectionName, Settings settings, QObject *parent = 0);
+    ~MenuScene();
+    void keyPressEvent(QKeyEvent * event);
+    void showQuitMenu();
+    void hideQuitMenu();
 };

@@ -34,7 +34,7 @@ public:
     void keyPressEvent(QKeyEvent * event);
 signals:
     void keyPressed(QKeyEvent * event);
-    void over();
+    void over(QString name);
 private slots:
     void onSceneConstructed();
 public slots:

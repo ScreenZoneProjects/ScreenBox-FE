@@ -49,8 +49,8 @@ SOURCES += src/main.cpp\
     src/utils/AppIntegrity.cpp \
     src/core/Settings.cpp \
     src/core/IntroScene.cpp \
-    src/core/MainMenuScene.cpp \
-    src/core/Wheel.cpp
+    src/core/Wheel.cpp \
+    src/core/MenuScene.cpp
 
 HEADERS  += src/core/Frontend.hpp \
 #    src/core/CRom.hpp \
@@ -73,8 +73,8 @@ HEADERS  += src/core/Frontend.hpp \
     src/utils/AppIntegrity.hpp \
     src/core/Settings.hpp \
     src/core/IntroScene.hpp \
-    src/core/MainMenuScene.hpp \
-    src/core/Wheel.hpp
+    src/core/Wheel.hpp \
+    src/core/MenuScene.hpp
 
 RESOURCES +=
 

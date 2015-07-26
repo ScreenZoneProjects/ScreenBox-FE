@@ -21,16 +21,56 @@
 #ifndef WHEEL_H
 #define WHEEL_H
 
-#include <QFileInfoList>
+#include <QList>
 #include "Settings.hpp"
 #include <QGraphicsItemGroup>
 
 class Wheel : public QGraphicsItemGroup
 {
 public:
-    Wheel(QFileInfoList list, Settings settings, QGraphicsItem * parent = 0);
+    Wheel(QString sectionName, QList<QString> list, Settings settings, QGraphicsItem * parent = 0);
 private:
+    //QList<QGraphicsItem> m_itemsList;
     Settings m_settings;
+    int m_windowWidth;
+    int m_windowHeight;
+
+    float m_wheelOpacity;
+    float m_smallOpacity;
+    QString m_wheelStyle;
+    QString m_wheelSpeed;
+
+    QString m_vWheel_pos;
+    int m_nWheel_largeWidth;
+    int m_nWheel_smallWidth;
+    int m_vWheel_largeWidth;
+    int m_vWheel_smallWidth;
+    int m_pWheel_largeWidth;
+    int m_pWheel_smallWidth;
+    int m_hWheel_largeWidth;
+    int m_hWheel_smallWidth;
+    int m_hWheel_y;
+
+    int m_text_width;
+    QString m_text_font;
+    int m_text_smallWidth;
+    int m_text_largeWidth;
+    int m_text_strokeSize;
+    QString m_text_strokeColor;
+    QString m_text_color1;
+    QString m_text_color2;
+    QString m_text_color3;
+    int m_text_colorRatio;
+    int m_text_shadowDistance;
+    int m_text_shadowAngle;
+    QString m_text_shadowColor;
+    float m_text_shadowAlpha;
+    float m_text_shaodwBlur;
+
+    void drawNormalWheel();
+    void drawPinWheel();
+    void drawVerticalWheel();
+    void drawHorizontalWheel();
 };
 
 #endif // WHEEL_H

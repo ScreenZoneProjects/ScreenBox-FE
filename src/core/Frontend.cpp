@@ -19,7 +19,7 @@
 */
 
 #include "Frontend.hpp"
-#include "MainMenuScene.hpp"
+#include "MenuScene.hpp"
 #include "IntroScene.hpp"
 #include <QGraphicsItem>
 #include <QKeyEvent>
@@ -55,11 +55,11 @@ Frontend::Frontend(Settings settings, QWidget *parent)
         m_currentScene = new IntroScene(m_settings, this);
     }
     else if (m_settings.Frontend("Main","Menu_Mode") == "mutli"){
-        m_currentScene = new MainMenuScene(m_settings, this);
+        m_currentScene = new MenuScene("Main Menu", m_settings, this);
     }
     else {
-        //QString aloneSystem = m_settings.MainMenu("Main","Single_Mode_Name");
-        //m_currentScene = new SystemMenu(aloneSystem,m_settings,this);
+        QString aloneSystem = m_settings.MainMenu("Main","Single_Mode_Name");
+        m_currentScene = new MenuScene(aloneSystem,m_settings,this);
     }
     setScene(m_currentScene);
 
@@ -77,19 +77,9 @@ Settings Frontend::getSettings(){
     return m_settings;
 }
 
-void Frontend::goToMainMenu(){
-    m_currentScene = new MainMenuScene(m_settings,this);
+void Frontend::goToMenu(QString systemName){
+    m_currentScene = new MenuScene(systemName,m_settings,this);
     setScene(m_currentScene);
-}
-
-void Frontend::goToExitMenu(){
-    //QGraphicsItem exitMenuItem = new ExitMenuItem();
-    //m_currentScene->addItem(exitMenuItem);
-    //exitMenuItem->setFocus();
-}
-
-void Frontend::goToSystemMenu(QString systemName){
-
 }
 
 void Frontend::quitApplication(){
