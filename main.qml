@@ -4,12 +4,17 @@ import QtQuick.Window 2.2
 Window {
     visible: true
     visibility: Window.FullScreen
-    color: "transparent"
+	//color: "transparent"
     flags: Qt.FramelessWindowHint
     title: "ScreenFlow"
 
-    SplashScreen
-    {
-        anchors.fill: parent
-    }
+	Wheel
+	{
+
+	}
+
+	//SplashScreen
+	//{
+	//    anchors.fill: parent
+	//}
 }

@@ -25,5 +25,16 @@ void CDeveloper::setName(const QString &sName)
 	m_sName = sName;
 }
 
+QMap<QLocale::Language, QString> CDeveloper::getDescriptions() const
+{
+    return m_vsDescriptions;
+}
+
+void CDeveloper::setDescriptions(const QMap<QLocale::Language, QString>& vsDescriptions)
+{
+    m_vsDescriptions = vsDescriptions;
+}
+
+
 
 

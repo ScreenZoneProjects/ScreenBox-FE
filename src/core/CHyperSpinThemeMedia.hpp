@@ -65,6 +65,12 @@ public:
 		AnimationType_ZoomOut,
 	};
 
+	float getPositionX() const;
+	void setPositionX(float f32PositionX);
+
+	float getPositionY() const;
+	void setPositionY(float f32PositionY);
+
 private:
 	float m_f32PositionX;
 	float m_f32PositionY;

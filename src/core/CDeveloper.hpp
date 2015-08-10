@@ -17,6 +17,9 @@ public:
 	QString getName() const;
 	void setName(const QString &sName);
 
+	QMap<QLocale::Language, QString> getDescriptions() const;
+	void setDescriptions(const QMap<QLocale::Language, QString>& vsDescriptions);
+
 private:
 	quint32 m_ui32Id; // Unique ID.
 	QString m_sName; //< The name of the developer studio/team.

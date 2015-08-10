@@ -3,5 +3,6 @@
         <file>SplashScreen.qml</file>
         <file>resources/images/logo.png</file>
         <file>main.qml</file>
+        <file>Wheel.qml</file>
     </qresource>
 </RCC>

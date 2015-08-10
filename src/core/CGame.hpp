@@ -23,9 +23,21 @@ class CGame
 public:
 	CGame();
 
+	quint64 getId() const;
+	void setId(const quint64& ui64Id);
+
+	QMap<QLocale::Language, QString> getNames() const;
+	void setNames(const QMap<QLocale::Language, QString>& vsNames);
+
+	QMap<QLocale::Language, QString> getSynopsis() const;
+	void setSynopsis(const QMap<QLocale::Language, QString>& vsSynopsis);
+
+	quint8 getPlayerCount() const;
+	void setPlayerCount(const quint8& ui8PlayerCount);
+
 private:
 	quint64 m_ui64Id; //< Unique ID
-	QString m_sName; //< Name of the game
+	QMap<QLocale::Language, QString> m_vsNames; //< Name of the game
 
 	QMap<QLocale::Language, QString> m_vsSynopsis; //< A short synopsis/brief of the game
 
@@ -43,5 +55,5 @@ private:
 
 	QVector<QLocale::Language> m_veLanguages;
 
-	quint8 m_ui8Players;
+	quint8 m_ui8PlayerCount;
 };
