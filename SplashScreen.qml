@@ -23,25 +23,6 @@ Rectangle {
             easing.type: Easing.InCubic
             running: true
         }
-
-
-//        SequentialAnimation on y {
-//            loops: 6
-
-//            PropertyAnimation{
-//                to : 180
-//                duration: 500
-//                easing.type: Easing.OutQuad
-//            }
-
-//            PropertyAnimation {
-//                to : 250
-//                duration: 500
-//                easing.type : Easing.InQuad
-//            }
-//        }
-
-
     }
 
     Text {

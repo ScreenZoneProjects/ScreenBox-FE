@@ -14,7 +14,6 @@ public:
 	CHyperSpinTheme();
 	bool parseATheme();
 
-
 private:
 	QVector<CHyperSpinThemeMedia> m_voHyperSpinMedias;
 
@@ -32,7 +31,9 @@ private:
 	*/
 
 	QString m_sFilePath;
+
 	CHyperSpinThemeVideo m_oHyperSpinVideo;
 	QVector<CHyperSpinThemeArtwork> m_voHyperSpinArtworks;
+
 };
 

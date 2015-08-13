@@ -48,7 +48,8 @@ SOURCES += src/main.cpp\
     src/utils/XmlParser.cpp \
     src/utils/AppIntegrity.cpp \
     src/core/Settings.cpp \
-    CHyperSpinDatabase.cpp
+    CHyperSpinDatabase.cpp \
+    src/core/CHyperSpin.cpp
 
 HEADERS  += src/core/Frontend.hpp \
     src/core/CRom.hpp \
@@ -70,7 +71,8 @@ HEADERS  += src/core/Frontend.hpp \
     src/utils/XmlParser.hpp \
     src/utils/AppIntegrity.hpp \
     src/core/Settings.hpp \
-    CHyperSpinDatabase.hpp
+    CHyperSpinDatabase.hpp \
+    src/core/CHyperSpin.hpp
 
 RESOURCES += \
     qml.qrc

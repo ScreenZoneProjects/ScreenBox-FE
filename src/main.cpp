@@ -33,12 +33,12 @@ int main(int argc, char *argv[])
 	QQmlApplicationEngine l_oQMLApplicationEngine;
 	l_oQMLApplicationEngine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-   /* Settings settings;
+	Settings settings;
     AppIntegrity ai(settings);
 
-	if(ai.getStatus() == AppIntegrity::ERROR)
+	/*if(ai.getStatus() == AppIntegrity::ERROR)
 	{
-        QMessageBox alert(QMessageBox::Icon::Critical,"Error","Error(s) found in your application directories !");
+		QMessageBox alert(QMessageBox::Icon::Critical, "Error", "Error(s) found in your application directories !");
         alert.setInformativeText("Error code : ");
         alert.setDetailedText(ai.getDetails());
         alert.exec();

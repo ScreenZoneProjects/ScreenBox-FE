@@ -7,6 +7,7 @@
 #include "CManufacturer.hpp"
 #include "CRegion.hpp"
 #include "CFranchise.hpp"
+#include "CHyperSpinTheme.hpp"
 
 #include <QLocale>
 #include <QFileInfo>
@@ -56,4 +57,6 @@ private:
 	QVector<QLocale::Language> m_veLanguages;
 
 	quint8 m_ui8PlayerCount;
+
+	CHyperSpinTheme m_oHyperSpinTheme;
 };

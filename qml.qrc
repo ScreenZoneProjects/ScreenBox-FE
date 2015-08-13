@@ -4,5 +4,6 @@
         <file>resources/images/logo.png</file>
         <file>main.qml</file>
         <file>Wheel.qml</file>
+        <file>HyperSpinTheme.qml</file>
     </qresource>
 </RCC>

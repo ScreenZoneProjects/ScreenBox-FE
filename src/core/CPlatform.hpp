@@ -4,8 +4,12 @@
 #include <QString>
 #include <QMap>
 #include <QLocale>
+#include <QFileInfo>
+#include <QPixmap>
+#include <QFont>
 
 #include "CManufacturer.hpp"
+#include "CHyperSpinTheme.hpp"
 
 class CPlatform
 {
@@ -26,4 +30,16 @@ private:
 	QString m_sName; //
 	QMap<QLocale::Language, QString> m_vsDescriptions; // Description of the platform.
 	CManufacturer* m_pManufacturer;
+
+	CHyperSpinTheme m_oHyperSpinTheme;
+
+	QFileInfo m_oLogoImageFilePath;
+	QPixmap m_oLogoImage;
+	QVector<QPixmap> m_voArtworksImage;
+	QVector<QPixmap> m_oBackgroundImages;
+
+	QPixmap m_o2DCartbridge;
+
+
+	QFont m_oFont;
 };

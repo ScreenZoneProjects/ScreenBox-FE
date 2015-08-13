@@ -4,8 +4,8 @@ Item {
 	id: mainItem
 	property int itemAngle: 60
 
-	width: 1920
-	height: 1080
+    width: parent.width
+    height: parent.height
 
 	ListModel {
 		id: dataModel
@@ -120,7 +120,7 @@ Item {
 			PathArc {
 				x: mainItem.width
 				y: mainItem.height
-				radiusX: 50
+                radiusX: 100
 				radiusY: 200
 				direction: PathArc.Counterclockwise
 			}
