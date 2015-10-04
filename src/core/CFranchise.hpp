@@ -1,8 +1,22 @@
 #pragma once
 
-class CFranchise
+#include <QObject>
+#include <QString>
+#include <QLocale>
+
+class CFranchise : public QObject
 {
+	Q_OBJECT
+
 public:
-	CFranchise();
+	explicit CFranchise(QObject *parent = 0);
+
+private:
+	QString m_sName;
+	QMap<QLocale::Language, QString> m_vsDescriptions;
+
+signals:
+
+public slots:
 };
 

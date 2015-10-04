@@ -20,13 +20,30 @@
 
 #pragma once
 
-#include <QMainWindow>
+#include "CPlatform.hpp"
+#include "CFranchise.hpp"
+#include "CDeveloper.hpp"
+#include "CGenre.hpp"
+#include "CManufacturer.hpp"
+#include "CRom.hpp"
+#include "CGame.hpp"
 
-class Frontend : public QMainWindow
+class CFrontend
 {
-    Q_OBJECT
 
 public:
-    Frontend(QWidget *parent = 0);
-    ~Frontend();
+	CFrontend();
+
+	bool initialize();
+
+	bool reload();
+
+private:
+	QMap<qint64, CPlatform*> m_mpPlateforms;
+	QMap<qint64, CFranchise*> m_mpFranchise;
+	QMap<qint64, CDeveloper*> m_mpDevelopers;
+	QMap<qint64, CGenre*> m_mpGenres;
+	QMap<qint64, CManufacturer*> m_mpManufacturers;
+	QMap<qint64, CRom*> m_mpRoms;
+	QMap<qint64, CGame*> m_mpGames;
 };

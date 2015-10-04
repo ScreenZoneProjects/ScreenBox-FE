@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <QXmlStreamReader>
 #include <QFile>
 
@@ -36,4 +38,3 @@ private:
 	QVector<CHyperSpinThemeArtwork> m_voHyperSpinArtworks;
 
 };
-

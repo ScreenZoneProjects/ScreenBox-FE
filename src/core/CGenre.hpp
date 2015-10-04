@@ -1,27 +1,38 @@
 #pragma once
 
+#include <QObject>
 #include <QtGlobal>
 #include <QString>
 #include <QMap>
 #include <QLocale>
 
-class CGenre
-{
-public:
-	CGenre();
+#include "CIndexable.hpp"
 
-	quint32 getId() const;
-	void setId(const quint32& ui32Id);
+class CGame;
+
+class CGenre : public QObject, public CIndexable
+{
+	Q_OBJECT
+
+	Q_PROPERTY(QString id READ getId)
+
+public:
+	explicit CGenre(QObject *parent = 0);
 
 	QString getName() const;
 	void setName(const QString& sName);
 
-	QMap<QLocale::Language, QString> getDescriptions() const;
-	void setDescriptions(const QMap<QLocale::Language, QString>& getDescriptions);
+	QString getDescription(QLocale::Language eLanguage) const;
+	void setDescription(QLocale::Language eLanguage, QString sDescription);
 
 private:
-	quint32 m_ui32Id; // Unique ID.
 	QString m_sName;
 	QMap<QLocale::Language, QString> m_vsDescriptions;
-};
 
+	QList<CGame*> m_vpGames;
+
+signals:
+	void playerCountChanged();
+
+public slots:
+};

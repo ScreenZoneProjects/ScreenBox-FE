@@ -1,18 +1,10 @@
 #include "CManufacturer.hpp"
 
-CManufacturer::CManufacturer()
+CManufacturer::CManufacturer(QObject *parent) : QObject(parent)
 {
 
 }
-quint32 CManufacturer::getId() const
-{
-	return m_ui32Id;
-}
 
-void CManufacturer::setId(const quint32& ui32Id)
-{
-	m_ui32Id = ui32Id;
-}
 QString CManufacturer::getName() const
 {
 	return m_sName;
@@ -21,17 +13,10 @@ QString CManufacturer::getName() const
 void CManufacturer::setName(const QString& sName)
 {
 	m_sName = sName;
+	this->setObjectName(m_sName + " manufacturer object");
 }
-QString CManufacturer::getDescription() const
+
+CDescription& CManufacturer::getDescriptionReference()
 {
-	return m_sDescription;
+	return m_oDescription;
 }
-
-void CManufacturer::setDescription(const QString& sDescription)
-{
-	m_sDescription = sDescription;
-}
-
-
-
-

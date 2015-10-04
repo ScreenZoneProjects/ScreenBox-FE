@@ -18,7 +18,7 @@
 #
 #
 
-QT += core gui xml qml quick
+QT += core gui xml qml quick sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -32,9 +32,7 @@ SOURCES += src/main.cpp\
     src/core/CRom.cpp \
     src/core/CGame.cpp \
     src/core/CGenre.cpp \
-    src/core/CRegion.cpp \
     src/core/CDeveloper.cpp \
-    src/core/CSystem.cpp \
     src/core/CManufacturer.cpp \
     src/core/CPlatform.cpp \
     src/core/CHyperSpinTheme.cpp \
@@ -49,15 +47,19 @@ SOURCES += src/main.cpp\
     src/utils/AppIntegrity.cpp \
     src/core/Settings.cpp \
     CHyperSpinDatabase.cpp \
-    src/core/CHyperSpin.cpp
+    src/core/CHyperSpin.cpp \
+    src/core/CLocalDatabase.cpp \
+    src/core/CPlatformGame.cpp \
+    src/core/CDescription.cpp \
+    src/core/CCommonTool.cpp \
+    src/core/CImageProvider.cpp \
+    src/core/CIndexable.cpp
 
 HEADERS  += src/core/Frontend.hpp \
     src/core/CRom.hpp \
     src/core/CGame.hpp \
     src/core/CGenre.hpp \
-    src/coreCRegion.hpp \
     src/core/CDeveloper.hpp \
-    src/core/CSystem.hpp \
     src/core/CManufacturer.hpp \
     src/core/CPlatform.hpp \
     src/core/CHyperSpinTheme.hpp \
@@ -72,7 +74,13 @@ HEADERS  += src/core/Frontend.hpp \
     src/utils/AppIntegrity.hpp \
     src/core/Settings.hpp \
     CHyperSpinDatabase.hpp \
-    src/core/CHyperSpin.hpp
+    src/core/CHyperSpin.hpp \
+    src/core/CLocalDatabase.hpp \
+    src/core/CPlatformGame.hpp \
+    src/core/CDescription.hpp \
+    src/core/CCommonTool.hpp \
+    src/core/CImageProvider.hpp \
+    src/core/CIndexable.hpp
 
 RESOURCES += \
     qml.qrc

@@ -33,8 +33,6 @@ int main(int argc, char *argv[])
 	QQmlApplicationEngine l_oQMLApplicationEngine;
 	l_oQMLApplicationEngine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-	Settings settings;
-    AppIntegrity ai(settings);
 
 	/*if(ai.getStatus() == AppIntegrity::ERROR)
 	{

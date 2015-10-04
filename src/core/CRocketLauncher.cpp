@@ -7,7 +7,7 @@ CRocketLauncher::CRocketLauncher()
 
 bool CRocketLauncher::launchGame(const CRom& oRom)
 {
-	QStringList parameters; parameters << "-r \"" << oRom.m_oFileInfo.absoluteFilePath() << "\""
+	QStringList parameters; parameters << "-r \"" << oRom.getFileInfo().absoluteFilePath() << "\""
 									   //<< "-s \"" + oRom.m_pPlatform->getName()<< "\""
 									   << "-f \"" << QCoreApplication::applicationFilePath() << "\""
 									   << "-p \"" << "ScreenZone" << "\"";

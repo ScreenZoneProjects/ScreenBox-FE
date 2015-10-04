@@ -1,27 +1,38 @@
 #pragma once
 
+#include <QObject>
 #include <QtGlobal>
 #include <QString>
 #include <QMap>
 #include <QLocale>
 
-class CDeveloper
-{
-public:
-	CDeveloper();
-	CDeveloper(quint32 ui32Id, QString sName, QString sDescription);
+#include "CIndexable.hpp"
+#include "CDescription.hpp"
 
-	quint32 getId() const;
-	void setId(const quint32 &ui32Id);
+class CDeveloper : public QObject, public CIndexable
+{
+	Q_OBJECT
+
+	//Q_PROPERTY(QString description READ getDescription)
+	Q_PROPERTY(QString name READ getName)
+	Q_PROPERTY(QString id READ getId)
+
+public:
+	explicit CDeveloper(QObject *parent = 0);
+	CDeveloper(qint64 i64Id, QString sName, QString sDescription);
 
 	QString getName() const;
 	void setName(const QString &sName);
 
-	QMap<QLocale::Language, QString> getDescriptions() const;
-	void setDescriptions(const QMap<QLocale::Language, QString>& vsDescriptions);
+	QString getDescription() const;
+	QString getDescription(QLocale::Language eLanguage) const;
+	void setDescription(QLocale::Language eLanguage, QString sDescription);
 
 private:
-	quint32 m_ui32Id; // Unique ID.
 	QString m_sName; //< The name of the developer studio/team.
-	QMap<QLocale::Language, QString> m_vsDescriptions; //< A description of the developer studio/team.
+	CDescription m_oDescriptions; //< A description of the developer studio/team.
+
+signals:
+
+public slots:
 };

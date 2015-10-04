@@ -1,6 +1,6 @@
 #include "CFranchise.hpp"
 
-CFranchise::CFranchise()
+CFranchise::CFranchise(QObject *parent) : QObject(parent)
 {
 
 }

@@ -369,7 +369,7 @@ bool CHyperSpinTheme::parseATheme()
 				{
 					CHyperSpinThemeVideo l_oVideo;
 
-					if(!parseAnAttribute<float>(l_oXMLStreamReader, "w", std::bind(&CHyperSpinThemeVideo::setWidth, l_oVideo, std::placeholders::_1)))
+					/*if(!parseAnAttribute<float>(l_oXMLStreamReader, "w", std::bind(&CHyperSpinThemeVideo::setWidth, l_oVideo, std::placeholders::_1)))
 					{
 
 					}
@@ -477,7 +477,7 @@ bool CHyperSpinTheme::parseATheme()
 					if(!parseAnAttribute<CHyperSpinThemeMedia::ERestingAnimation>(l_oXMLStreamReader, "resting", std::bind(&CHyperSpinThemeVideo::setRestingAnimation, l_oVideo, std::placeholders::_1)))
 					{
 
-					}
+					}*/
 
 					m_oHyperSpinVideo = l_oVideo;
 				}
@@ -486,7 +486,7 @@ bool CHyperSpinTheme::parseATheme()
 				{
 					CHyperSpinThemeArtwork l_oArtwork;
 
-					if(!parseAnAttribute<float>(l_oXMLStreamReader, "w", std::bind(&CHyperSpinThemeArtwork::setWidth, l_oArtwork, std::placeholders::_1)))
+					/*if(!parseAnAttribute<float>(l_oXMLStreamReader, "w", std::bind(&CHyperSpinThemeArtwork::setWidth, l_oArtwork, std::placeholders::_1)))
 					{
 
 					}
@@ -539,7 +539,7 @@ bool CHyperSpinTheme::parseATheme()
 					if(!parseAnAttribute<CHyperSpinThemeMedia::ERestingAnimation>(l_oXMLStreamReader, "resting", std::bind(&CHyperSpinThemeArtwork::setRestingAnimation, l_oArtwork, std::placeholders::_1)))
 					{
 
-					}
+					}*/
 
 					m_voHyperSpinArtworks.push_back(l_oArtwork);
 				}

@@ -1,6 +1,6 @@
 #include "CRom.hpp"
 
-CRom::CRom()
+CRom::CRom(QObject *parent) : QObject(parent)
 {
 
 }
@@ -14,14 +14,19 @@ void CRom::setIsTrained(bool bIsTrained)
 	m_bIsTrained = bIsTrained;
 }
 
+QFileInfo CRom::getFileInfo() const
+{
+    return m_oFileInfo;
+}
+
 bool CRom::isPrelease() const
 {
-	return m_bIsPrelease;
+    return m_bIsPrelease;
 }
 
 void CRom::setIsPrelease(bool bIsPrelease)
 {
-	m_bIsPrelease = bIsPrelease;
+    m_bIsPrelease = bIsPrelease;
 }
 
 bool CRom::isDemo() const
@@ -64,12 +69,12 @@ void CRom::setIsPrototype(bool bIsPrototype)
 	m_bIsPrototype = bIsPrototype;
 }
 
-quint64 CRom::getSize() const
+quint64 CRom::getFileSize() const
 {
 	return m_ui64Size;
 }
 
-void CRom::setSize(const quint64& ui64Size)
+void CRom::setFileSize(const quint64& ui64Size)
 {
 	m_ui64Size = ui64Size;
 }
@@ -103,14 +108,3 @@ void CRom::setCRC(const quint64& ui64CRC)
 {
 	m_ui64CRC = ui64CRC;
 }
-
-quint64 CRom::getId() const
-{
-	return m_ui64Id;
-}
-
-void CRom::setId(const quint64& ui64Id)
-{
-	m_ui64Id = ui64Id;
-}
-

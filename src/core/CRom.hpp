@@ -1,19 +1,31 @@
 #pragma once
 
+#include <QObject>
 #include <QLocale>
 #include <QFileInfo>
 #include <QVector>
 #include <QDate>
 
-class CRom
+#include "CIndexable.hpp"
+
+class CRom : public QObject, public CIndexable
 {
+	Q_OBJECT
+
+	Q_PROPERTY(QString id READ getId)
+	Q_PROPERTY(QString CRC READ getCRC)
+	Q_PROPERTY(QString MD5 READ getMD5)
+	Q_PROPERTY(QString SHA1 READ getSHA1)
+	Q_PROPERTY(QString fileSize READ getFileSize)
+	Q_PROPERTY(QString isPrototype READ isPrototype)
+	Q_PROPERTY(QString isPirate READ isPirate)
+	Q_PROPERTY(QString isTranslated READ isTranslated)
+	Q_PROPERTY(QString isDemo READ isDemo)
+	Q_PROPERTY(QString isPrelease READ isPrelease)
+	Q_PROPERTY(QString isTrained READ isTrained)
+
 public:
-	CRom();
-
-	QFileInfo m_oFileInfo;
-
-	quint64 getId() const;
-	void setId(const quint64& ui64Id);
+	explicit CRom(QObject *parent = 0);
 
 	quint64 getCRC() const;
 	void setCRC(const quint64& ui64CRC);
@@ -24,8 +36,8 @@ public:
 	QByteArray getSHA1() const;
 	void setSHA1(const QByteArray& vbSHA1);
 
-	quint64 getSize() const;
-	void setSize(const quint64& ui64Size);
+	quint64 getFileSize() const;
+	void setFileSize(const quint64& ui64Size);
 
 	bool isPrototype() const;
 	void setIsPrototype(bool bIsPrototype);
@@ -45,8 +57,10 @@ public:
 	bool isTrained() const;
 	void setIsTrained(bool bIsTrained);
 
+	QFileInfo getFileInfo() const;
+
 private:
-	quint64 m_ui64Id; //< The unique ID of the rom file.
+	QFileInfo m_oFileInfo;
 
 	quint64 m_ui64CRC; //< The CRC of the rom file.
 	QByteArray m_vbMD5; //< The MD5 of the rom file
@@ -59,4 +73,8 @@ private:
 	bool m_bIsDemo;
 	bool m_bIsPrelease;
 	bool m_bIsTrained;
+
+signals:
+
+public slots:
 };

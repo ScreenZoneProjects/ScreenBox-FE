@@ -5,13 +5,19 @@
 #include <QFileInfoList>
 
 #include "CHyperSpinTheme.hpp"
+#include "CPlatform.hpp"
 
 class CHyperSpin
 {
 public:
 	CHyperSpin();
 
-	bool scanThemes();
+	bool scanMedias();
+	bool scanPlatformMedias(QFileInfo oPlatformDirectory);
+	bool scanImages(QFileInfo oPlatformImagesDirectory);
+	bool scanSounds(QFileInfo oPlatformSoundsDirectory);
+	bool scanThemes(QFileInfo oPlatformThemesDirectory);
+	bool scanVideos(QFileInfo oPlatformVideosDirectory);
 
 private:
 	QDir m_oMediaDirectoryPath;

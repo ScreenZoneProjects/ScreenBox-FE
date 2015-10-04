@@ -19,13 +19,3 @@
 */
 
 #include "Frontend.hpp"
-
-Frontend::Frontend(QWidget *parent)
-    : QMainWindow(parent)
-{
-}
-
-Frontend::~Frontend()
-{
-
-}
