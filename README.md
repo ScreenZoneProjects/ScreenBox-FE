@@ -134,3 +134,9 @@ ScreenFlow uses the Git-flow as Git workflow model, so to add new features, foll
 1. Don't change any version number, it will be made later by repo owners
 1. Push the branch up to GitHub
 1. Send a pull request to the ScreenZoneProjects/ScreenFlow project on develop branch
+
+## LICENSE
+
+![logo](http://www.gnu.org/graphics/gplv3-127x51.png)
+
+ScreenFlow is under GPLv3 license, for more informations you can read the [LICENSE.txt](https://github.com/ScreenZoneProjects/ScreenFlow/LICENSE.txt) file.
