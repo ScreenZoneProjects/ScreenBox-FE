@@ -1,17 +1,30 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(ScreenFlow)
 
-message("Testing CMake....")
+macro(ADD_OSX_FRAMEWORK fwname target)
+    find_library(FRAMEWORK_${fwname}
+            NAMES ${fwname}
+            PATHS ${CMAKE_PREFIX_PATH}
+            PATH_SUFFIXES lib
+            NO_DEFAULT_PATH)
+    if( ${FRAMEWORK_${fwname}} STREQUAL FRAMEWORK_${fwname}-NOTFOUND)
+        MESSAGE(ERROR ": Framework ${fwname} not found")
+    else()
+        TARGET_LINK_LIBRARIES(${target} PUBLIC "${FRAMEWORK_${fwname}}/${fwname}")
+        MESSAGE(STATUS "Framework ${fwname} found at ${FRAMEWORK_${fwname}}")
+    endif()
+endmacro(ADD_OSX_FRAMEWORK)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+if (WIN32)
     set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.6.0\\5.6\\msvc2010")
     set(EXECUTABLE_OUTPUT_PATH "build/Windows/")
-endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+endif()
+if (APPLE)
     set(CMAKE_PREFIX_PATH "/Applications/Qt/Qt5.6.0/5.6/clang_64/")
     set(EXECUTABLE_OUTPUT_PATH "build/MacOSX/")
-endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+endif()
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -63,7 +76,7 @@ set(SOURCE_FILES
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCE_FILES})
 qt5_use_modules(${PROJECT_NAME} Widgets Qml Quick)
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    message("lofoof")
-    target_link_libraries(${PROJECT_NAME} "-framework QtAV -framework QtAVWidgets")
+if (APPLE)
+    ADD_OSX_FRAMEWORK(QtAV ${PROJECT_NAME})
+    #ADD_OSX_FRAMEWORK(QtAVWidgets ${PROJECT_NAME})
 endif()
