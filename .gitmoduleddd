@@ -1,0 +1,8 @@
+[submodule "QtAV"]
+	path = lib/QtAV
+	url = https://github.com/wang-bin/QtAV.git
+	branch = b562ab9
+[submodule "FFmpeg"]
+	path = lib/FFmpeg
+	url = https://github.com/FFmpeg/FFmpeg.git
+	branch = c66f4d1
