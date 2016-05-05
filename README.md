@@ -1,5 +1,5 @@
 ScreenFlow
-==========
+===========
 
 Open-Source Emulators Frontend
 
@@ -89,7 +89,7 @@ $ ScreenFlow -v
 $ ScreenFlow -u NAME       # Define a server user name NAME
 $ ScreenFlow -pwd PASSWORD # Define a server user password PASSWORD
 $ ScreenFlow -p            # Define a server port
-$ ScreenFlow --noserver    # Disable JSON-RPC server 
+$ ScreenFlow --noserver    # Disable JSON-RPC server
 ```
 
 #### Launch a game using CLI
