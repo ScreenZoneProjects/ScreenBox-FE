@@ -4,8 +4,6 @@
 #include <QQmlContext>
 #include <QThread>
 #include <QProcess>
-#include <QtAV>
-#include <QtAVWidgets>
 #include <QMessageBox>
 
 #include "utils/AppIntegrity.h"
@@ -24,6 +22,8 @@ int main(int argc, char *argv[])
     application.setApplicationDisplayName(appTitle);
     application.setOrganizationName(ORGANIZATION_NAME_STRING);
     application.setOrganizationDomain(ORGANIZATION_DOMAIN_STRING);
+
+
 
     QString applicationDirPath = application.applicationDirPath();
 
@@ -71,8 +71,6 @@ int main(int argc, char *argv[])
     }
 
     delete settings;
-
-    QtAV::Widgets::registerRenderers();
 
     qmlRegisterType<QuickSettings>("QuickFrontend", 1, 0, "QuickSettings");
     qmlRegisterType<QuickProcess>("QuickFrontend", 1, 0, "QuickProcess");

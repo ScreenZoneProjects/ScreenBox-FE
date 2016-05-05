@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += widgets qml quick av avwidgets
+QT += widgets qml quick
 CONFIG += c++11
 
 TARGET = ScreenFlow
@@ -63,6 +63,15 @@ MOC_DIR = $${DESTDIR}/.moc
 RCC_DIR = $${DESTDIR}/.rcc
 UI_DIR = $${DESTDIR}/.ui
 
+INCLUDEPATH += $${_PRO_FILE_PWD_}/lib/prebuilt/include
+LIBS += -L$${_PRO_FILE_PWD_}/lib/prebuilt/lib -lavcodec \
+    -lavformat \
+    -lavutil \
+    -lavfilter \
+    -lpostproc \
+    -lswresample \
+    -lswscale
+
 HEADERS += \
     src/settings/AppSettings.h \
     src/settings/MenuSettings.h \
@@ -75,4 +84,5 @@ HEADERS += \
     src/qml/QuickScene.h \
     src/qml/QuickWheel.h \
     src/databases/SystemDatabase.h \
-    src/databases/GameDatabase.h
+    src/databases/GameDatabase.h \
+    src/utils/FFmpeg.h
