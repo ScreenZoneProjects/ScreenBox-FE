@@ -2,4 +2,4 @@
 build/*
 *.pro.user
 .idea/
-lib/prebuilt/*
+lib/build/
