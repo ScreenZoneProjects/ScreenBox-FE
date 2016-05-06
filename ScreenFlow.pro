@@ -1,13 +1,13 @@
 TEMPLATE = app
 
-QT += widgets qml quick av
+QT += widgets qml quick av websockets
 CONFIG += c++11
 
 TARGET = ScreenFlow
 
 VERSION = 0.0.0.1
 DEFINES += VERSION_STRING=\\\"$$VERSION\\\"
-DEFINES += APPLICATION_NAME_STRING=\\\"ScreenFlow\\\"
+DEFINES += APPLICATION_NAME_STRING=\\\"$${TARGET}\\\"
 DEFINES += ORGANIZATION_NAME_STRING=\\\"ScreenZone\\\"
 DEFINES += ORGANIZATION_DOMAIN_STRING=\\\"screenzone.fr\\\"
 DEFINES += SETDIR_PATH=\\\"/Settings\\\"
@@ -76,3 +76,13 @@ HEADERS += \
     src/qml/QuickWheel.h \
     src/databases/SystemDatabase.h \
     src/databases/GameDatabase.h
+
+OTHER_FILES += \
+    resources/qml/ExitMenu.qml \
+    resources/qml/Hud.qml \
+    resources/qml/IntroScene.qml \
+    resources/qml/main.qml \
+    resources/qml/MenuScene.qml \
+    resources/qml/Theme.qml \
+    resources/qml/Wheel.qml \
+    resources/qml/WheelItem.qml

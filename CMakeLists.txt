@@ -78,5 +78,4 @@ qt5_use_modules(${PROJECT_NAME} Widgets Qml Quick)
 
 if (APPLE)
     ADD_OSX_FRAMEWORK(QtAV ${PROJECT_NAME})
-    #ADD_OSX_FRAMEWORK(QtAVWidgets ${PROJECT_NAME})
 endif()

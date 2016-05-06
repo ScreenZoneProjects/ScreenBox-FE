@@ -1,5 +1,4 @@
 <RCC>
-    <qresource prefix="/img"/>
     <qresource prefix="/qml">
         <file>qml/Hud.qml</file>
         <file>qml/main.qml</file>
@@ -9,5 +8,6 @@
         <file>qml/Wheel.qml</file>
         <file>qml/ExitMenu.qml</file>
         <file>qml/WheelItem.qml</file>
+        <file>qml/Network.js</file>
     </qresource>
 </RCC>

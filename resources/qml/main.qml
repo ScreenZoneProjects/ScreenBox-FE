@@ -2,6 +2,8 @@ import QtQuick 2.6
 import QtQuick.Controls 1.4
 import QtAV 1.6
 import QuickFrontend 1.0
+import QtWebSockets 1.0
+import "Network.js" as Net
 
 ApplicationWindow {
     id: mainWindow
@@ -107,6 +109,33 @@ ApplicationWindow {
                 frontend.currentScene = menuScene;
                 introScene.destroy();
             }
+        }
+    }
+
+    WebSocketServer {
+        id: server
+        listen: true
+        accept: true
+        host: "localhost"
+        port: 3030
+        name: "ScreenFlow"
+
+        onListenChanged: {
+            console.log(url);
+        }
+
+        onClientConnected: {
+            webSocket.sendTextMessage(qsTr(JSON.stringify({test: 0})));
+            webSocket.onTextMessageReceived.connect(function (msg) {
+                var jsonMsg = JSON.parse(msg);
+                var response = Net.handleRequest(jsonMsg);
+                webSocket.sendTextMessage(qsTr(response));
+            });
+        }
+
+        onErrorStringChanged: {
+            console.log(url);
+            console.error(errorString);
         }
     }
 }
