@@ -32,9 +32,9 @@ RESOURCES += $$_PRO_FILE_PWD_/resources/resources.qrc
 
 QML_IMPORT_PATH =
 
-RC_FILE = $$_PRO_FILE_PWD_/resources/win32/ScreenFlow.rc
-ICON = $$_PRO_FILE_PWD_/resources/osx/logo.icns
-QMAKE_INFO_PLIST = $$_PRO_FILE_PWD_/resources/osx/Info.plist
+RC_FILE = $${_PRO_FILE_PWD_}/resources/win32/ScreenFlow.rc
+ICON = $${_PRO_FILE_PWD_}/resources/osx/logo.icns
+QMAKE_INFO_PLIST = $${_PRO_FILE_PWD_}/resources/osx/Info.plist
 
 win32 {
     OUT_PWD = $${_PRO_FILE_PWD_}/build/Windows

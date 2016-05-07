@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QProcess>
 #include <QMessageBox>
+#include <QCursor>
 
 #include "utils/AppIntegrity.h"
 #include "settings/Settings.h"
@@ -22,7 +23,7 @@ int main(int argc, char *argv[])
     application.setApplicationDisplayName(appTitle);
     application.setOrganizationName(ORGANIZATION_NAME_STRING);
     application.setOrganizationDomain(ORGANIZATION_DOMAIN_STRING);
-
+    application.setOverrideCursor(QCursor(Qt::BlankCursor));
 
 
     QString applicationDirPath = application.applicationDirPath();

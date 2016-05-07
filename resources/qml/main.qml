@@ -67,7 +67,7 @@ ApplicationWindow {
     Image {
         id: scanLines
         visible: (settings.appValue("Resolution", "Scanlines_Active") === "true" && settings.appValue("Resolution","Scanlines_Image") !== "")
-        source: "file:/"+_APP_DIR_+"/Media/Frontend/Images/Scanlines/"+settings.appValue("Resolution","Scanlines_Image")
+        source: (settings.appValue("Resolution", "Scanlines_Active") === "true" && settings.appValue("Resolution","Scanlines_Image") !== "") ? "file:/"+_APP_DIR_+"/Media/Frontend/Images/Scanlines/"+settings.appValue("Resolution","Scanlines_Image") : ""
         anchors.fill: parent
         opacity: settings.appValue("Resolution","Scanlines_Alpha")
         fillMode: Image.Tile
@@ -114,14 +114,16 @@ ApplicationWindow {
 
     WebSocketServer {
         id: server
-        listen: true
-        accept: true
-        host: "localhost"
         port: 3030
-        name: "ScreenFlow"
+        host: "127.0.0.1"
+        accept: true
+
+        Component.onCompleted: {
+            listen = true
+        }
 
         onListenChanged: {
-            console.log(url);
+            console.log("JSON-RPC Server is listening at " + url + "...");
         }
 
         onClientConnected: {
@@ -134,8 +136,7 @@ ApplicationWindow {
         }
 
         onErrorStringChanged: {
-            console.log(url);
-            console.error(errorString);
+            console.error("[JSON-RPC] Error: " + errorString);
         }
     }
 }

@@ -65,12 +65,16 @@ QuickScene {
         }
         switch (event.key) {
             case Qt.Key_Left:
+                currentWheel.goLeft();
                 break;
             case Qt.Key_Right:
+                currentWheel.goRight();
                 break;
             case Qt.Key_Up:
+                currentWheel.goUp();
                 break;
             case Qt.Key_Down:
+                currentWheel.goDown();
                 break;
             case Qt.Key_Escape:
                 menuScene.system = "Main Menu";
@@ -95,10 +99,41 @@ QuickScene {
         anchors.bottom: parent.bottom
     }
     Wheel {
+        alpha: settings.mainMenuValue("wheel", "alpha")
+        color_ratio: settings.mainMenuValue("wheel", "color_ratio")
+        horz_large: settings.mainMenuValue("wheel", "horz_large")
+        horz_small: settings.mainMenuValue("wheel", "horz_small")
+        horz_wheel_y: settings.mainMenuValue("wheel", "horz_wheel_y")
+        large_text_width: settings.mainMenuValue("wheel", "large_text_width")
+        norm_large: settings.mainMenuValue("wheel", "norm_large")
+        norm_small: settings.mainMenuValue("wheel", "norm_small")
+        pin_large: settings.mainMenuValue("wheel", "pin_large")
+        pin_small: settings.mainMenuValue("wheel", "pin_small")
+        shadow_alpha: settings.mainMenuValue("wheel", "shadow_alpha")
+        shadow_angle: settings.mainMenuValue("wheel", "shadow_angle")
+        shadow_blur: settings.mainMenuValue("wheel", "shadow_blur")
+        shadow_color: settings.mainMenuValue("wheel", "shadow_color")
+        shadow_distance: settings.mainMenuValue("wheel", "shadow_distance")
+        small_alpha: settings.mainMenuValue("wheel", "small_alpha")
+        small_text_width: settings.mainMenuValue("wheel", "small_text_width")
+        speed: settings.mainMenuValue("wheel", "speed")
+        style: settings.mainMenuValue("wheel", "style")
+        text_color1: settings.mainMenuValue("wheel", "text_color1")
+        text_color2: settings.mainMenuValue("wheel", "text_color2")
+        text_color3: settings.mainMenuValue("wheel", "text_color3")
+        text_font: settings.mainMenuValue("wheel", "text_font")
+        text_stroke_color: settings.mainMenuValue("wheel", "text_stroke_color")
+        text_stroke_size: settings.mainMenuValue("wheel", "text_stroke_size")
+        text_width: settings.mainMenuValue("wheel", "text_width")
+        vert_large: settings.mainMenuValue("wheel", "vert_large")
+        vert_small: settings.mainMenuValue("wheel", "vert_small")
+        vert_wheel_position: settings.mainMenuValue("wheel", "vert_wheel_position")
+
         id: currentWheel
-        width: parent.height/2
-        height: parent.height/2
-        anchors.centerIn: parent
+        width: parent.height*2
+        height: parent.height*2
+        x: parent.width*2/3
+        y: -parent.height/2
     }
 
     ExitMenu {
