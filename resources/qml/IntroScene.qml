@@ -3,6 +3,9 @@ import QtAV 1.6
 import QuickFrontend 1.0
 
 QuickScene {
+    property QuickSettings settings
+    property MediaPlayer videoPlayer
+
     NumberAnimation {
         id: fadeIn;
         from: 0;

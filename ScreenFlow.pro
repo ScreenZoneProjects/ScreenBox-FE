@@ -75,7 +75,8 @@ HEADERS += \
     src/qml/QuickScene.h \
     src/qml/QuickWheel.h \
     src/databases/SystemDatabase.h \
-    src/databases/GameDatabase.h
+    src/databases/GameDatabase.h \
+    src/utils/actionscriptkeys.h
 
 OTHER_FILES += \
     resources/qml/ExitMenu.qml \

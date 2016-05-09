@@ -42,3 +42,9 @@ function handleRequest (req) {
         });
     }
 }
+
+function toHex(d) {
+    var hex = Number(d).toString(16);
+    var result = ("000000"+hex).slice(-6).toUpperCase();
+    return result;
+}

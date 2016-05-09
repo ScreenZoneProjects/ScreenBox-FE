@@ -3,7 +3,7 @@ import QtQuick.Controls 1.4
 import QtAV 1.6
 import QuickFrontend 1.0
 import QtWebSockets 1.0
-import "Network.js" as Net
+import "Utils.js" as Net
 
 ApplicationWindow {
     id: mainWindow
@@ -55,12 +55,16 @@ ApplicationWindow {
             id: introScene
             width: parent.width
             height: parent.height
+            settings: settings
+            videoPlayer: videoPlayer
         }
 
         MenuScene {
             id: menuScene
             width: parent.width
             height: parent.height
+            frontend: frontend
+            settings: settings
         }
     }
 

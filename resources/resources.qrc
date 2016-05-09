@@ -6,8 +6,8 @@
         <file>qml/MenuScene.qml</file>
         <file>qml/Wheel.qml</file>
         <file>qml/ExitMenu.qml</file>
-        <file>qml/WheelItem.qml</file>
-        <file>qml/Network.js</file>
+        <file>qml/Special.qml</file>
+        <file>qml/Utils.js</file>
     </qresource>
     <qresource prefix="/xsd">
         <file>xsd/mainMenu.xsd</file>

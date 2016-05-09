@@ -8,8 +8,6 @@
 #include <QXmlSchemaValidator>
 #include <QUrl>
 
-#include <QDebug>
-
 QuickFrontend::QuickFrontend(QQuickItem *parent)
     : QQuickItem(parent)
     , m_enterScene(0)
@@ -81,7 +79,6 @@ bool QuickFrontend::isValidDatabase(QString systemName)
         QFile file(QApplication::applicationDirPath().remove(OSX_DIR_SUFFIX)+
                    "/Databases/"+systemName+"/"+systemName+".xml");
         if (file.exists()) {
-            qDebug() << "main menu system...";
             file.open(QIODevice::ReadOnly);
             QXmlSchemaValidator validator(databaseSchema);
             if (validator.validate(&file, QUrl::fromLocalFile(file.fileName())))
