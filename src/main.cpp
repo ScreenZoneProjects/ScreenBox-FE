@@ -82,5 +82,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("_APP_DIR_", applicationDirPath);
     engine.load(QUrl(QStringLiteral("qrc:/qml/qml/main.qml")));
 
+    QObject::connect(&engine, SIGNAL(quit()), &application, SLOT(quit()));
     return application.exec();
 }

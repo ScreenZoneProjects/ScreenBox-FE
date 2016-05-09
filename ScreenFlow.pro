@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += widgets qml quick av websockets
+QT += widgets qml quick av websockets xmlpatterns
 CONFIG += c++11
 
 TARGET = ScreenFlow
@@ -79,10 +79,13 @@ HEADERS += \
 
 OTHER_FILES += \
     resources/qml/ExitMenu.qml \
-    resources/qml/Hud.qml \
     resources/qml/IntroScene.qml \
     resources/qml/main.qml \
     resources/qml/MenuScene.qml \
     resources/qml/Theme.qml \
     resources/qml/Wheel.qml \
     resources/qml/WheelItem.qml
+
+DISTFILES += \
+    resources/qml/Special.qml \
+    resources/xsd/mainMenu.xsd

@@ -2,6 +2,14 @@
 
 #include "QuickScene.h"
 
+#include <QXmlSchema>
+#include <QFile>
+#include <QApplication>
+#include <QXmlSchemaValidator>
+#include <QUrl>
+
+#include <QDebug>
+
 QuickFrontend::QuickFrontend(QQuickItem *parent)
     : QQuickItem(parent)
     , m_enterScene(0)
@@ -60,4 +68,25 @@ void QuickFrontend::disableScene(QuickScene * scene)
     scene->setEnabled(false);
     scene->setRunning(false);
     scene->setFocus(false, Qt::OtherFocusReason);
+}
+
+bool QuickFrontend::isValidDatabase(QString systemName)
+{
+    QXmlSchema databaseSchema;
+    if (systemName == "Main Menu")
+        databaseSchema.load(QUrl(QStringLiteral("qrc:/xsd/xsd/mainMenu.xsd")));
+    else
+        databaseSchema.load(QUrl(QStringLiteral("qrc:/xsd/xsd/systemMenu.xsd")));
+    if (databaseSchema.isValid()) {
+        QFile file(QApplication::applicationDirPath().remove(OSX_DIR_SUFFIX)+
+                   "/Databases/"+systemName+"/"+systemName+".xml");
+        if (file.exists()) {
+            qDebug() << "main menu system...";
+            file.open(QIODevice::ReadOnly);
+            QXmlSchemaValidator validator(databaseSchema);
+            if (validator.validate(&file, QUrl::fromLocalFile(file.fileName())))
+                return true;
+        }
+    }
+    return false;
 }

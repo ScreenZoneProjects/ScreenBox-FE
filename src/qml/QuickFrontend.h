@@ -17,6 +17,7 @@ public:
     void setCurrentScene(QuickScene *currentScene);
     void enableScene(QuickScene * scene);
     void disableScene(QuickScene * scene);
+    Q_INVOKABLE bool isValidDatabase(QString database);
 signals:
     void currentSceneChanged();
 private:
