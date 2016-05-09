@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>SplashScreen.qml</file>
+        <file>resources/images/logo.png</file>
+        <file>main.qml</file>
+        <file>Wheel.qml</file>
+        <file>HyperSpinTheme.qml</file>
+        <file>PlatformList.qml</file>
+        <file>NotificationBar.qml</file>
+        <file>Clock.qml</file>
+    </qresource>
+</RCC>

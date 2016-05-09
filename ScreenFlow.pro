@@ -1,76 +1,92 @@
-#
-#      Copyright (C) 2015 Team ScreenZone
-#      http://screenzone.fr
-#
-#  This Program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2, or (at your option)
-#  any later version.
-#
-#  This Program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with XBMC; see the file COPYING.  If not, see
-#  <http://www.gnu.org/licenses/>.
-#
-#
-
-QT += core gui xml qml quick
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-TARGET = ScreenFlow
 TEMPLATE = app
 
+QT += widgets qml quick av websockets xmlpatterns
 CONFIG += c++11
 
-SOURCES += src/main.cpp\
-    src/core/Frontend.cpp \
-    src/core/CRom.cpp \
-    src/core/CGame.cpp \
-    src/core/CGenre.cpp \
-    src/core/CRegion.cpp \
-    src/core/CDeveloper.cpp \
-    src/core/CSystem.cpp \
-    src/core/CManufacturer.cpp \
-    src/core/CPlatform.cpp \
-    src/core/CHyperSpinTheme.cpp \
-    src/core/CFranchise.cpp \
-    src/core/CRocketLauncher.cpp \
-    src/core/CHyperSpinThemeVideo.cpp \
-    src/core/CHyperSpinThemeArtwork.cpp \
-    src/core/CHyperSpinThemeParticle.cpp \
-    src/core/CHyperSpinThemeMedia.cpp \
-    src/utils/IniParser.cpp \
-    src/utils/XmlParser.cpp \
+TARGET = ScreenFlow
+
+VERSION = 0.0.0.1
+DEFINES += VERSION_STRING=\\\"$$VERSION\\\"
+DEFINES += APPLICATION_NAME_STRING=\\\"$${TARGET}\\\"
+DEFINES += ORGANIZATION_NAME_STRING=\\\"ScreenZone\\\"
+DEFINES += ORGANIZATION_DOMAIN_STRING=\\\"screenzone.fr\\\"
+DEFINES += SETDIR_PATH=\\\"/Settings\\\"
+DEFINES += OSX_DIR_SUFFIX=\\\"/$${TARGET}.app/Contents/MacOS\\\"
+
+SOURCES += \
+    src/settings/AppSettings.cpp \
+    src/settings/MenuSettings.cpp \
+    src/settings/SystemSettings.cpp \
     src/utils/AppIntegrity.cpp \
-    src/core/Settings.cpp
+    src/main.cpp \
+    src/settings/Settings.cpp \
+    src/qml/QuickProcess.cpp \
+    src/qml/QuickFrontend.cpp \
+    src/qml/QuickScene.cpp \
+    src/qml/QuickSettings.cpp \
+    src/qml/QuickWheel.cpp \
+    src/databases/SystemDatabase.cpp \
+    src/databases/GameDatabase.cpp
 
-HEADERS  += src/core/Frontend.hpp \
-    src/core/CRom.hpp \
-    src/core/CGame.hpp \
-    src/core/CGenre.hpp \
-    src/coreCRegion.hpp \
-    src/core/CDeveloper.hpp \
-    src/core/CSystem.hpp \
-    src/core/CManufacturer.hpp \
-    src/core/CPlatform.hpp \
-    src/core/CHyperSpinTheme.hpp \
-    src/core/CFranchise.hpp \
-    src/core/CRocketLauncher.hpp \
-    src/core/CHyperSpinThemeVideo.hpp \
-    src/core/CHyperSpinThemeArtwork.hpp \
-    src/core/CHyperSpinThemeParticle.hpp \
-    src/core/CHyperSpinThemeMedia.hpp \
-    src/utils/IniParser.hpp \
-    src/utils/XmlParser.hpp \
-    src/utils/AppIntegrity.hpp \
-    src/core/Settings.hpp
+RESOURCES += $$_PRO_FILE_PWD_/resources/resources.qrc
 
-RESOURCES += \
-    qml.qrc
+QML_IMPORT_PATH =
 
-DISTFILES +=
+RC_FILE = $${_PRO_FILE_PWD_}/resources/win32/ScreenFlow.rc
+ICON = $${_PRO_FILE_PWD_}/resources/osx/logo.icns
+QMAKE_INFO_PLIST = $${_PRO_FILE_PWD_}/resources/osx/Info.plist
+
+win32 {
+    OUT_PWD = $${_PRO_FILE_PWD_}/build/Windows
+}
+
+unix:linux:!macx:!android {
+    OUT_PWD = $${_PRO_FILE_PWD_}/build/Linux
+}
+
+android {
+    OUT_PWD = $${_PRO_FILE_PWD_}/build/Android
+}
+
+macx {
+    OUT_PWD = $${_PRO_FILE_PWD_}/build/MacOSX
+}
+
+CONFIG(debug, debug|release) {
+    DESTDIR = $${OUT_PWD}/debug
+} else {
+    DESTDIR = $${OUT_PWD}/release
+}
+
+OBJECTS_DIR = $${DESTDIR}/.obj
+MOC_DIR = $${DESTDIR}/.moc
+RCC_DIR = $${DESTDIR}/.rcc
+UI_DIR = $${DESTDIR}/.ui
+
+HEADERS += \
+    src/settings/AppSettings.h \
+    src/settings/MenuSettings.h \
+    src/settings/SystemSettings.h \
+    src/utils/AppIntegrity.h \
+    src/settings/Settings.h \
+    src/qml/QuickSettings.h \
+    src/qml/QuickProcess.h \
+    src/qml/QuickFrontend.h \
+    src/qml/QuickScene.h \
+    src/qml/QuickWheel.h \
+    src/databases/SystemDatabase.h \
+    src/databases/GameDatabase.h \
+    src/utils/actionscriptkeys.h
+
+OTHER_FILES += \
+    resources/qml/ExitMenu.qml \
+    resources/qml/IntroScene.qml \
+    resources/qml/main.qml \
+    resources/qml/MenuScene.qml \
+    resources/qml/Theme.qml \
+    resources/qml/Wheel.qml \
+    resources/qml/WheelItem.qml
+
+DISTFILES += \
+    resources/qml/Special.qml \
+    resources/xsd/mainMenu.xsd

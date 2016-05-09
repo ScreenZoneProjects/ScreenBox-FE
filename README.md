@@ -1,7 +1,7 @@
 ScreenFlow
 ==========
 
-Open-Source Emulators Frontend
+Open-Source Emulators Frontend, with full HyperSpin configuration support.
 
 Chat Support [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ScreenZoneProjects/ScreenFlow?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -10,7 +10,7 @@ Chat Support [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitte
 | ![win-badge]        | ![lin-badge]      | ![osx-badge]    |
 
 [lin-link]: https://travis-ci.org/ScreenZoneProjects/ScreenFlow
-[win-link]: https://ci.appveyor.com/project/jbltx/openspin-7jlje
+[win-link]: https://ci.appveyor.com/project/jbltx/screenflow
 [osx-link]: https://travis-ci.org/ScreenZoneProjects/ScreenFlow
 [lin-badge]: https://travis-ci.org/ScreenZoneProjects/ScreenFlow.svg "Travis build status"
 [win-badge]: https://ci.appveyor.com/api/projects/status/rp48rjajn5svtpoj?svg=true "AppVeyor build status"
@@ -20,23 +20,25 @@ Chat Support [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitte
 
 ScreenFlow is a simple open-source games emulators frontend.
 
-ScreenFlow is written in C++, using the famous Qt libs.
+ScreenFlow is written in C++, using the famous Qt framework.
 It contains frontend standard and extra features :
 
 * Navigate through several systems and games with animated menus.
 * Each system and game can have their own animation theme.
 * Themes, settings and databases are fully compatible with [HyperSpin](http://www.hyperspin-fe.com/) ones.
+* Use [FFmpeg](https://github.com/FFmpeg/FFmpeg) for video and audio playback.
 * Launch games in emulators with predefined configurations.
 * User can remotely control the frontend using JSON-RPC protocol.
 
-ScreenFlow uses [ClDoc](https://jessevdk.github.io/cldoc/) for online documentation.
+ScreenFlow uses [Doxygen](https://github.com/doxygen/doxygen) for online development documentation.
 
-For more informations, please see the [Wiki](https://github.com/ScreenZoneProjects/ScreenFlow/wiki).
+For more informations, please see the [Wiki](https://github.com/ScreenZoneProjects/ScreenFlow/wiki), or you can go to [Official ScreenZone forum](http://www.screenzone.fr/forum).
 
 ## SYSTEM REQUIREMENTS
 
-- Windows / Linux / OSX Operating Systems
-- 32bits / 64bits / ARM CPU Architectures
+| Windows | Linux | OSX | Android |
+| :-----: | :---: | :-: | :-----: |
+| 32/64bits | 32/64bits | 64bits | ARMv7 |
 
 ## RELEASE INSTALLATION
 
@@ -46,26 +48,41 @@ If you want to install from releases, go to [Releases page](https://github.com/S
 
 You may first need to install some additional [development packages](https://github.com/ScreenZoneProjects/ScreenFlow/wiki/Installation) for your OS.
 
-Then simply use the **[QMake](http://doc.qt.io/qt-5/qmake-overview.html#building-a-project)** and make command :
+### Get the source code
 
 ```bash
 git clone https://github.com/ScreenZoneProjects/ScreenFlow.git
 cd ScreenFlow
-qmake -qt=qt5
-make
-sudo make install
+#Use the command below to work on last stable version commit
+git checkout tags/latest
+git submodule update --init --recursive
 ```
 
-If you prefer to use **[CMake](http://www.cmake.org/)**, you can also use it :
+### Build ScreenFlow
+
+- Using qmake
 
 ```bash
-git clone https://github.com/ScreenZoneProjects/ScreenFlow.git
-cd ScreenFlow && mkdir build && cd build
-cmake -DCMAKE_PREFIX_PATH="PATH_TO_Qt5<Module>_DIR" ../
-make
-sudo make install
+qmake <options> -o Makefile ScreenFlow.pro
 ```
-**NB: You need to change `"PATH_TO_Qt5<Module>_DIR"` by your personal path.**
+
+- Using cmake
+
+```bash
+cmake <options> -o Makefile ScreenFlow.pro
+```
+
+#### Build options
+
+By default, the Makefile generated will be available to build ScreenFlow for your **current system** as **release** environment. The default destination directory is `build/<YOUR_SYSTEM>/release`. Here are the options to customize your Makefile generation:
+
+- `BUILD_DIR` = (*String*) The build destination directory (default: `build`)
+- `WIN_DIR` = (*String*) The Windows build directory (default: `Windows`)
+- `OSX_DIR` = (*String*) The OSX build directory (default: `MacOSX`)
+- `LINUX_DIR` = (*String*) The Linux build directory (default: `Linux`)
+- `DEBUG` = (*Boolean*) Set debug environment (default: `false`)
+- `ARCH` = (*String x86_64 | x64*) Set build archithecture. Works only with Windows/Linux builds, OSX is by default only in x64 and android only in armv7 (default: `x86_64`)
+- `INSTALL_DIR` = (*String*) The installation directory (defaut: `/usr/local` for Linux, `/Applications` for OSX and `C:\Program Files` for Windows)
 
 
 ## RUNNING
@@ -85,19 +102,12 @@ $ ScreenFlow -v
 ```
 
 #### JSON-RPC Configuration
-```bash
-$ ScreenFlow -u NAME       # Define a server user name NAME
-$ ScreenFlow -pwd PASSWORD # Define a server user password PASSWORD
-$ ScreenFlow -p            # Define a server port
-$ ScreenFlow --noserver    # Disable JSON-RPC server 
-```
+
+*WIP...*
 
 #### Launch a game using CLI
-```bash
-$ ScreenFlow -s SYSTEM  # Define the system name SYSTEM
-$ ScreenFlow -r ROM     # Define the ROM name ROM
-$ ScreenFlow -a ARGS    # Optionnal: Additionnal arguments for the emulator executable ARGS
-```
+
+*WIP...*
 
 # DOCUMENTATION
 
@@ -124,3 +134,9 @@ ScreenFlow uses the Git-flow as Git workflow model, so to add new features, foll
 1. Don't change any version number, it will be made later by repo owners
 1. Push the branch up to GitHub
 1. Send a pull request to the ScreenZoneProjects/ScreenFlow project on develop branch
+
+## LICENSE
+
+![logo](http://www.gnu.org/graphics/gplv3-127x51.png)
+
+ScreenFlow is under GPLv3 license, for more informations you can read the [LICENSE.txt](https://github.com/ScreenZoneProjects/ScreenFlow/LICENSE.txt) file.

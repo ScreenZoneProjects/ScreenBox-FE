@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>qml/main.qml</file>
+        <file>qml/IntroScene.qml</file>
+        <file>qml/Theme.qml</file>
+        <file>qml/MenuScene.qml</file>
+        <file>qml/Wheel.qml</file>
+        <file>qml/ExitMenu.qml</file>
+        <file>qml/Special.qml</file>
+        <file>qml/Utils.js</file>
+    </qresource>
+    <qresource prefix="/xsd">
+        <file>xsd/mainMenu.xsd</file>
+        <file>xsd/systemMenu.xsd</file>
+    </qresource>
+</RCC>

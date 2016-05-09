@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>SplashScreen.qml</file>
-        <file>resources/images/logo.png</file>
-        <file>main.qml</file>
-    </qresource>
-</RCC>

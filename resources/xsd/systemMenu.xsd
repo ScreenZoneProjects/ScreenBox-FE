@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://www.qt-project.org/xmlschematest"
+            version="1.0"
+            elementFormDefault="qualified">
+    <xsd:element name="menu">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="header">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element type="xsd:string" name="listname"/>
+                            <xsd:element type="xsd:string" name="lastlistupdate"/>
+                            <xsd:element type="xsd:string" name="listversion"/>
+                            <xsd:element type="xsd:string" name="exporterversion"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="game" maxOccurs="unbounded" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element type="xsd:string" name="description"/>
+                            <xsd:element type="xsd:string" name="cloneof"/>
+                            <xsd:element type="xsd:string" name="crc"/>
+                            <xsd:element type="xsd:string" name="manufacturer"/>
+                            <xsd:element type="xsd:short" name="year"/>
+                            <xsd:element type="xsd:string" name="genre"/>
+                            <xsd:element type="xsd:string" name="rating"/>
+                            <xsd:element type="xsd:string" name="enabled"/>
+                        </xsd:sequence>
+                        <xsd:attribute type="xsd:string" name="name" use="required"/>
+                        <xsd:attribute type="xsd:string" name="index" use="optional"/>
+                        <xsd:attribute type="xsd:string" name="image" use="optional"/>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
