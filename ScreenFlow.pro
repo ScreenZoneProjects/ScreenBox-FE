@@ -24,7 +24,6 @@ SOURCES += \
     src/qml/QuickFrontend.cpp \
     src/qml/QuickScene.cpp \
     src/qml/QuickSettings.cpp \
-    src/qml/QuickWheel.cpp \
     src/databases/SystemDatabase.cpp \
     src/databases/GameDatabase.cpp
 
@@ -73,7 +72,6 @@ HEADERS += \
     src/qml/QuickProcess.h \
     src/qml/QuickFrontend.h \
     src/qml/QuickScene.h \
-    src/qml/QuickWheel.h \
     src/databases/SystemDatabase.h \
     src/databases/GameDatabase.h \
     src/utils/actionscriptkeys.h
