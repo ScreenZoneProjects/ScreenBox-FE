@@ -19,11 +19,21 @@ QuickScene {
     }
 
     function previousTitle () {
-
+        wheel.opacity = 1;
+        if (wheel.timer.running)
+            wheel.timer.restart();
+        else
+            wheel.timer.start();
+        wheel.view.decrementCurrentIndex();
     }
 
     function nextTitle () {
-
+        wheel.opacity = 1;
+        if (wheel.timer.running)
+            wheel.timer.restart();
+        else
+            wheel.timer.start();
+        wheel.view.incrementCurrentIndex()
     }
 
     function previousLetter () {
@@ -193,6 +203,8 @@ QuickScene {
         vert_wheel_position: settings.mainMenuValue("wheel", "vert_wheel_position")
 
         currentSystem: system
+
+        timer.onTriggered: { opacity = alpha; }
     }
 
     Rectangle {

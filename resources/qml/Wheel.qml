@@ -39,8 +39,20 @@ Rectangle {
 
     property alias view: wheelPathView
 
+    property alias timer: wheelTimer
+
     color: "transparent"
-    opacity: 1
+    opacity: alpha
+
+    Behavior on opacity {
+        PropertyAnimation { duration: 300 }
+    }
+
+    Timer {
+        id: wheelTimer
+        running: false
+        interval: 1000
+    }
 
     Component {
         id: delegate
@@ -48,9 +60,12 @@ Rectangle {
             id: wrapper
             visible: PathView.onPath
             rotation: PathView.onPath ? PathView.wheelItemRotation : 0
-            width: PathView.wheelItemWidth
+            width: PathView.isCurrentItem ? norm_large : norm_small
             height: 50
             scale: 0.8
+
+            Behavior on width { PropertyAnimation { duration: 150 } }
+
             Text {
                 id: wheelItemText
                 text: gameName
@@ -84,15 +99,16 @@ Rectangle {
         delegate: delegate
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
+        highlightMoveDuration: 100
         path: Path {
             startX: width
             startY: height
             PathAttribute { name: "wheelItemRotation"; value: -90; }
             PathAttribute { name: "wheelItemWidth"; value: norm_small; }
             PathArc { x: width*0.5; y: height*0.5; radiusX: width/2; radiusY: height/2; } // Middle
-            PathAttribute { name: "wheelItemWidth"; value: norm_small; }
+            PathAttribute { name: "wheelItemWidth"; value: norm_large; }
             PathAttribute { name: "wheelItemRotation"; value: 0; }
-            PathArc { x: width; y: 0; radiusX: width/2; radiusY: height/2; } // End
+            PathArc { x: width; y: 0; radiusX: width*0.5; radiusY: height*0.5; } // End
             PathAttribute { name: "wheelItemWidth"; value: norm_small; }
             PathAttribute { name: "wheelItemRotation"; value: 90; }
         }
