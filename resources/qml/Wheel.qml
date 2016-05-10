@@ -41,11 +41,19 @@ Rectangle {
     property string currentSystem: "Main Menu"
 
     property alias view: wheelPathView
-
+    property alias listModel: database
     property alias timer: wheelTimer
 
     color: "transparent"
     opacity: alpha
+
+    XmlListModel {
+        id: database
+        source: "file://"+_APP_DIR_+"/Databases/"+currentSystem+"/"+currentSystem+".xml"
+        query: "/menu/game"
+
+        XmlRole { name: "gameName"; query: "@name/string()"; }
+    }
 
     Behavior on opacity {
         PropertyAnimation { duration: 300 }
@@ -136,6 +144,62 @@ Rectangle {
         }
     }
 
+    Path {
+        id: wheelPath
+        startX: (vert_wheel_position === "right") ? width : 0
+        startY: {
+            if (vert_wheel_position === "right") return height;
+            else if (vert_wheel_position === "left") return 0;
+            else return horz_wheel_y;
+        }
+
+        PathAttribute {
+            name: "wheelItemRotation";
+            value: {
+                if (vert_wheel_position === "left") return 0;
+                else if (vert_wheel_position === "right") return -90;
+                else return 0;
+            }
+        }
+
+        PathArc {
+            x: width*0.5;
+            y: (vert_wheel_position === "right" || vert_wheel_position === "left") ? height*0.5 : horz_wheel_y-height/2 ;
+            radiusX: width/2;
+            radiusY: height/2;
+        }
+        PathAttribute {
+            name: "wheelItemRotation";
+            value: {
+                if (vert_wheel_position === "left") return 0;
+                else if (vert_wheel_position === "right") return 0;
+                else return 0;
+            }
+        }
+
+        PathArc {
+            x: (vert_wheel_position === "left") ? 0 : width;
+            y: {
+                if (vert_wheel_position === "left") return height;
+                else if (vert_wheel_position === "right") return 0;
+                else return horz_wheel_y;
+            }
+            radiusX: width*0.5;
+            radiusY: height*0.5;
+        }
+
+        PathAttribute {
+            name: "wheelItemRotation";
+            value: {
+                if (vert_wheel_position === "left") return 0;
+                else if (vert_wheel_position === "right") return 90;
+                else return 0;
+            }
+        }
+
+    }
+
+
     PathView {
         id: wheelPathView
         anchors.fill: parent
@@ -146,19 +210,7 @@ Rectangle {
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
         highlightMoveDuration: (speed === "high") ? 60 : 120
-        path: Path {
-            startX: width
-            startY: height
-            PathAttribute { name: "wheelItemRotation"; value: -90; }
-            PathAttribute { name: "wheelItemWidth"; value: norm_small; }
-            PathArc { x: width*0.5; y: height*0.5; radiusX: width/2; radiusY: height/2; } // Middle
-            PathAttribute { name: "wheelItemWidth"; value: norm_large; }
-            PathAttribute { name: "wheelItemRotation"; value: 0; }
-            PathArc { x: width; y: 0; radiusX: width*0.5; radiusY: height*0.5; } // End
-            PathAttribute { name: "wheelItemWidth"; value: norm_small; }
-            PathAttribute { name: "wheelItemRotation"; value: 90; }
-        }
-
+        path: wheelPath
         onCurrentItemChanged: {
             pointedItem = database.get(wheelPathView.currentIndex).gameName;
         }

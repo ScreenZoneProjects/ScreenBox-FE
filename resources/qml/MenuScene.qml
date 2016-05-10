@@ -11,9 +11,8 @@ QuickScene {
     property bool firstLaunch: true
 
     function goToSystem (systemName) {
-        console.log(systemName);
         if (!firstLaunch)
-            wheel.anchors.horizontalCenterOffset = width/4;
+            wheel.anchors.horizontalCenterOffset = width;
         firstLaunch = false;
     }
 
@@ -49,14 +48,6 @@ QuickScene {
 
     function toggleGenres () {
 
-    }
-
-    XmlListModel {
-        id: database
-        source: "file://"+_APP_DIR_+"/Databases/"+system+"/"+system+".xml"
-        query: "/menu/game"
-
-        XmlRole { name: "gameName"; query: "@name/string()"; }
     }
 
     Keys.onPressed: {
@@ -168,10 +159,11 @@ QuickScene {
 
     Wheel {
         id: wheel
-        width: parent.height*2
-        height: parent.height*2
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+
+        anchors.centerIn: parent
+        width: parent.height*1.8
+        height: parent.height*1.8
+
         alpha: settings.mainMenuValue("wheel", "alpha")
         color_ratio: settings.mainMenuValue("wheel", "color_ratio")
         horz_large: settings.mainMenuValue("wheel", "horz_large")
@@ -201,7 +193,6 @@ QuickScene {
         vert_large: settings.mainMenuValue("wheel", "vert_large")
         vert_small: settings.mainMenuValue("wheel", "vert_small")
         vert_wheel_position: settings.mainMenuValue("wheel", "vert_wheel_position")
-
         currentSystem: system
 
         timer.onTriggered: { opacity = alpha; }
@@ -228,6 +219,4 @@ QuickScene {
         action: settings.appValue("Main", "Exit_Action")
         pointed: settings.appValue("Main", "Exit_Default")
     }
-
-
 }
