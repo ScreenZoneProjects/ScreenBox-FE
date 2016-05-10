@@ -159,10 +159,9 @@ QuickScene {
 
     Wheel {
         id: wheel
-        width: parent.height
-        height: parent.height
-        anchors.centerIn: theme
-        color: "grey"
+        width: parent.height*2
+        height: parent.height*2
+        anchors.verticalCenter: parent.verticalCenter
         alpha: settings.mainMenuValue("wheel", "alpha")
         color_ratio: settings.mainMenuValue("wheel", "color_ratio")
         horz_large: settings.mainMenuValue("wheel", "horz_large")
@@ -192,6 +191,8 @@ QuickScene {
         vert_large: settings.mainMenuValue("wheel", "vert_large")
         vert_small: settings.mainMenuValue("wheel", "vert_small")
         vert_wheel_position: settings.mainMenuValue("wheel", "vert_wheel_position")
+
+        currentSystem: system
     }
 
     Rectangle {

@@ -35,36 +35,66 @@ Rectangle {
 
     property string pointedItem : "MAME"
 
+    property string currentSystem: "Main Menu"
+
+    property alias view: wheelPathView
+
     color: "transparent"
     opacity: 1
 
     Component {
         id: delegate
-        Rectangle {
-            color: "red"
-            width: 200
+        Item {
+            id: wrapper
+            visible: PathView.onPath
+            rotation: PathView.onPath ? PathView.wheelItemRotation : 0
+            width: PathView.wheelItemWidth
             height: 50
-
+            scale: 0.8
             Text {
-                anchors.fill: parent
+                id: wheelItemText
                 text: gameName
+                color: "white"
+                anchors.centerIn: wrapper
+                visible: false
+            }
+            Image {
+                id: wheelItemImage
+                source: "file://"+_APP_DIR_+"/Media/"+currentSystem+"/Images/Wheel/"+gameName+".png"
+                width: parent.width
+                anchors.centerIn: wrapper
+                fillMode: Qt.KeepAspectRatio
+                visible: true
+                onStatusChanged: {
+                    if (status === Image.Error) {
+                        wheelItemText.visible = true;
+                        wheelItemImage.visible = false;
+                    }
+                }
             }
         }
     }
 
     PathView {
+        id: wheelPathView
         anchors.fill: parent
         model: database
-        pathItemCount: 12
+        pathItemCount: 20
+        cacheItemCount: 2
         delegate: delegate
+        preferredHighlightBegin: 0.5
+        preferredHighlightEnd: 0.5
         path: Path {
-            startX: wheel.width
-            startY: wheel.height
-            PathArc { x: wheel.width; y: 0; radiusX: wheel.width/2; radiusY: wheel.height/2; useLargeArc: false; }
+            startX: width
+            startY: height
+            PathAttribute { name: "wheelItemRotation"; value: -90; }
+            PathAttribute { name: "wheelItemWidth"; value: norm_small; }
+            PathArc { x: width*0.5; y: height*0.5; radiusX: width/2; radiusY: height/2; } // Middle
+            PathAttribute { name: "wheelItemWidth"; value: norm_small; }
+            PathAttribute { name: "wheelItemRotation"; value: 0; }
+            PathArc { x: width; y: 0; radiusX: width/2; radiusY: height/2; } // End
+            PathAttribute { name: "wheelItemWidth"; value: norm_small; }
+            PathAttribute { name: "wheelItemRotation"; value: 90; }
         }
-    }
-
-    Component.onCompleted: {
-
     }
 }
