@@ -3,7 +3,7 @@ import QtQuick.Controls 1.4
 import QtAV 1.6
 import QuickFrontend 1.0
 import QtWebSockets 1.0
-import "Utils.js" as Net
+import "Utils.js" as Utils
 
 ApplicationWindow {
     id: mainWindow
@@ -62,6 +62,8 @@ ApplicationWindow {
             anchors.fill: parent
             settings: settings
             videoPlayer: videoPlayer
+            enterAnimation: NumberAnimation { target: introScene; property: "opacity"; from: 0; to: 1; duration: 300 }
+            exitAnimation: NumberAnimation { target: introScene; property: "opacity"; from: 1; to: 0; duration: 300 }
         }
 
         WheelScene {
@@ -76,7 +78,8 @@ ApplicationWindow {
             onSwitchToGrid: {
                 frontend.currentScene = gridScene;
             }
-
+            enterAnimation: NumberAnimation { target: wheelScene; property: "opacity"; from: 0; to: 1; duration: 300 }
+            exitAnimation: NumberAnimation { target: wheelScene; property: "opacity"; from: 1; to: 0; duration: 300 }
         }
 
         CoverflowScene {
@@ -91,6 +94,8 @@ ApplicationWindow {
             onSwitchToWheel: {
                 frontend.currentScene = wheelScene;
             }
+            enterAnimation: NumberAnimation { target: coverFlowScene; property: "opacity"; from: 0; to: 1; duration: 300 }
+            exitAnimation: NumberAnimation { target: coverFlowScene; property: "opacity"; from: 1; to: 0; duration: 300 }
         }
 
         GridScene {
@@ -105,6 +110,8 @@ ApplicationWindow {
             onSwitchToWheel: {
                 frontend.currentScene = wheelScene;
             }
+            enterAnimation: NumberAnimation { target: gridScene; property: "opacity"; from: 0; to: 1; duration: 300 }
+            exitAnimation: NumberAnimation { target: gridScene; property: "opacity"; from: 1; to: 0; duration: 300 }
         }
     }
 
@@ -175,7 +182,7 @@ ApplicationWindow {
             webSocket.sendTextMessage(qsTr(JSON.stringify({test: 0})));
             webSocket.onTextMessageReceived.connect(function (msg) {
                 var jsonMsg = JSON.parse(msg);
-                var response = Net.handleRequest(jsonMsg);
+                var response = Utils.handleRequest(jsonMsg);
                 webSocket.sendTextMessage(qsTr(response));
             });
         }
