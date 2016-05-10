@@ -1,6 +1,9 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.XmlListModel 2.0
 import QuickFrontend 1.0
+import QtGraphicalEffects 1.0
+
+import "Utils.js" as Utils
 
 Rectangle {
     property double alpha: 0.15
@@ -41,7 +44,7 @@ Rectangle {
 
     property alias timer: wheelTimer
 
-    color: "transparent"
+    color: "white"
     opacity: alpha
 
     Behavior on opacity {
@@ -61,18 +64,36 @@ Rectangle {
             visible: PathView.onPath
             rotation: PathView.onPath ? PathView.wheelItemRotation : 0
             width: PathView.isCurrentItem ? norm_large : norm_small
-            height: 50
-            scale: 0.8
+            height: 100
+            scale: 0.75
 
             Behavior on width { PropertyAnimation { duration: 150 } }
 
             Text {
                 id: wheelItemText
                 text: gameName
-                color: "white"
-                anchors.centerIn: wrapper
                 visible: false
+                font.weight: (text_width === 700) ? Font.Bold : Font.Normal
+                font.pixelSize: parent.height
+                width: wrapper.PathView.isCurrentItem ? large_text_width : small_text_width
+                anchors.horizontalCenter: parent.horizontalCenter
+                fontSizeMode: Text.HorizontalFit
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                style: Text.Outline
+                styleColor: text_stroke_color
+
+                LinearGradient {
+                    anchors.fill: wheelItemText
+                    source: wheelItemText
+                    gradient: Gradient {
+                        GradientStop { position: 0; color: text_color1; }
+                        GradientStop { position: 0.5*color_ratio; color: text_color2; }
+                        GradientStop { position: 1*color_ratio; color: text_color3; }
+                    }
+                }
             }
+
             Image {
                 id: wheelItemImage
                 source: "file://"+_APP_DIR_+"/Media/"+currentSystem+"/Images/Wheel/"+gameName+".png"
@@ -81,11 +102,23 @@ Rectangle {
                 fillMode: Qt.KeepAspectRatio
                 visible: true
                 onStatusChanged: {
-                    if (status === Image.Error) {
+                    if (status === Image.Error)
+                    {
+                        visible = false;
                         wheelItemText.visible = true;
-                        wheelItemImage.visible = false;
                     }
                 }
+            }
+
+            DropShadow {
+                anchors.fill: (wheelItemImage.visible) ? wheelItemImage : wheelItemText
+                horizontalOffset: Utils.getHOffset(shadow_angle, shadow_distance)
+                verticalOffset: Utils.getVOffset(shadow_angle, shadow_distance)
+                radius: shadow_blur
+                samples: 8
+                opacity: shadow_alpha
+                color: shadow_color
+                source: (wheelItemImage.visible) ? wheelItemImage : wheelItemText
             }
         }
     }

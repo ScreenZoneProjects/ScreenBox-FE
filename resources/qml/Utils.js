@@ -48,3 +48,17 @@ function toHex(d) {
     var result = ("000000"+hex).slice(-6).toUpperCase();
     return result;
 }
+
+function getVOffset (angle, distance) {
+    var isNegative = false;
+    if (distance < 0)
+        isNegative = true;
+    return (isNegative) ? -distance*Math.sin(angle) : distance*Math.sin(angle);
+}
+
+function getHOffset (angle, distance) {
+    var isNegative = false;
+    if (distance < 0)
+        isNegative = true;
+    return (isNegative) ? -distance*Math.cos(angle) : distance*Math.cos(angle);
+}
