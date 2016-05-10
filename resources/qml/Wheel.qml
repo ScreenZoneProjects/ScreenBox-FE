@@ -5,7 +5,8 @@ import QtGraphicalEffects 1.0
 
 import "Utils.js" as Utils
 
-Rectangle {
+Item {
+    /* HyperSpin Official Properties */
     property double alpha: 0.15
     property double color_ratio: 1
     property int horz_large: 400
@@ -36,16 +37,73 @@ Rectangle {
     property int vert_small: 240
     property string vert_wheel_position: "right"
 
+    /* Other Properties */
     property string pointedItem : "MAME"
-
     property string currentSystem: "Main Menu"
-
     property alias view: wheelPathView
     property alias listModel: database
-    property alias timer: wheelTimer
+    property alias alphaTimer: alphaTimer
 
-    color: "transparent"
+    /* Signals */
+    signal movedUp();
+    signal movedDown();
+    signal movedSkipUp();
+    signal movedSkipDown();
+    signal movedSkipUpNumber();
+    signal movedSkipDownNumber();
+    signal exiting();
+    signal selecting();
+
     opacity: alpha
+    anchors.horizontalCenterOffset: {
+        if (vert_wheel_position === "left") return -parent.width/4;
+        else if (vert_wheel_position === "right") return parent.width/4;
+        else return 0;
+    }
+
+    function up () {
+        opacity = 1;
+        if (alphaTimer.running)
+            alphaTimer.restart();
+        else
+            alphaTimer.start();
+        wheelPathView.decrementCurrentIndex();
+        movedUp();
+    }
+
+    function down () {
+        opacity = 1;
+        if (alphaTimer.running)
+            alphaTimer.restart();
+        else
+            alphaTimer.start();
+        wheelPathView.incrementCurrentIndex();
+        movedDown();
+    }
+
+    function skipUp () {
+        movedSkipUp();
+    }
+
+    function skipDown () {
+        movedSkipDown();
+    }
+
+    function skipUpNumber () {
+        movedSkipUpNumber();
+    }
+
+    function skipDownNumber () {
+        movedSkipDownNumber();
+    }
+
+    function exit () {
+        exiting();
+    }
+
+    function select () {
+        selecting();
+    }
 
     XmlListModel {
         id: database
@@ -64,9 +122,11 @@ Rectangle {
     }
 
     Timer {
-        id: wheelTimer
+        id: alphaTimer
         running: false
         interval: 1000
+
+        onTriggered: { opacity = alpha; }
     }
 
     Component {
@@ -199,18 +259,18 @@ Rectangle {
 
     }
 
-
     PathView {
         id: wheelPathView
         anchors.fill: parent
         model: database
-        pathItemCount: 20
+        pathItemCount: 22
         cacheItemCount: 2
         delegate: delegate
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
-        highlightMoveDuration: (speed === "high") ? 60 : 120
+        highlightMoveDuration: (speed === "high") ? 80 : 120
         path: wheelPath
+
         onCurrentItemChanged: {
             pointedItem = database.get(wheelPathView.currentIndex).gameName;
         }

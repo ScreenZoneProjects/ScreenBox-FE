@@ -58,18 +58,53 @@ ApplicationWindow {
 
         IntroScene {
             id: introScene
-            width: parent.width
-            height: parent.height
+            objectName: "introScene"
+            anchors.fill: parent
             settings: settings
             videoPlayer: videoPlayer
         }
 
-        MenuScene {
-            id: menuScene
-            width: parent.width
-            height: parent.height
+        WheelScene {
+            id: wheelScene
+            objectName: "wheelScene"
+            anchors.fill: parent
             frontend: frontend
             settings: settings
+            onSwitchToCoverFlow: {
+                frontend.currentScene = coverFlowScene;
+            }
+            onSwitchToGrid: {
+                frontend.currentScene = gridScene;
+            }
+
+        }
+
+        CoverflowScene {
+            id: coverFlowScene
+            objectName: "coverFlowScene"
+            anchors.fill: parent
+            frontend: frontend
+            settings: settings
+            onSwitchToGrid: {
+                frontend.currentScene = gridScene;
+            }
+            onSwitchToWheel: {
+                frontend.currentScene = wheelScene;
+            }
+        }
+
+        GridScene {
+            id: gridScene
+            objectName: "gridScene"
+            frontend: frontend
+            settings: settings
+            anchors.fill: parent
+            onSwitchToCoverFlow: {
+                frontend.currentScene = coverFlowScene;
+            }
+            onSwitchToWheel: {
+                frontend.currentScene = wheelScene;
+            }
         }
     }
 
@@ -83,6 +118,7 @@ ApplicationWindow {
         horizontalAlignment: Image.AlignLeft
         verticalAlignment: Image.AlignTop
         scale: settings.appValue("Resolution","Scanlines_Scale")
+        focus: false
     }
 
     MediaPlayer {
@@ -115,8 +151,8 @@ ApplicationWindow {
         }
         onStopped: {
             if (frontend.currentScene === introScene) {
-                frontend.currentScene = menuScene;
-                introScene.destroy();
+                frontend.currentScene = wheelScene;
+                //introScene.destroy();
             }
         }
     }

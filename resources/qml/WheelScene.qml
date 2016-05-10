@@ -1,123 +1,66 @@
 import QtQuick 2.0
 import QuickFrontend 1.0
 import QtQuick.XmlListModel 2.0
-import "Utils.js" as Colors
+import "Utils.js" as Utils
 
 QuickScene {
     property string system: "Main Menu"
     property QuickSettings settings
     property QuickFrontend frontend
 
-    property bool firstLaunch: true
-
-    function goToSystem (systemName) {
-        if (!firstLaunch)
-            wheel.anchors.horizontalCenterOffset = width;
-        firstLaunch = false;
-    }
-
-    function previousTitle () {
-        wheel.opacity = 1;
-        if (wheel.timer.running)
-            wheel.timer.restart();
-        else
-            wheel.timer.start();
-        wheel.view.decrementCurrentIndex();
-    }
-
-    function nextTitle () {
-        wheel.opacity = 1;
-        if (wheel.timer.running)
-            wheel.timer.restart();
-        else
-            wheel.timer.start();
-        wheel.view.incrementCurrentIndex()
-    }
-
-    function previousLetter () {
-
-    }
-
-    function nextLetter () {
-
-    }
-
-    function toggleFavourites () {
-
-    }
-
-    function toggleGenres () {
-
-    }
+    signal switchToCoverFlow();
+    signal switchToGrid();
 
     Keys.onPressed: {
-        if (settings.appValue("Main", "Enable_Exit") === "true" &&
-                system === "Main Menu" &&
-                event.key === Qt.Key_Escape &&
-                settings.appValue("Main", "Enable_Exit_Menu") !== "true")
-        {
-            return Qt.quit();
-        }
-        else if (exitMenu.visible === false &&
-                system === "Main Menu" &&
-                event.key === Qt.Key_Escape &&
-                settings.appValue("Main", "Enable_Exit_Menu") === "true")
-        {
-            exitMenu.visible = true;
-            return;
-        }
-        else if (exitMenu.visible === true) {
-            switch (event.key) {
-                case Qt.Key_Escape:
-                    exitMenu.visible = false;
-                    break;
-                case Qt.Key_Left:
-                    exitMenu.pointed = "yes";
-                    break;
-                case Qt.Key_Right:
-                    exitMenu.pointed = "no";
-                    break;
-                case Qt.Key_Return:
-                    if (exitMenu.pointed === "yes")
-                        return Qt.quit();
-                    else
-                        exitMenu.visible = false;
-                    break;
-                default:
-                    break;
-            }
-            return;
-        }
         switch (event.key) {
-            case Qt.Key_Left:
-                previousLetter();
-                break;
-            case Qt.Key_Right:
-                nextLetter();
-                break;
-            case Qt.Key_Up:
-                previousTitle();
-                break;
-            case Qt.Key_Down:
-                nextTitle();
-                break;
-            case Qt.Key_Escape:
-                goToSystem("Main Menu");
-                break;
-            case Qt.Key_Return:
-                if (system === "Main Menu")
-                    goToSystem(wheel.pointedItem);
-                else
-                    process.rocketLaunch(system, wheel.pointedItem);
-                break;
-            default:
-                break;
+        case Qt.Key_Up:
+            if (!exitMenu.visible)
+                wheel.up();
+            break;
+        case Qt.Key_Down:
+            if (!exitMenu.visible)
+                wheel.down();
+            break;
+        case Qt.Key_Left:
+            if (!exitMenu.visible)
+                wheel.skipDown();
+            else
+                exitMenu.pointed = "yes"
+            break;
+        case Qt.Key_Right:
+            if (!exitMenu.visible)
+                wheel.skipUp();
+            else
+                exitMenu.pointed = "no"
+            break;
+        case Qt.Key_Return:
+            if (!exitMenu.visible)
+                wheel.select();
+            else if (exitMenu.pointed === "yes")
+                return Qt.quit();
+            else
+                exitMenu.visible = false;
+            break;
+        case Qt.Key_Escape:
+            if (!exitMenu.visible)
+                wheel.exit();
+            else
+                exitMenu.visible = false;
+            break;
+        case Qt.Key_C:
+            switchToCoverFlow();
+            break;
+        case Qt.Key_G:
+            switchToGrid();
+            break;
+        default:
+            break;
         }
     }
 
     Component.onCompleted: {
         if (frontend.isValidDatabase(system)) {
-            goToSystem(system);
+            /**/
         } else {
             notFound.visible = true;
         }
@@ -161,8 +104,9 @@ QuickScene {
         id: wheel
 
         anchors.centerIn: parent
-        width: parent.height*1.8
-        height: parent.height*1.8
+        width: parent.height*2
+        height: parent.height*2
+        currentSystem: system
 
         alpha: settings.mainMenuValue("wheel", "alpha")
         color_ratio: settings.mainMenuValue("wheel", "color_ratio")
@@ -177,25 +121,38 @@ QuickScene {
         shadow_alpha: settings.mainMenuValue("wheel", "shadow_alpha")
         shadow_angle: settings.mainMenuValue("wheel", "shadow_angle")
         shadow_blur: settings.mainMenuValue("wheel", "shadow_blur")
-        shadow_color: "#"+Colors.toHex(settings.mainMenuValue("wheel", "shadow_color"))
+        shadow_color: "#"+Utils.toHex(settings.mainMenuValue("wheel", "shadow_color"))
         shadow_distance: settings.mainMenuValue("wheel", "shadow_distance")
         small_alpha: settings.mainMenuValue("wheel", "small_alpha")
         small_text_width: settings.mainMenuValue("wheel", "small_text_width")
         speed: settings.mainMenuValue("wheel", "speed")
         style: settings.mainMenuValue("wheel", "style")
-        text_color1: "#"+Colors.toHex(settings.mainMenuValue("wheel", "text_color1"))
-        text_color2: "#"+Colors.toHex(settings.mainMenuValue("wheel", "text_color2"))
-        text_color3: "#"+Colors.toHex(settings.mainMenuValue("wheel", "text_color3"))
+        text_color1: "#"+Utils.toHex(settings.mainMenuValue("wheel", "text_color1"))
+        text_color2: "#"+Utils.toHex(settings.mainMenuValue("wheel", "text_color2"))
+        text_color3: "#"+Utils.toHex(settings.mainMenuValue("wheel", "text_color3"))
         text_font: settings.mainMenuValue("wheel", "text_font")
-        text_stroke_color: "#"+Colors.toHex(settings.mainMenuValue("wheel", "text_stroke_color"))
+        text_stroke_color: "#"+Utils.toHex(settings.mainMenuValue("wheel", "text_stroke_color"))
         text_stroke_size: settings.mainMenuValue("wheel", "text_stroke_size")
         text_width: settings.mainMenuValue("wheel", "text_width")
         vert_large: settings.mainMenuValue("wheel", "vert_large")
         vert_small: settings.mainMenuValue("wheel", "vert_small")
         vert_wheel_position: settings.mainMenuValue("wheel", "vert_wheel_position")
-        currentSystem: system
 
-        timer.onTriggered: { opacity = alpha; }
+        onExiting: {
+            if (settings.appValue("Main", "Enable_Exit") === "true" &&
+                    system === "Main Menu" &&
+                    settings.appValue("Main", "Enable_Exit_Menu") !== "true")
+            {
+                return Qt.quit();
+            }
+            else if (exitMenu.visible === false &&
+                    system === "Main Menu" &&
+                    settings.appValue("Main", "Enable_Exit_Menu") === "true")
+            {
+                exitMenu.visible = true;
+                return;
+            }
+        }
     }
 
     Rectangle {

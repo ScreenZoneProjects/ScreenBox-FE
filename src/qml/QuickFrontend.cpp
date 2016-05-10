@@ -8,6 +8,8 @@
 #include <QXmlSchemaValidator>
 #include <QUrl>
 
+#include <QDebug>
+
 QuickFrontend::QuickFrontend(QQuickItem *parent)
     : QQuickItem(parent)
     , m_enterScene(0)
@@ -28,7 +30,7 @@ void QuickFrontend::setCurrentScene(QuickScene *currentScene)
     int stackSize = m_sceneStack.size();
     if (!currentScene)
         return;
-    else if (stackSize > 0 && currentScene == m_sceneStack.top())
+    else if (stackSize > 0 && currentScene->objectName() == m_sceneStack.top()->objectName())
         return;
     else if (m_sceneStack.contains(currentScene)) {
         int index = m_sceneStack.indexOf(currentScene);
@@ -38,7 +40,7 @@ void QuickFrontend::setCurrentScene(QuickScene *currentScene)
         }
     }
     if (stackSize > 0)
-        m_exitScene = m_sceneStack.pop();
+        m_exitScene = m_sceneStack.top();
     m_sceneStack.push(currentScene);
     currentScene->setZ(m_sceneStack.size());
     disableScene(m_exitScene);

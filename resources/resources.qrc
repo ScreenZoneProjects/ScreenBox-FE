@@ -3,11 +3,13 @@
         <file>qml/main.qml</file>
         <file>qml/IntroScene.qml</file>
         <file>qml/Theme.qml</file>
-        <file>qml/MenuScene.qml</file>
+        <file>qml/WheelScene.qml</file>
         <file>qml/Wheel.qml</file>
         <file>qml/ExitMenu.qml</file>
         <file>qml/Special.qml</file>
         <file>qml/Utils.js</file>
+        <file>qml/GridScene.qml</file>
+        <file>qml/CoverflowScene.qml</file>
     </qresource>
     <qresource prefix="/xsd">
         <file>xsd/mainMenu.xsd</file>
