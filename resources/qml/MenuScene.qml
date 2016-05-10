@@ -8,14 +8,13 @@ QuickScene {
     property QuickSettings settings
     property QuickFrontend frontend
 
+    property bool firstLaunch: true
+
     function goToSystem (systemName) {
-        // Switch to new system here...
-        // Call outAnimation for current theme/wheel/specials
-        // Change system property to systemName
-        // Call inAnimation for new theme/wheel/special
-        wheel.visible = true;
-        specialArt.visible = true;
-        theme.visible = true;
+        console.log(systemName);
+        if (!firstLaunch)
+            wheel.anchors.horizontalCenterOffset = width/4;
+        firstLaunch = false;
     }
 
     function previousTitle () {
@@ -114,7 +113,7 @@ QuickScene {
             case Qt.Key_Escape:
                 goToSystem("Main Menu");
                 break;
-            case Qt.Key_Enter:
+            case Qt.Key_Return:
                 if (system === "Main Menu")
                     goToSystem(wheel.pointedItem);
                 else
@@ -172,6 +171,7 @@ QuickScene {
         width: parent.height*2
         height: parent.height*2
         anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
         alpha: settings.mainMenuValue("wheel", "alpha")
         color_ratio: settings.mainMenuValue("wheel", "color_ratio")
         horz_large: settings.mainMenuValue("wheel", "horz_large")

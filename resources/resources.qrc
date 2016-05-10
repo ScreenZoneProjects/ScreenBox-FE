@@ -13,4 +13,11 @@
         <file>xsd/mainMenu.xsd</file>
         <file>xsd/systemMenu.xsd</file>
     </qresource>
+    <qresource prefix="/ttf">
+        <file>ttf/style4.ttf</file>
+        <file>ttf/style2.ttf</file>
+        <file>ttf/style3-bold.ttf</file>
+        <file>ttf/style3.ttf</file>
+        <file>ttf/style1.ttf</file>
+    </qresource>
 </RCC>

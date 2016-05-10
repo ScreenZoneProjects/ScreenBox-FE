@@ -44,10 +44,14 @@ Rectangle {
 
     property alias timer: wheelTimer
 
-    color: "white"
+    color: "transparent"
     opacity: alpha
 
     Behavior on opacity {
+        PropertyAnimation { duration: 300 }
+    }
+
+    Behavior on anchors.horizontalCenterOffset {
         PropertyAnimation { duration: 300 }
     }
 
@@ -82,7 +86,16 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 style: Text.Outline
                 styleColor: text_stroke_color
-
+                font.family: {
+                    if (text_font === "Style4")
+                        return style4Font.name;
+                    else if (text_font === "Style3")
+                        return style3Font.name;
+                    else if (text_font === "Style2")
+                        return style2Font.name;
+                    else
+                        return style1Font.name;
+                }
                 LinearGradient {
                     anchors.fill: wheelItemText
                     source: wheelItemText
@@ -132,7 +145,7 @@ Rectangle {
         delegate: delegate
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
-        highlightMoveDuration: 100
+        highlightMoveDuration: (speed === "high") ? 60 : 120
         path: Path {
             startX: width
             startY: height
@@ -144,6 +157,10 @@ Rectangle {
             PathArc { x: width; y: 0; radiusX: width*0.5; radiusY: height*0.5; } // End
             PathAttribute { name: "wheelItemWidth"; value: norm_small; }
             PathAttribute { name: "wheelItemRotation"; value: 90; }
+        }
+
+        onCurrentItemChanged: {
+            pointedItem = database.get(wheelPathView.currentIndex).gameName;
         }
     }
 }

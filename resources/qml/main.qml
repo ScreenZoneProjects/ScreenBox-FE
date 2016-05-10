@@ -21,6 +21,11 @@ ApplicationWindow {
     QuickProcess { id: process }
     QuickSettings { id: settings }
 
+    FontLoader { id: style1Font; source: "qrc:/ttf/ttf/style1.ttf"; }
+    FontLoader { id: style2Font; source: "qrc:/ttf/ttf/style2.ttf"; }
+    FontLoader { id: style3Font; source: "qrc:/ttf/ttf/style3.ttf"; }
+    FontLoader { id: style4Font; source: "qrc:/ttf/ttf/style4.ttf"; }
+
     Component.onCompleted: {
         if (settings.appValue("Startup Program", "Executable") !== "") {
             if (settings.appValue("Startup Program", "WinState") === "MAXIMIZED") {

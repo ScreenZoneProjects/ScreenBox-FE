@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     application.setApplicationDisplayName(appTitle);
     application.setOrganizationName(ORGANIZATION_NAME_STRING);
     application.setOrganizationDomain(ORGANIZATION_DOMAIN_STRING);
-    application.setOverrideCursor(QCursor(Qt::BlankCursor));
+
 
 
     QString applicationDirPath = application.applicationDirPath();
@@ -72,6 +72,8 @@ int main(int argc, char *argv[])
     }
 
     delete settings;
+
+    application.setOverrideCursor(QCursor(Qt::BlankCursor));
 
     qmlRegisterType<QuickSettings>("QuickFrontend", 1, 0, "QuickSettings");
     qmlRegisterType<QuickProcess>("QuickFrontend", 1, 0, "QuickProcess");
