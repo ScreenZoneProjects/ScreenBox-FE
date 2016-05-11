@@ -37,9 +37,10 @@ QuickScene {
 
     VideoOutput2 {
         id: introOutput
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
         source: videoPlayer
+        opengl: true
+        fillMode: VideoOutput.PreserveAspectCrop
         orientation: 0
     }
 }

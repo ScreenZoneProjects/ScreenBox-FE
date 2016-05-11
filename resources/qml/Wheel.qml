@@ -46,6 +46,7 @@ Item {
     property alias offsetTimer: offsetTimer
     property QuickFrontend f;
     property QuickSettings s;
+    property string currentData: "Main Menu"
 
     /* Signals */
     signal movedUp();
@@ -105,12 +106,11 @@ Item {
     }
 
     function select () {
-        var validation = f.isValidDatabase(pointedItem);
-        if (validation === QuickFrontend.MenuType) {
+        if (f.isValidMenuData(pointedItem)) {
             f.nextDataType = QuickFrontend.MenuType
             f.nextDataName = pointedItem
             selecting();
-        } else if (validation === QuickFrontend.SystemType) {
+        } else if (f.isValidSystemData(pointedItem)) {
             f.nextDataType = QuickFrontend.SystemType
             f.nextDataName = pointedItem
             selecting();
@@ -146,13 +146,13 @@ Item {
         }
         else {
             pointedItem = "Main Menu"
-            selecting();
+            select();
         }
     }
 
     XmlListModel {
         id: database
-        source: "file://"+_APP_DIR_+"/Databases/"+f.currentDataName+"/"+f.currentDataName+".xml"
+        source: "file://"+_APP_DIR_+"/Databases/"+currentData+"/"+currentData+".xml"
         query: "/menu/game"
 
         XmlRole { name: "gameName"; query: "@name/string()"; }
@@ -182,7 +182,12 @@ Item {
 
         onTriggered: {
             if (!lastPhase) {
-                f.currentDataName = f.nextDataName;
+                console.log("first phase animation wait");
+                currentData = f.nextDataName;
+                f.currentDataName = currentData;
+                f.currentDataType = f.nextDataType
+                f.nextDataType = 0
+                f.nextDataName = ""
                 start();
                 lastPhase = true;
                 return;
@@ -250,7 +255,7 @@ Item {
 
             Image {
                 id: wheelItemImage
-                source: "file://"+_APP_DIR_+"/Media/"+f.currentDataName+"/Images/Wheel/"+gameName+".png"
+                source: "file://"+_APP_DIR_+"/Media/"+currentData+"/Images/Wheel/"+gameName+".png"
                 width: parent.width
                 anchors.centerIn: wrapper
                 fillMode: Qt.KeepAspectRatio

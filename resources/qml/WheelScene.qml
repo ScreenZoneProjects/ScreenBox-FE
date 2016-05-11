@@ -55,10 +55,9 @@ QuickScene {
     }
 
     Component.onCompleted: {
-        var validation = frontend.isValidDatabase(frontend.currentDataName);
-        if (validation === QuickFrontend.MenuType) {
+        if (frontend.isValidMenuData(frontend.currentDataName)) {
             /* The database is a Basic Menu */
-        } else if (validation === QuickFrontend.SystemType) {
+        } else if (frontend.isvalidSystemData(frontend.currentDataName)) {
             /* The database is a System Menu */
         }
         else {
@@ -108,6 +107,8 @@ QuickScene {
 
         f: frontend
         s: settings
+
+        currentData: frontend.currentDataName
 
         alpha: settings.mainMenuValue("wheel", "alpha")
         color_ratio: settings.mainMenuValue("wheel", "color_ratio")

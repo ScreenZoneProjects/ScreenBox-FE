@@ -51,7 +51,8 @@ public:
     void disableScene(QuickScene * scene);
     void attachScene(QuickScene * scene);
     QMetaMethod getMetaMethod(QObject * object, QString methodSignature) const;
-    Q_INVOKABLE DataType isValidDatabase(QString database);
+    Q_INVOKABLE bool isValidSystemData(QString data);
+    Q_INVOKABLE bool isValidMenuData(QString data);
 public slots:
     void handleEnterAnimationRunningChanged(bool running);
     void handleExitAnimationRunningChanged(bool running);

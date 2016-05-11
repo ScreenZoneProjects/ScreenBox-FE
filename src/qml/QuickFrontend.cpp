@@ -164,40 +164,53 @@ void QuickFrontend::disableScene(QuickScene * scene)
     scene->setFocus(false, Qt::OtherFocusReason);
 }
 
-QuickFrontend::DataType QuickFrontend::isValidDatabase(QString systemName)
+bool QuickFrontend::isValidMenuData(QString data)
 {
-    if (m_validMenus.contains(systemName))
-        return DataType::MenuType;
-
-    if (m_validSystems.contains(systemName))
-        return DataType::SystemType;
+    if (m_validMenus.contains(data))
+        return true;
 
     QFile xmlFile(QApplication::applicationDirPath().remove(OSX_DIR_SUFFIX)+
-                  "/Databases/"+systemName+"/"+systemName+".xml");
+                  "/Databases/"+data+"/"+data+".xml");
 
     if (!xmlFile.exists())
-        return DataType::InvalidType;
+        return false;
 
     xmlFile.open(QIODevice::ReadOnly);
 
-    QXmlSchemaValidator systemValidator(*m_systemSchema);
-    QXmlSchemaValidator menuValidator(*m_menuSchema);
+    QXmlSchemaValidator validator(*m_menuSchema);
 
-    bool isMenu = menuValidator.validate(&xmlFile, QUrl::fromLocalFile(xmlFile.fileName()));
-    bool isSystem = systemValidator.validate(&xmlFile, QUrl::fromLocalFile(xmlFile.fileName()));
+    if (validator.validate(&xmlFile, QUrl::fromLocalFile(xmlFile.fileName())))
+    {
+        m_validMenus.append(data);
+        return true;
+    }
 
-    if (isMenu)
+    return false;
+
+}
+
+bool QuickFrontend::isValidSystemData(QString data)
+{
+    if (m_validSystems.contains(data))
+        return true;
+
+    QFile xmlFile(QApplication::applicationDirPath().remove(OSX_DIR_SUFFIX)+
+                  "/Databases/"+data+"/"+data+".xml");
+
+    if (!xmlFile.exists())
+        return false;
+
+    xmlFile.open(QIODevice::ReadOnly);
+
+    QXmlSchemaValidator validator(*m_systemSchema);
+
+    if (validator.validate(&xmlFile, QUrl::fromLocalFile(xmlFile.fileName())))
     {
-        m_validMenus.append(systemName);
-        return DataType::MenuType;
+        m_validSystems.append(data);
+        return true;
     }
-    else if (isSystem)
-    {
-        m_validSystems.append(systemName);
-        return DataType::SystemType;
-    }
-    else
-        return DataType::InvalidType;
+
+    return false;
 }
 
 void QuickFrontend::handleExitAnimationRunningChanged(bool running)
