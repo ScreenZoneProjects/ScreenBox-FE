@@ -8,8 +8,7 @@ QuickScene {
     property QuickSettings settings
     property string currentSystem: "Main Menu"
 
-    signal switchToCoverFlow();
-    signal switchToWheel();
+    signal switchScene();
 
     Rectangle {
         id: gridBackground
@@ -34,12 +33,11 @@ QuickScene {
             id: wrapper
             width: grid.cellWidth
             height: grid.cellHeight
+            z: GridView.isCurrentItem ? 1 : 0
             Item {
                 anchors.fill: parent
                 anchors.margins: parent.height/10
-                scale: wrapper.GridView.isCurrentItem ? 1.1 : 1
-
-                z: wrapper.GridView.isCurrentItem ? 10 : 1
+                scale: wrapper.GridView.isCurrentItem ? 1.3 : 1
                 Behavior on scale { PropertyAnimation { duration: 100 }}
                 Behavior on z { PropertyAnimation { duration: 100 }}
                 Image {
@@ -52,7 +50,7 @@ QuickScene {
                 Rectangle {
                     id: gridItemMask
                     anchors.fill: parent
-                    radius: 8
+                    radius: 2
                     visible: false
                 }
                 OpacityMask {
@@ -99,11 +97,8 @@ QuickScene {
             break;
         case Qt.Key_Escape:
             break;
-        case Qt.Key_W:
-            switchToWheel();
-            break;
-        case Qt.Key_C:
-            switchToCoverFlow();
+        case Qt.Key_S:
+            switchScene();
             break;
         default:
             break;
@@ -117,28 +112,58 @@ QuickScene {
             width: grid.cellWidth
             height: grid.cellHeight
             color: "white"
-            radius: 8
+            radius: 2
         }
     }
 
     Item {
+        id: gridHeader
+        width: parent.width
+        height: parent.width/10
+        anchors.top: parent.top
+        anchors.left: parent.left
+    }
+
+    Item {
         width: parent.width*.95
-        height: parent.height
-        anchors.centerIn: parent
+        height: parent.width/2.29
+        anchors.top: gridHeader.bottom
+        anchors.horizontalCenter: gridHeader.horizontalCenter
 
         GridView {
             id: grid
             width: parent.width
-            height: parent.width/2.29
+            height: parent.height
             anchors.centerIn: parent
             model: database
-            // highlight: highlight
+            //highlight: highlight
             delegate: delegate
             cellHeight: (parent.width/5)/2.3
             cellWidth: parent.width/5
             flow: GridView.LeftToRight
             preferredHighlightBegin: 0.5
             preferredHighlightEnd: 0.5
+        }
+    }
+
+    Rectangle {
+        id: gridFadeBottom
+        width: parent.width
+        height: parent.height*0.5
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        gradient : Gradient {
+            GradientStop { position: 0; color: "#00161616"; }
+            GradientStop { position: 1; color: "#FF161616"; }
+        }
+
+        Image {
+            id: gridMainCover
+            source: "http://images.nintendolife.com/games/wii/mario_and_sonic_at_the_olympic_games/cover_large.jpg"
+            height: parent.height*.8
+            anchors.verticalCenter: parent.verticalCenter
+            fillMode: Qt.KeepAspectRatio
+            x: parent.height*.1
         }
     }
 }

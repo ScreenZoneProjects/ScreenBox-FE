@@ -13,9 +13,66 @@ QuickFrontend::QuickFrontend(QQuickItem *parent)
     : QQuickItem(parent)
     , m_enterScene(0)
     , m_exitScene(0)
+    , m_menuSchema(0)
+    , m_systemSchema(0)
 {
     m_sceneStack.clear();
 
+    m_menuSchema = new QXmlSchema();
+    m_systemSchema = new QXmlSchema();
+
+    m_menuSchema->load(QUrl(QStringLiteral("qrc:/xsd/xsd/mainMenu.xsd")));
+    m_systemSchema->load(QUrl(QStringLiteral("qrc:/xsd/xsd/systemMenu.xsd")));
+}
+
+QString QuickFrontend::currentDataName() const
+{
+    return m_currentDataName;
+}
+
+QuickFrontend::DataType QuickFrontend::currentDataType() const
+{
+    return m_currentDataType;
+}
+
+QString QuickFrontend::nextDataName() const
+{
+    return m_nextDataName;
+}
+
+QuickFrontend::DataType QuickFrontend::nextDataType() const
+{
+    return m_nextDataType;
+}
+
+void QuickFrontend::setCurrentDataName(QString currentDataName)
+{
+    m_currentDataName = currentDataName;
+}
+
+void QuickFrontend::setCurrentDataType(DataType currentDataType)
+{
+    m_currentDataType = currentDataType;
+}
+
+void QuickFrontend::setNextDataName(QString nextDataName)
+{
+    m_nextDataName = nextDataName;
+}
+
+void QuickFrontend::setNextDataType(DataType nextDataType)
+{
+    m_nextDataType = nextDataType;
+}
+
+QList<QString> QuickFrontend::dataPath() const
+{
+    return m_dataPath;
+}
+
+void QuickFrontend::setDataPath(QList<QString> dataPath)
+{
+    m_dataPath = dataPath;
 }
 
 QuickScene * QuickFrontend::currentScene() const
@@ -107,27 +164,41 @@ void QuickFrontend::disableScene(QuickScene * scene)
     scene->setFocus(false, Qt::OtherFocusReason);
 }
 
-bool QuickFrontend::isValidDatabase(QString systemName)
+QuickFrontend::DataType QuickFrontend::isValidDatabase(QString systemName)
 {
-    QXmlSchema databaseSchema;
-    if (systemName == "Main Menu")
-        databaseSchema.load(QUrl(QStringLiteral("qrc:/xsd/xsd/mainMenu.xsd")));
-    else
-        databaseSchema.load(QUrl(QStringLiteral("qrc:/xsd/xsd/systemMenu.xsd")));
-    if (databaseSchema.isValid()) {
-        QFile file(QApplication::applicationDirPath().remove(OSX_DIR_SUFFIX)+
-                   "/Databases/"+systemName+"/"+systemName+".xml");
-        if (file.exists()) {
-            file.open(QIODevice::ReadOnly);
-            QXmlSchemaValidator validator(databaseSchema);
-            if (validator.validate(&file, QUrl::fromLocalFile(file.fileName())))
-                return true;
-        }
+    if (m_validMenus.contains(systemName))
+        return DataType::MenuType;
+
+    if (m_validSystems.contains(systemName))
+        return DataType::SystemType;
+
+    QFile xmlFile(QApplication::applicationDirPath().remove(OSX_DIR_SUFFIX)+
+                  "/Databases/"+systemName+"/"+systemName+".xml");
+
+    if (!xmlFile.exists())
+        return DataType::InvalidType;
+
+    xmlFile.open(QIODevice::ReadOnly);
+
+    QXmlSchemaValidator systemValidator(*m_systemSchema);
+    QXmlSchemaValidator menuValidator(*m_menuSchema);
+
+    bool isMenu = menuValidator.validate(&xmlFile, QUrl::fromLocalFile(xmlFile.fileName()));
+    bool isSystem = systemValidator.validate(&xmlFile, QUrl::fromLocalFile(xmlFile.fileName()));
+
+    if (isMenu)
+    {
+        m_validMenus.append(systemName);
+        return DataType::MenuType;
     }
-    return false;
+    else if (isSystem)
+    {
+        m_validSystems.append(systemName);
+        return DataType::SystemType;
+    }
+    else
+        return DataType::InvalidType;
 }
-
-
 
 void QuickFrontend::handleExitAnimationRunningChanged(bool running)
 {

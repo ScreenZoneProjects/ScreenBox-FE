@@ -39,10 +39,13 @@ Item {
 
     /* Other Properties */
     property string pointedItem : "MAME"
-    property string currentSystem: "Main Menu"
     property alias view: wheelPathView
     property alias listModel: database
     property alias alphaTimer: alphaTimer
+    property alias currentDatabase: database
+    property alias offsetTimer: offsetTimer
+    property QuickFrontend f;
+    property QuickSettings s;
 
     /* Signals */
     signal movedUp();
@@ -102,12 +105,54 @@ Item {
     }
 
     function select () {
-        selecting();
+        var validation = f.isValidDatabase(pointedItem);
+        if (validation === QuickFrontend.MenuType) {
+            f.nextDataType = QuickFrontend.MenuType
+            f.nextDataName = pointedItem
+            selecting();
+        } else if (validation === QuickFrontend.SystemType) {
+            f.nextDataType = QuickFrontend.SystemType
+            f.nextDataName = pointedItem
+            selecting();
+        } else {
+            f.notFound(pointedItem);
+        }
+    }
+
+    onSelecting: {
+        wheelPathView.enabled = false
+        if (vert_wheel_position === "left")
+            anchors.horizontalCenterOffset = -parent.width;
+        else if (vert_wheel_position === "right")
+            anchors.horizontalCenterOffset = parent.width;
+        else
+            anchors.verticalCenterOffset = parent.height;
+        offsetTimer.start();
+    }
+
+    onExiting: {
+        if (settings.appValue("Main", "Enable_Exit") === "true" &&
+                f.currentDataName === "Main Menu" &&
+                settings.appValue("Main", "Enable_Exit_Menu") !== "true")
+        {
+            return Qt.quit();
+        }
+        else if (exitMenu.visible === false &&
+                f.currentDataName === "Main Menu" &&
+                settings.appValue("Main", "Enable_Exit_Menu") === "true")
+        {
+            exitMenu.visible = true;
+            return;
+        }
+        else {
+            pointedItem = "Main Menu"
+            selecting();
+        }
     }
 
     XmlListModel {
         id: database
-        source: "file://"+_APP_DIR_+"/Databases/"+currentSystem+"/"+currentSystem+".xml"
+        source: "file://"+_APP_DIR_+"/Databases/"+f.currentDataName+"/"+f.currentDataName+".xml"
         query: "/menu/game"
 
         XmlRole { name: "gameName"; query: "@name/string()"; }
@@ -129,6 +174,34 @@ Item {
         onTriggered: { opacity = alpha; }
     }
 
+    Timer {
+        id: offsetTimer
+        running: false
+        interval: 300
+        property bool lastPhase: false
+
+        onTriggered: {
+            if (!lastPhase) {
+                f.currentDataName = f.nextDataName;
+                start();
+                lastPhase = true;
+                return;
+            }
+            if (database.progress === XmlListModel.Loading) {
+                start();
+                return
+            }
+            if (vert_wheel_position === "left")
+                anchors.horizontalCenterOffset = -parent.width/4;
+            else if (vert_wheel_position === "right")
+                anchors.horizontalCenterOffset = parent.width/4;
+            else
+                anchors.verticalCenterOffset = 0;
+            wheelPathView.enabled = true;
+            lastPhase = false;
+        }
+    }
+
     Component {
         id: delegate
         Item {
@@ -145,7 +218,7 @@ Item {
                 id: wheelItemText
                 text: gameName
                 visible: false
-                font.weight: (text_width === 700) ? Font.Bold : Font.Normal
+                font.weight: (text_width === 900) ? Font.Bold : Font.Normal
                 font.pixelSize: parent.height
                 width: wrapper.PathView.isCurrentItem ? large_text_width : small_text_width
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -177,7 +250,7 @@ Item {
 
             Image {
                 id: wheelItemImage
-                source: "file://"+_APP_DIR_+"/Media/"+currentSystem+"/Images/Wheel/"+gameName+".png"
+                source: "file://"+_APP_DIR_+"/Media/"+f.currentDataName+"/Images/Wheel/"+gameName+".png"
                 width: parent.width
                 anchors.centerIn: wrapper
                 fillMode: Qt.KeepAspectRatio

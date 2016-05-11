@@ -6,16 +6,12 @@ QuickScene {
     property QuickFrontend frontend
     property QuickSettings settings
 
-    signal switchToGrid();
-    signal switchToWheel();
+    signal switchScene();
 
     Keys.onPressed: {
         switch (event.key) {
-        case Qt.Key_G:
-            switchToGrid();
-            break;
-        case Qt.Key_W:
-            switchToWheel();
+        case Qt.Key_S:
+            switchScene();
             break;
         default:
             break;

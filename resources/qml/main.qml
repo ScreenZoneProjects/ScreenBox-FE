@@ -51,10 +51,19 @@ ApplicationWindow {
         }
     }
 
+    Timer { id: nfTimer; running: false; interval: 2000; onTriggered: { notFound.visible = false; }}
+
     QuickFrontend {
         id: frontend
         anchors.fill: parent
+        currentDataName: (settings.appValue("Main","Menu_Mode") === "multi") ? "Main Menu" : (settings.appValue("Main","Single_Mode_Name"))
+        currentDataType: QuickFrontend.MenuType
         currentScene: introScene
+        function notFound(fn) {
+            notFound.fileName = fn;
+            notFound.visible = true;
+            nfTimer.start();
+        }
 
         IntroScene {
             id: introScene
@@ -72,10 +81,8 @@ ApplicationWindow {
             anchors.fill: parent
             frontend: frontend
             settings: settings
-            onSwitchToCoverFlow: {
-                frontend.currentScene = coverFlowScene;
-            }
-            onSwitchToGrid: {
+            exitmenu: exitMenu
+            onSwitchScene: {
                 frontend.currentScene = gridScene;
             }
             enterAnimation: NumberAnimation { target: wheelScene; property: "opacity"; from: 0; to: 1; duration: 300 }
@@ -88,10 +95,7 @@ ApplicationWindow {
             anchors.fill: parent
             frontend: frontend
             settings: settings
-            onSwitchToGrid: {
-                frontend.currentScene = gridScene;
-            }
-            onSwitchToWheel: {
+            onSwitchScene: {
                 frontend.currentScene = wheelScene;
             }
             enterAnimation: NumberAnimation { target: coverFlowScene; property: "opacity"; from: 0; to: 1; duration: 300 }
@@ -104,15 +108,35 @@ ApplicationWindow {
             frontend: frontend
             settings: settings
             anchors.fill: parent
-            onSwitchToCoverFlow: {
+            onSwitchScene: {
                 frontend.currentScene = coverFlowScene;
-            }
-            onSwitchToWheel: {
-                frontend.currentScene = wheelScene;
             }
             enterAnimation: NumberAnimation { target: gridScene; property: "opacity"; from: 0; to: 1; duration: 300 }
             exitAnimation: NumberAnimation { target: gridScene; property: "opacity"; from: 1; to: 0; duration: 300 }
         }
+    }
+
+    Rectangle {
+        id: notFound
+        property string fileName: ""
+        visible: false
+        anchors.fill: parent
+        color: "#CC000000"
+        Text {
+            id: notFoundText
+            text: "Cannot find " + notFound.fileName + ".xml"
+            anchors.centerIn: parent
+            color: "white"
+            scale: 2
+        }
+    }
+
+    ExitMenu {
+        id: exitMenu
+        anchors.fill: parent
+        visible: false
+        action: settings.appValue("Main", "Exit_Action")
+        pointed: settings.appValue("Main", "Exit_Default")
     }
 
     Image {
@@ -159,7 +183,6 @@ ApplicationWindow {
         onStopped: {
             if (frontend.currentScene === introScene) {
                 frontend.currentScene = wheelScene;
-                //introScene.destroy();
             }
         }
     }

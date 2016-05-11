@@ -4,54 +4,50 @@ import QtQuick.XmlListModel 2.0
 import "Utils.js" as Utils
 
 QuickScene {
-    property string system: "Main Menu"
     property QuickSettings settings
     property QuickFrontend frontend
+    property ExitMenu exitmenu;
 
-    signal switchToCoverFlow();
-    signal switchToGrid();
+    signal switchScene();
 
     Keys.onPressed: {
         switch (event.key) {
         case Qt.Key_Up:
-            if (!exitMenu.visible)
+            if (!exitmenu.visible)
                 wheel.up();
             break;
         case Qt.Key_Down:
-            if (!exitMenu.visible)
+            if (!exitmenu.visible)
                 wheel.down();
             break;
         case Qt.Key_Left:
-            if (!exitMenu.visible)
+            if (!exitmenu.visible)
                 wheel.skipDown();
             else
-                exitMenu.pointed = "yes"
+                exitmenu.pointed = "yes"
             break;
         case Qt.Key_Right:
-            if (!exitMenu.visible)
+            if (!exitmenu.visible)
                 wheel.skipUp();
             else
-                exitMenu.pointed = "no"
+                exitmenu.pointed = "no"
             break;
         case Qt.Key_Return:
-            if (!exitMenu.visible)
+            if (!exitmenu.visible)
                 wheel.select();
-            else if (exitMenu.pointed === "yes")
+            else if (exitmenu.pointed === "yes")
                 return Qt.quit();
             else
-                exitMenu.visible = false;
+                exitmenu.visible = false;
             break;
         case Qt.Key_Escape:
-            if (!exitMenu.visible)
+            if (!exitmenu.visible)
                 wheel.exit();
             else
-                exitMenu.visible = false;
+                exitmenu.visible = false;
             break;
-        case Qt.Key_C:
-            switchToCoverFlow();
-            break;
-        case Qt.Key_G:
-            switchToGrid();
+        case Qt.Key_S:
+            switchScene();
             break;
         default:
             break;
@@ -59,10 +55,15 @@ QuickScene {
     }
 
     Component.onCompleted: {
-        if (frontend.isValidDatabase(system)) {
-            /**/
-        } else {
-            notFound.visible = true;
+        var validation = frontend.isValidDatabase(frontend.currentDataName);
+        if (validation === QuickFrontend.MenuType) {
+            /* The database is a Basic Menu */
+        } else if (validation === QuickFrontend.SystemType) {
+            /* The database is a System Menu */
+        }
+        else {
+            /* The database is invalid */
+            frontend.notFound(frontend.currentDataName);
         }
     }
 
@@ -96,8 +97,6 @@ QuickScene {
         m_b_type: settings.mainMenuValue("Special Art B", "type")
         m_b_x: settings.mainMenuValue("Special Art B", "x")
         m_b_y: settings.mainMenuValue("Special Art B", "y")
-
-        currentSystem: system
     }
 
     Wheel {
@@ -106,7 +105,9 @@ QuickScene {
         anchors.centerIn: parent
         width: parent.height*2
         height: parent.height*2
-        currentSystem: system
+
+        f: frontend
+        s: settings
 
         alpha: settings.mainMenuValue("wheel", "alpha")
         color_ratio: settings.mainMenuValue("wheel", "color_ratio")
@@ -137,43 +138,5 @@ QuickScene {
         vert_large: settings.mainMenuValue("wheel", "vert_large")
         vert_small: settings.mainMenuValue("wheel", "vert_small")
         vert_wheel_position: settings.mainMenuValue("wheel", "vert_wheel_position")
-
-        onExiting: {
-            if (settings.appValue("Main", "Enable_Exit") === "true" &&
-                    system === "Main Menu" &&
-                    settings.appValue("Main", "Enable_Exit_Menu") !== "true")
-            {
-                return Qt.quit();
-            }
-            else if (exitMenu.visible === false &&
-                    system === "Main Menu" &&
-                    settings.appValue("Main", "Enable_Exit_Menu") === "true")
-            {
-                exitMenu.visible = true;
-                return;
-            }
-        }
-    }
-
-    Rectangle {
-        id: notFound
-        visible: false
-        anchors.fill: parent
-        color: "#CC000000"
-        Text {
-            id: notFoundText
-            text: "Cannot find " + system + ".xml"
-            anchors.centerIn: parent
-            color: "white"
-            scale: 2
-        }
-    }
-
-    ExitMenu {
-        id: exitMenu
-        anchors.fill: parent
-        visible: false
-        action: settings.appValue("Main", "Exit_Action")
-        pointed: settings.appValue("Main", "Exit_Default")
     }
 }

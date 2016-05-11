@@ -23,7 +23,7 @@
                             <xsd:element type="xsd:string" name="cloneof"/>
                             <xsd:element type="xsd:string" name="crc"/>
                             <xsd:element type="xsd:string" name="manufacturer"/>
-                            <xsd:element type="xsd:short" name="year"/>
+                            <xsd:element type="xsd:string" name="year"/>
                             <xsd:element type="xsd:string" name="genre"/>
                             <xsd:element type="xsd:string" name="rating"/>
                             <xsd:element type="xsd:string" name="enabled"/>
