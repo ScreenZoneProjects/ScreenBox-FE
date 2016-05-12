@@ -1,7 +1,9 @@
 import QtQuick 2.0
-import QuickFrontend 1.0
 import QtQuick.XmlListModel 2.0
-import "Utils.js" as Utils
+
+import ScreenBox 1.0
+import Scripts 1.0
+import Exit 1.0
 
 QuickScene {
     property QuickSettings settings
@@ -11,40 +13,25 @@ QuickScene {
     signal switchScene();
 
     Keys.onPressed: {
+        console.log(frontend.dataPath);
         switch (event.key) {
         case Qt.Key_Up:
-            if (!exitmenu.visible)
-                wheel.up();
+            wheel.up();
             break;
         case Qt.Key_Down:
-            if (!exitmenu.visible)
-                wheel.down();
+            wheel.down();
             break;
         case Qt.Key_Left:
-            if (!exitmenu.visible)
-                wheel.skipDown();
-            else
-                exitmenu.pointed = "yes"
+            wheel.skipDown();
             break;
         case Qt.Key_Right:
-            if (!exitmenu.visible)
-                wheel.skipUp();
-            else
-                exitmenu.pointed = "no"
+            wheel.skipUp();
             break;
         case Qt.Key_Return:
-            if (!exitmenu.visible)
-                wheel.select();
-            else if (exitmenu.pointed === "yes")
-                return Qt.quit();
-            else
-                exitmenu.visible = false;
+            wheel.select();
             break;
         case Qt.Key_Escape:
-            if (!exitmenu.visible)
-                wheel.exit();
-            else
-                exitmenu.visible = false;
+            wheel.exit();
             break;
         case Qt.Key_S:
             switchScene();
@@ -55,13 +42,8 @@ QuickScene {
     }
 
     Component.onCompleted: {
-        if (frontend.isValidMenuData(frontend.currentDataName)) {
-            /* The database is a Basic Menu */
-        } else if (frontend.isvalidSystemData(frontend.currentDataName)) {
-            /* The database is a System Menu */
-        }
-        else {
-            /* The database is invalid */
+        if (!frontend.isValidMenuData(frontend.currentDataName) &&
+                !frontend.isValidSystemData(frontend.currentDataName)) {
             frontend.notFound(frontend.currentDataName);
         }
     }
@@ -107,8 +89,6 @@ QuickScene {
 
         f: frontend
         s: settings
-
-        currentData: frontend.currentDataName
 
         alpha: settings.mainMenuValue("wheel", "alpha")
         color_ratio: settings.mainMenuValue("wheel", "color_ratio")

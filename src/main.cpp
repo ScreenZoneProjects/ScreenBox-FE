@@ -75,10 +75,10 @@ int main(int argc, char *argv[])
 
     application.setOverrideCursor(QCursor(Qt::BlankCursor));
 
-    qmlRegisterType<QuickSettings>("QuickFrontend", 1, 0, "QuickSettings");
-    qmlRegisterType<QuickProcess>("QuickFrontend", 1, 0, "QuickProcess");
-    qmlRegisterType<QuickScene>("QuickFrontend", 1, 0, "QuickScene");
-    qmlRegisterType<QuickFrontend>("QuickFrontend", 1, 0, "QuickFrontend");
+    qmlRegisterType<QuickSettings>(APPLICATION_NAME_STRING, 1, 0, "QuickSettings");
+    qmlRegisterType<QuickProcess>(APPLICATION_NAME_STRING, 1, 0, "QuickProcess");
+    qmlRegisterType<QuickScene>(APPLICATION_NAME_STRING, 1, 0, "QuickScene");
+    qmlRegisterType<QuickFrontend>(APPLICATION_NAME_STRING, 1, 0, "QuickFrontend");
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("_APP_DIR_", applicationDirPath);

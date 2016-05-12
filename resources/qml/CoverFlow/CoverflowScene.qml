@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QuickFrontend 1.0
+import ScreenBox 1.0
 
 QuickScene {
 

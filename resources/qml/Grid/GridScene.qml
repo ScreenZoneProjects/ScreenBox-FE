@@ -1,12 +1,12 @@
 import QtQuick 2.0
-import QuickFrontend 1.0
+import ScreenBox 1.0
 import QtQuick.XmlListModel 2.0
 import QtGraphicalEffects 1.0
 
 QuickScene {
     property QuickFrontend frontend
     property QuickSettings settings
-    property string currentSystem: "Main Menu"
+    property string delegatedMenuName: frontend.currentDataName
 
     signal switchScene();
 
@@ -21,10 +21,16 @@ QuickScene {
 
     XmlListModel {
         id: database
-        source: "file://"+_APP_DIR_+"/Databases/"+currentSystem+"/"+currentSystem+".xml"
+        source: "file://" + _APP_DIR_ + "/Databases/" +
+              frontend.currentDataName + "/" + frontend.currentDataName + ".xml"
         query: "/menu/game"
 
         XmlRole { name: "gameName"; query: "@name/string()"; }
+
+        onStatusChanged: {
+            if (status === XmlListModel.Ready)
+                delegatedMenuName = frontend.currentDataName
+        }
     }
 
     Component {
@@ -44,7 +50,8 @@ QuickScene {
                     anchors.fill: parent
                     id: gridItemImage
                     fillMode: Qt.KeepAspectRatioByExpanding
-                    source: "file://"+_APP_DIR_+"/Media/"+currentSystem+"/Images/Grids/"+gameName+".png"
+                    source: "file://" + _APP_DIR_ + "/Media/" +
+                        delegatedMenuName + "/Images/Grids/" + gameName + ".png"
                     visible: false
                 }
                 Rectangle {
@@ -159,7 +166,7 @@ QuickScene {
 
         Image {
             id: gridMainCover
-            source: "http://images.nintendolife.com/games/wii/mario_and_sonic_at_the_olympic_games/cover_large.jpg"
+            source: ""
             height: parent.height*.8
             anchors.verticalCenter: parent.verticalCenter
             fillMode: Qt.KeepAspectRatio

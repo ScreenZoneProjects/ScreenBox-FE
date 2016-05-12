@@ -1,11 +1,19 @@
 import QtQuick 2.6
 import QtQuick.Controls 1.4
 import QtAV 1.6
-import QuickFrontend 1.0
 import QtWebSockets 1.0
-import "Utils.js" as Utils
+
+// CUSTOM QML
+import ScreenBox 1.0
+import CoverFlow 1.0
+import Scripts 1.0
+import Grid 1.0
+import Exit 1.0
+import Wheel 1.0
+import Intro 1.0
 
 ApplicationWindow {
+    property var dataPath: []
     id: mainWindow
     visible: true
     height: settings.appValue("Resolution", "Height");
@@ -14,7 +22,7 @@ ApplicationWindow {
     width: settings.appValue("Resolution", "Width");
     minimumWidth: mainWindow.width
     maximumWidth: mainWindow.width
-    title: "ScreenFlow v1.0"
+    title: Qt.application.name + " v" + Qt.application.version
     contentOrientation: Qt.Horizontal
     color: "#000000"
 
@@ -89,7 +97,7 @@ ApplicationWindow {
             exitAnimation: NumberAnimation { target: wheelScene; property: "opacity"; from: 1; to: 0; duration: 300 }
         }
 
-        CoverflowScene {
+        CoverFlowScene {
             id: coverFlowScene
             objectName: "coverFlowScene"
             anchors.fill: parent
@@ -134,7 +142,8 @@ ApplicationWindow {
     ExitMenu {
         id: exitMenu
         anchors.fill: parent
-        visible: false
+        opacity: 0
+        frontend: frontend
         action: settings.appValue("Main", "Exit_Action")
         pointed: settings.appValue("Main", "Exit_Default")
     }

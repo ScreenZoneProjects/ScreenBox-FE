@@ -1,9 +1,9 @@
 import QtQuick 2.5
 import QtQuick.XmlListModel 2.0
-import QuickFrontend 1.0
 import QtGraphicalEffects 1.0
 
-import "Utils.js" as Utils
+import Scripts 1.0
+import ScreenBox 1.0
 
 Item {
     /* HyperSpin Official Properties */
@@ -37,16 +37,20 @@ Item {
     property int vert_small: 240
     property string vert_wheel_position: "right"
 
-    /* Other Properties */
-    property string pointedItem : "MAME"
-    property alias view: wheelPathView
+    /* Aliases */
+    property alias pathView: wheelPathView
     property alias listModel: database
+    property alias delegate: delegate
     property alias alphaTimer: alphaTimer
-    property alias currentDatabase: database
     property alias offsetTimer: offsetTimer
+
+    /* Other Properties */
     property QuickFrontend f;
     property QuickSettings s;
-    property string currentData: "Main Menu"
+    property string pointedItem :
+        (settings.appValue("Main", "Menu_Mode") === "multi") ?
+            "Main Menu" : settings.appValue("Main", "Last_System")
+    property string delegateMenuName: f.currentDataName
 
     /* Signals */
     signal movedUp();
@@ -59,6 +63,7 @@ Item {
     signal selecting();
 
     opacity: alpha
+
     anchors.horizontalCenterOffset: {
         if (vert_wheel_position === "left") return -parent.width/4;
         else if (vert_wheel_position === "right") return parent.width/4;
@@ -66,23 +71,23 @@ Item {
     }
 
     function up () {
-        opacity = 1;
-        if (alphaTimer.running)
-            alphaTimer.restart();
-        else
-            alphaTimer.start();
+        alphaFade();
         wheelPathView.decrementCurrentIndex();
         movedUp();
     }
 
     function down () {
+        alphaFade();
+        wheelPathView.incrementCurrentIndex();
+        movedDown();
+    }
+
+    function alphaFade() {
         opacity = 1;
         if (alphaTimer.running)
             alphaTimer.restart();
         else
             alphaTimer.start();
-        wheelPathView.incrementCurrentIndex();
-        movedDown();
     }
 
     function skipUp () {
@@ -102,24 +107,36 @@ Item {
     }
 
     function exit () {
+        if (f.currentDataName === "Main Menu") {
+            if (settings.appValue("Main", "Enable_Exit_Menu") === "true") {
+                exitMenu.opacity = 1;
+                exitMenu.focus = true;
+            } else if (settings.appValue("Main", "Enable_Exit") === "true") {
+                Qt.quit();
+            }
+        } else {
+            /* NEED TO HANDLE MULTIWHEEL TO GO BACK */
+            pointedItem = "Main Menu"
+            select();
+        }
         exiting();
     }
 
     function select () {
         if (f.isValidMenuData(pointedItem)) {
             f.nextDataType = QuickFrontend.MenuType
-            f.nextDataName = pointedItem
-            selecting();
+            enter();
         } else if (f.isValidSystemData(pointedItem)) {
             f.nextDataType = QuickFrontend.SystemType
-            f.nextDataName = pointedItem
-            selecting();
+            enter();
         } else {
             f.notFound(pointedItem);
         }
+        selecting();
     }
 
-    onSelecting: {
+    function enter () {
+        f.nextDataName = pointedItem
         wheelPathView.enabled = false
         if (vert_wheel_position === "left")
             anchors.horizontalCenterOffset = -parent.width;
@@ -128,34 +145,6 @@ Item {
         else
             anchors.verticalCenterOffset = parent.height;
         offsetTimer.start();
-    }
-
-    onExiting: {
-        if (settings.appValue("Main", "Enable_Exit") === "true" &&
-                f.currentDataName === "Main Menu" &&
-                settings.appValue("Main", "Enable_Exit_Menu") !== "true")
-        {
-            return Qt.quit();
-        }
-        else if (exitMenu.visible === false &&
-                f.currentDataName === "Main Menu" &&
-                settings.appValue("Main", "Enable_Exit_Menu") === "true")
-        {
-            exitMenu.visible = true;
-            return;
-        }
-        else {
-            pointedItem = "Main Menu"
-            select();
-        }
-    }
-
-    XmlListModel {
-        id: database
-        source: "file://"+_APP_DIR_+"/Databases/"+currentData+"/"+currentData+".xml"
-        query: "/menu/game"
-
-        XmlRole { name: "gameName"; query: "@name/string()"; }
     }
 
     Behavior on opacity {
@@ -182,10 +171,9 @@ Item {
 
         onTriggered: {
             if (!lastPhase) {
-                console.log("first phase animation wait");
-                currentData = f.nextDataName;
-                f.currentDataName = currentData;
-                f.currentDataType = f.nextDataType
+                f.currentDataName = f.nextDataName;
+                f.currentDataType = f.nextDataType;
+                f.dataPath.push(f.currentDataName)
                 f.nextDataType = 0
                 f.nextDataName = ""
                 start();
@@ -196,6 +184,8 @@ Item {
                 start();
                 return
             }
+
+            alphaFade();
             if (vert_wheel_position === "left")
                 anchors.horizontalCenterOffset = -parent.width/4;
             else if (vert_wheel_position === "right")
@@ -207,6 +197,21 @@ Item {
         }
     }
 
+
+    XmlListModel {
+        id: database
+        source: "file://" + _APP_DIR_ + "/Databases/" +
+                f.currentDataName + "/" + f.currentDataName + ".xml"
+        query: "/menu/game"
+
+        XmlRole { name: "gameName"; query: "@name/string()"; }
+
+        onStatusChanged: {
+            if (status === XmlListModel.Ready)
+                delegateMenuName = f.currentDataName;
+        }
+    }
+
     Component {
         id: delegate
         Item {
@@ -215,9 +220,10 @@ Item {
             rotation: PathView.onPath ? PathView.wheelItemRotation : 0
             width: PathView.isCurrentItem ? norm_large : norm_small
             height: 100
-            scale: 0.75
+            scale: 0.75            
 
             Behavior on width { PropertyAnimation { duration: 150 } }
+
 
             Text {
                 id: wheelItemText
@@ -225,7 +231,8 @@ Item {
                 visible: false
                 font.weight: (text_width === 900) ? Font.Bold : Font.Normal
                 font.pixelSize: parent.height
-                width: wrapper.PathView.isCurrentItem ? large_text_width : small_text_width
+                width: wrapper.PathView.isCurrentItem ?
+                           large_text_width : small_text_width
                 anchors.horizontalCenter: parent.horizontalCenter
                 fontSizeMode: Text.HorizontalFit
                 verticalAlignment: Text.AlignVCenter
@@ -246,16 +253,26 @@ Item {
                     anchors.fill: wheelItemText
                     source: wheelItemText
                     gradient: Gradient {
-                        GradientStop { position: 0; color: text_color1; }
-                        GradientStop { position: 0.5*color_ratio; color: text_color2; }
-                        GradientStop { position: 1*color_ratio; color: text_color3; }
+                        GradientStop {
+                            position: 0;
+                            color: text_color1;
+                        }
+                        GradientStop {
+                            position: 0.5*color_ratio;
+                            color: text_color2;
+                        }
+                        GradientStop {
+                            position: 1*color_ratio;
+                            color: text_color3;
+                        }
                     }
                 }
             }
 
             Image {
                 id: wheelItemImage
-                source: "file://"+_APP_DIR_+"/Media/"+currentData+"/Images/Wheel/"+gameName+".png"
+                source: "file://" + _APP_DIR_ + "/Media/" + delegateMenuName +
+                        "/Images/Wheel/" + gameName + ".png"
                 width: parent.width
                 anchors.centerIn: wrapper
                 fillMode: Qt.KeepAspectRatio
@@ -270,15 +287,19 @@ Item {
             }
 
             DropShadow {
-                anchors.fill: (wheelItemImage.visible) ? wheelItemImage : wheelItemText
+                anchors.fill: (wheelItemImage.visible) ?
+                                  wheelItemImage : wheelItemText
                 horizontalOffset: Utils.getHOffset(shadow_angle, shadow_distance)
                 verticalOffset: Utils.getVOffset(shadow_angle, shadow_distance)
                 radius: shadow_blur
                 samples: 8
                 opacity: shadow_alpha
                 color: shadow_color
-                source: (wheelItemImage.visible) ? wheelItemImage : wheelItemText
+                source: (wheelItemImage.visible) ?
+                            wheelItemImage : wheelItemText
             }
+
+
         }
     }
 
