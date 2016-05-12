@@ -6,7 +6,7 @@ MenuSettings::MenuSettings(QString filePath)
 {
     path = filePath;
     config = new QSettings(path, QSettings::IniFormat);
-    if (!config->contains("Main/Version")) {
+    if (!config->contains("wheel/alpha")) {
         generateConfig();
     }
 }

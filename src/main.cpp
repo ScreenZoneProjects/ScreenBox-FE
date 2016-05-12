@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     application.setApplicationDisplayName(appTitle);
     application.setOrganizationName(ORGANIZATION_NAME_STRING);
     application.setOrganizationDomain(ORGANIZATION_DOMAIN_STRING);
-    application.setOverrideCursor(QCursor(Qt::BlankCursor));
+
 
 
     QString applicationDirPath = application.applicationDirPath();
@@ -73,13 +73,16 @@ int main(int argc, char *argv[])
 
     delete settings;
 
-    qmlRegisterType<QuickSettings>("QuickFrontend", 1, 0, "QuickSettings");
-    qmlRegisterType<QuickProcess>("QuickFrontend", 1, 0, "QuickProcess");
-    qmlRegisterType<QuickScene>("QuickFrontend", 1, 0, "QuickScene");
-    qmlRegisterType<QuickFrontend>("QuickFrontend", 1, 0, "QuickFrontend");
+    application.setOverrideCursor(QCursor(Qt::BlankCursor));
+
+    qmlRegisterType<QuickSettings>(APPLICATION_NAME_STRING, 1, 0, "QuickSettings");
+    qmlRegisterType<QuickProcess>(APPLICATION_NAME_STRING, 1, 0, "QuickProcess");
+    qmlRegisterType<QuickScene>(APPLICATION_NAME_STRING, 1, 0, "QuickScene");
+    qmlRegisterType<QuickFrontend>(APPLICATION_NAME_STRING, 1, 0, "QuickFrontend");
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("_APP_DIR_", applicationDirPath);
+    engine.addImportPath(QStringLiteral("qrc:/qml/qml"));
     engine.load(QUrl(QStringLiteral("qrc:/qml/qml/main.qml")));
 
     QObject::connect(&engine, SIGNAL(quit()), &application, SLOT(quit()));
