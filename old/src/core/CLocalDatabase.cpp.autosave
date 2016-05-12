@@ -1,0 +1,529 @@
+#include "CLocalDatabase.hpp"
+
+#include <QDebug>
+#include <QSqlRecord>
+
+const QString CLocalDatabase::s_sDescriptionsTable = "Descriptions";
+const QString CLocalDatabase::s_sDevelopersTable = "Developers";
+const QString CLocalDatabase::s_sDevelopersDescriptionsTable = "DevelopersDescriptions";
+const QString CLocalDatabase::s_sFranchisesTable = "Franchises";
+const QString CLocalDatabase::s_sRomsTable = "Roms";
+const QString CLocalDatabase::s_sGamesTable = "Games";
+const QString CLocalDatabase::s_sGamesDescriptionsTable = "GamesDescriptions";
+const QString CLocalDatabase::s_sGamesGenresTable = "GamesGenres";
+const QString CLocalDatabase::s_sGamesLanguagesTable = "GamesLanguages";
+const QString CLocalDatabase::s_sGenresTable = "Genres";
+const QString CLocalDatabase::s_sGenresDescriptionsTable = "GenresDescriptions";
+const QString CLocalDatabase::s_sLanguagesTable = "Languages";
+const QString CLocalDatabase::s_sManufacturersTable = "Manufacturers";
+const QString CLocalDatabase::s_sManufacturersDescriptionsTable = "ManufacturersDescriptions";
+const QString CLocalDatabase::s_sPlatformsTable = "Platforms";
+const QString CLocalDatabase::s_sPlatformsDescriptionsTable = "PlatformsDescriptions";
+const QString CLocalDatabase::s_sRegionsTable = "Regions";
+
+CLocalDatabase::CLocalDatabase()
+{
+
+}
+
+bool CLocalDatabase::open()
+{
+	m_oSQLiteDatabase = QSqlDatabase::addDatabase("QSQLITE", "Local SQLite database");
+	m_oSQLiteDatabase.setHostName("localhost");
+	m_oSQLiteDatabase.setDatabaseName(m_sLocalDatabaseFilePath);
+
+	if(!m_oSQLiteDatabase.open())
+	{
+		qWarning() << "Local database: Failed to open the local database:" << m_sLocalDatabaseFilePath <<"| Error:" << m_oSQLiteDatabase;
+		return false;
+	}
+
+	qInfo() << "Local database: Open the local database:" << m_sLocalDatabaseFilePath << " succeed.";
+	return true;
+}
+
+bool CLocalDatabase::close()
+{
+	m_oSQLiteDatabase.close();
+	qInfo() << "Local database: Closing the local database:" << m_sLocalDatabaseFilePath << "succeed.";
+	return true;
+}
+
+bool CLocalDatabase::checkDatabaseIntegrity()
+{
+	return true;
+}
+
+bool setManufacturersDescriptions(QMap<qint64, CManufacturer*>& mpManufacturers,
+								  const QMap<qint64, CLocalDatabase::SObjectDescription>& moManufacturersDescriptions,
+								  const QMap<qint64, CLocalDatabase::SDescription>& moDescriptions)
+{
+	QMapIterator<qint64, CLocalDatabase::SObjectDescription> l_oMapIterator(moManufacturersDescriptions);
+
+	while (l_oMapIterator.hasNext())
+	{
+		l_oMapIterator.next();
+
+		qint64 l_i64ManufacturerId = l_oMapIterator.value().i64ObjecId;
+		qint64 l_i64DescriptionId = l_oMapIterator.value().i64DescriptionId;
+
+		if(!mpManufacturers.contains(l_i64ManufacturerId))
+		{
+			return false;
+		}
+
+		if(!moDescriptions.contains(l_i64DescriptionId))
+		{
+			return false;
+		}
+
+		mpManufacturers[l_i64ManufacturerId]->getDescriptionReference().setDescription(
+					moDescriptions[l_i64DescriptionId].eLanguage,
+					moDescriptions[l_i64DescriptionId].sDescription
+					);
+	}
+
+	return true;
+}
+
+bool setPlatformsDescriptions(QMap<qint64, CPlatform*>& mpPlatforms,
+							  const QMap<qint64, CLocalDatabase::SObjectDescription>& moPlatformsDescriptions,
+							  const QMap<qint64, CLocalDatabase::SDescription>& moDescriptions)
+{
+	QMapIterator<qint64, CLocalDatabase::SObjectDescription> l_oMapIterator(moPlatformsDescriptions);
+
+	while (l_oMapIterator.hasNext())
+	{
+		l_oMapIterator.next();
+
+		qint64 l_i64PlatformId = l_oMapIterator.value().i64ObjecId;
+		qint64 l_i64DescriptionId = l_oMapIterator.value().i64DescriptionId;
+
+		if(!mpPlatforms.contains(l_i64PlatformId))
+		{
+			return false;
+		}
+
+		if(!moDescriptions.contains(l_i64DescriptionId))
+		{
+			return false;
+		}
+
+		mpPlatforms[l_i64PlatformId]->getDescriptionReference().setDescription(
+					moDescriptions[l_i64DescriptionId].eLanguage,
+					moDescriptions[l_i64DescriptionId].sDescription
+					);
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getObjectsDescriptions(QMap<qint64, SObjectDescription>& mObjectDescriptions, const QString& sObjectTableName, const QString& sForeignKeyObjectName, qint64 i64ObjectId)
+{
+	QSqlQuery l_oQueryObjectDescriptions;
+
+	QString sQueryString = "SELECT id, fk_" + sForeignKeyObjectName + "_id, fk_description_id FROM " + sObjectTableName;
+
+	if(i64ObjectId > 0)
+	{
+		sQueryString += " WHERE fk_" + sForeignKeyObjectName + "_id = " + i64ObjectId;
+	}
+
+	if(l_oQueryObjectDescriptions.exec(sQueryString))
+	{
+		return false;
+	}
+
+	while (l_oQueryObjectDescriptions.next())
+	{
+		SObjectDescription l_sObjectDescription;
+
+		l_sObjectDescription.i64Id = l_oQueryObjectDescriptions.value(0).toLongLong();
+		l_sObjectDescription.i64ObjecId = l_oQueryObjectDescriptions.value(1).toLongLong();
+		l_sObjectDescription.i64DescriptionId = l_oQueryObjectDescriptions.value(2).toLongLong();
+		mObjectDescriptions.insert(l_sObjectDescription.i64Id, l_sObjectDescription);
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getDescriptionsTable(QMap<qint64, SDescription> moDescriptionsTable, const QMap<qint64, QLocale::Language>& moLanguagesTable)
+{
+	QSqlQuery l_oQueryDescriptionsTable;
+
+	if(!l_oQueryDescriptionsTable.exec("SELECT id, text, fk_language FROM " + s_sDescriptionsTable))
+	{
+		return false;
+	}
+
+	while(l_oQueryDescriptionsTable.next())
+	{
+		SDescription l_sDescription;
+
+		l_sDescription.i64Id = l_oQueryDescriptionsTable.value(0).toLongLong();
+		l_sDescription.sDescription = l_oQueryDescriptionsTable.value(1).toString();
+		qint64 l_i64LanguageId = l_oQueryDescriptionsTable.value(2).toLongLong();
+		l_sDescription.eLanguage = moLanguagesTable[l_i64LanguageId];
+
+		if(moDescriptionsTable.contains(l_i64LanguageId))
+		{
+
+		}
+
+		moDescriptionsTable[l_sDescription.i64Id] = l_sDescription;
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getDescription(qint64 i64DescriptionId, CDescription& oDescription)
+{
+	QSqlQuery l_oQueryDescription;
+	if(!l_oQueryDescription.exec("SELECT id, text, fk_language FROM " + s_sDescriptionsTable + " WHERE id =" + i64DescriptionId))
+	{
+		return false;
+	}
+
+	while (l_oQueryDescription.next())
+	{
+		oDescription.setId(l_oQueryDescription.value(0).toLongLong());
+		//oDescription.setDescription(m_mLanguagesTable[l_oQueryDescription.value(2).toLongLong()], l_oQueryDescription.value(1).toString());
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::loadLocalDatabase()
+{
+	QMap<qint64, SObjectDescription> l_mManufacturersDescriptions;
+	QMap<qint64, SObjectDescription> l_mPlatformsDescriptions;
+	QMap<qint64, SObjectDescription> l_mDevelopersDescriptions;
+	QMap<qint64, SObjectDescription> l_mGameDescriptions;
+
+	QMap<qint64, SDescription> l_mDescriptions;
+
+	QMap<qint64, CManufacturer*> mpManufacturer;
+	QMap<qint64, CPlatform*> mpPlatforms;
+	QMap<qint64, CDeveloper*> mpDevelopers;
+	QMap<qint64, CGenre*> mpGenres;
+	QMap<qint64, CGame*> mpGames;
+	QMap<qint64, CRom*> mpRoms;
+
+	QMap<qint64, QLocale::Language> moLanguages;
+
+	if(!this->getLanguagesList(moLanguages))
+	{
+		return false;
+	}
+
+	if(!this->getManufacturersList(mpManufacturer))
+	{
+		return false;
+	}
+
+	if(this->getPlatformsList(mpPlatforms))
+	{
+		return false;
+	}
+
+	if(this->getDevelopersList(mpDevelopers))
+	{
+		return false;
+	}
+
+	if(this->getGenresList(mpGenres))
+	{
+		return false;
+	}
+
+	if(this->getGamesList(mpGames))
+	{
+		return false;
+	}
+
+	if(this->getRomsList(mpRoms))
+	{
+		return false;
+	}
+
+	if(!getObjectsDescriptions(l_mManufacturersDescriptions, s_sManufacturersDescriptionsTable, "manufacturer"))
+	{
+		return false;
+	}
+
+	if(!getObjectsDescriptions(l_mPlatformsDescriptions, s_sPlatformsDescriptionsTable, "platform"))
+	{
+		return false;
+	}
+
+	if(!getObjectsDescriptions(l_mDevelopersDescriptions,s_sDevelopersDescriptionsTable, "developer"))
+	{
+		return false;
+	}
+
+	if(!getObjectsDescriptions(l_mGameDescriptions, s_sGamesDescriptionsTable, "game"))
+	{
+		return false;
+	}
+
+	if(!getDescriptionsTable(l_mDescriptions, moLanguages))
+	{
+		return false;
+	}
+
+	/*if(!setManufacturersDescriptions(mpManufacturer,l_mManufacturersDescriptions,l_mDescriptions))
+	{
+		return false;
+	}
+
+	if(!setPlatformsDescriptions(mpPlatforms,l_mPlatformsDescriptions,l_mDescriptions))
+	{
+		return false;
+	}
+
+	if(!setDevelopersDescriptions(mpDevelopers,l_mDevelopersDescriptions,l_mDescriptions))
+	{
+		return false;
+	}
+
+	if(!setGamesDescriptions(mpGames,l_mGameDescriptions,l_mDescriptions))
+	{
+		return false;
+	}*/
+
+	return true;
+}
+
+bool CLocalDatabase::getManufacturersList(QMap<qint64, CManufacturer*>& mpManufacturers)
+{
+	QSqlQuery l_oQueryManufacturers;
+
+	if(l_oQueryManufacturers.exec("SELECT id, name FROM " + s_sManufacturersTable))
+	{
+		return false;
+	}
+
+	while (l_oQueryManufacturers.next())
+	{
+		qint64 l_i64Id = l_oQueryManufacturers.value(0).toLongLong();
+		QString l_sName = l_oQueryManufacturers.value(1).toString();
+
+		if(!mpManufacturers.contains(l_i64Id))
+		{
+			mpManufacturers[l_i64Id] = new CManufacturer();
+		}
+
+		mpManufacturers[l_i64Id]->setId(l_i64Id);
+		mpManufacturers[l_i64Id]->setName(l_sName);
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getPlatformsList(QMap<qint64, CPlatform*>& moPlatforms, qint64 i64ManufacturerId)
+{
+	QSqlQuery l_oQueryPlatforms;
+
+	QString sQueryString = "SELECT id, name, fk_manufacturer_id FROM " + s_sPlatformsTable;
+
+	if(i64ManufacturerId > 0)
+	{
+		sQueryString += " WHERE fk_manufacturer_id = " + i64ManufacturerId;
+	}
+
+	if(l_oQueryPlatforms.exec(sQueryString))
+	{
+		return false;
+	}
+
+	while (l_oQueryPlatforms.next())
+	{
+		qint64 l_i64Id = l_oQueryPlatforms.value(0).toLongLong();
+		QString l_sName = l_oQueryPlatforms.value(1).toString();
+
+		if(!moPlatforms.contains(l_i64Id))
+		{
+			moPlatforms[l_i64Id] = new CPlatform();
+		}
+
+		moPlatforms[l_i64Id]->setId(l_i64Id);
+		moPlatforms[l_i64Id]->setName(l_sName);
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getDevelopersList(QMap<qint64, CDeveloper*>& moDevelopers)
+{
+	QSqlQuery l_oQueryDevelopers;
+
+	QString sQueryString = "SELECT id, name FROM " + s_sDevelopersTable;
+
+	if(l_oQueryDevelopers.exec(sQueryString))
+	{
+		return false;
+	}
+
+	while (l_oQueryDevelopers.next())
+	{
+		qint64 l_i64Id = l_oQueryDevelopers.value(0).toLongLong();
+		QString l_sName = l_oQueryDevelopers.value(1).toString();
+
+		if(!moDevelopers.contains(l_i64Id))
+		{
+			moDevelopers[l_i64Id] = new CDeveloper();
+		}
+
+		moDevelopers[l_i64Id]->setId(l_i64Id);
+		moDevelopers[l_i64Id]->setName(l_sName);
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getGenresList(QMap<qint64, CGenre*>& moGenres)
+{
+	QSqlQuery l_oQueryGenres;
+
+	QString sQueryString = "SELECT id, name FROM " + s_sGenresTable;
+
+	if(l_oQueryGenres.exec(sQueryString))
+	{
+		return false;
+	}
+
+	while (l_oQueryGenres.next())
+	{
+		qint64 l_i64Id = l_oQueryGenres.value(0).toLongLong();
+		QString l_sName = l_oQueryGenres.value(1).toString();
+
+		if(!moGenres.contains(l_i64Id))
+		{
+			moGenres[l_i64Id] = new CGenre();
+		}
+
+		moGenres[l_i64Id]->setId(l_i64Id);
+		moGenres[l_i64Id]->setName(l_sName);
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getGamesList(QMap<qint64, CGame*>& moGames)
+{
+	QSqlQuery l_oQueryGames;
+
+	QString sQueryString = "SELECT * FROM " + s_sGamesTable;
+
+	int l_oi32IdField = l_oQueryGames.record().indexOf("id");
+	int l_oi32FileNameField = l_oQueryGames.record().indexOf("fileName");
+	int l_oi32FilePathField = l_oQueryGames.record().indexOf("filePath");
+	int l_oi32PlatformField = l_oQueryGames.record().indexOf("platform");
+	int l_oi32NameField = l_oQueryGames.record().indexOf("name");
+	int l_oi32CloneOfField = l_oQueryGames.record().indexOf("cloneOf");
+	int l_oi32SynopsysField = l_oQueryGames.record().indexOf("synopsis");
+	int l_oi32ControlesField = l_oQueryGames.record().indexOf("controles");
+	int l_oi32LanguageField = l_oQueryGames.record().indexOf("language");
+	int l_oi32PlayersField = l_oQueryGames.record().indexOf("players");
+	int l_oi32ScoreField = l_oQueryGames.record().indexOf("score");
+	int l_oi32RatingField = l_oQueryGames.record().indexOf("rating");
+	int l_oi32GenreField = l_oQueryGames.record().indexOf("genre");
+	int l_oi32ReleaseDateField = l_oQueryGames.record().indexOf("releaseDate");
+	int l_oi32DeveloperField = l_oQueryGames.record().indexOf("developer");
+	int l_oi32ManufacturerField = l_oQueryGames.record().indexOf("manufacturer");
+	int l_oi32FranchiseField = l_oQueryGames.record().indexOf("franchise");
+	int l_oi32SizeField = l_oQueryGames.record().indexOf("size");
+	int l_oi32CRCField = l_oQueryGames.record().indexOf("crc");
+	int l_oi32MD5Field = l_oQueryGames.record().indexOf("md5");
+	int l_oi32SHA1Field = l_oQueryGames.record().indexOf("sha1");
+
+	if(l_oQueryGames.exec(sQueryString))
+	{
+		return false;
+	}
+
+	while (l_oQueryGames.next())
+	{
+		qint64 l_i64Id = l_oQueryGames.value(0).toLongLong();
+		QString l_sName = l_oQueryGames.value(1).toString();
+
+		if(!moGames.contains(l_i64Id))
+		{
+			moGames[l_i64Id] = new CGame();
+		}
+
+		moGames[l_i64Id]->setId(l_i64Id);
+		//moGames[l_i64Id]->setName(l_sName);
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getLanguagesList(QMap<qint64, QLocale::Language>& moLanguagesTable)
+{
+	QSqlQuery l_oQueryLanguages;
+
+	if(!l_oQueryLanguages.exec("SELECT id, name, code FROM " + s_sLanguagesTable))
+	{
+		return false;
+	}
+
+	while (l_oQueryLanguages.next())
+	{
+		qint64 l_i64Id = l_oQueryLanguages.value(0).toLongLong();
+		QString l_sName = l_oQueryLanguages.value(1).toString();
+		QString l_sCode = l_oQueryLanguages.value(2).toString();
+		QLocale l_oLocale = QLocale(l_sCode);
+		QLocale::Language l_eLanguage =	l_oLocale.language();
+
+		moLanguagesTable[l_i64Id] = l_eLanguage;
+	}
+
+	return true;
+}
+
+bool CLocalDatabase::getRomsList(QMap<qint64, CRom*>& mpRoms)
+{
+	QSqlQuery l_oQueryGames;
+
+	QString sQueryString = "SELECT * FROM " + s_sRomsTable;
+
+	if(!l_oQueryGames.exec(sQueryString))
+	{
+		return false;
+	}
+
+	int l_i32IdField = l_oQueryGames.record().indexOf("id");
+	int l_i32FileNameField = l_oQueryGames.record().indexOf("fileName");
+	int l_i32FilePathField = l_oQueryGames.record().indexOf("filePath");
+	int l_i32PlatformField = l_oQueryGames.record().indexOf("platform");
+	int l_i32NameField = l_oQueryGames.record().indexOf("name");
+	int l_i32CloneOfField = l_oQueryGames.record().indexOf("cloneOf");
+	int l_i32SynopsysField = l_oQueryGames.record().indexOf("synopsis");
+	int l_i32ControlesField = l_oQueryGames.record().indexOf("controles");
+	int l_i32LanguageField = l_oQueryGames.record().indexOf("language");
+	int l_i32PlayersField = l_oQueryGames.record().indexOf("players");
+	int l_i32ScoreField = l_oQueryGames.record().indexOf("score");
+	int l_i32RatingField = l_oQueryGames.record().indexOf("rating");
+	int l_i32GenreField = l_oQueryGames.record().indexOf("genre");
+	int l_i32ReleaseDateField = l_oQueryGames.record().indexOf("releaseDate");
+	int l_i32DeveloperField = l_oQueryGames.record().indexOf("developer");
+	int l_i32ManufacturerField = l_oQueryGames.record().indexOf("manufacturer");
+	int l_i32FranchiseField = l_oQueryGames.record().indexOf("franchise");
+	int l_i32SizeField = l_oQueryGames.record().indexOf("size");
+	int l_i32CRCField = l_oQueryGames.record().indexOf("crc");
+	int l_i32MD5Field = l_oQueryGames.record().indexOf("md5");
+	int l_i32SHA1Field = l_oQueryGames.record().indexOf("sha1");
+
+
+
+	while (l_oQueryRoms.next())
+	{
+		qint64 l_i64Id = l_oQueryRoms.value(0).toLongLong();
+		QString l_sName = l_oQueryRoms.value(1).toString();
+
+		//mpRoms[l_i64Id] = l_eLanguage;
+	}
+
+	return true;
+}

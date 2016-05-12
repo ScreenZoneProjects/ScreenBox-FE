@@ -1,0 +1,5 @@
+.DS_Store
+build/*
+*.pro.user
+.idea/
+lib/build/
