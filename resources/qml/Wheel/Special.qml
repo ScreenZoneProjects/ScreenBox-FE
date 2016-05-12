@@ -25,7 +25,7 @@ Rectangle {
 
     property string currentSystem: "Main Menu"
 
-    color: "transparent"
+    color:  "transparent"
 
     Image {
         //source: "file:/"+_APP_DIR_+"/Media/"+currentSystem+"/Image/Special/SpecialA1.swf"
