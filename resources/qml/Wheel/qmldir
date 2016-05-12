@@ -1,0 +1,5 @@
+module Wheel
+Special 1.0 Special.qml
+Theme 1.0 Theme.qml
+Wheel 1.0 Wheel.qml
+WheelScene 1.0 WheelScene.qml

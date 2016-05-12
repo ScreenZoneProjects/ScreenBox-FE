@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtAV 1.6
-import QuickFrontend 1.0
+import ScreenBox 1.0
 
 QuickScene {
     property QuickSettings settings
@@ -19,27 +19,28 @@ QuickScene {
         if (settings.appValue("IntroVideo", "Use_Intro") === "true")
         {
             fadeIn.start();
-            videoPlayer.source = "file:/"+_APP_DIR_+"/Media/Frontend/Video/Intro.flv";
+            videoPlayer.source = "file:/" + _APP_DIR_ +
+                    "/Media/Frontend/Video/Intro.flv";
         }
         else
         {
-            videoPlayer.source = "";
+            videoPlayer.stop();
         }
     }
 
     Keys.onPressed: {
-        if (settings.appValue("IntroVideo", "Use_Intro") === "true" &&
-                settings.appValue("IntroVideo", "Stop_On_Keypress") === "true")
+        if (settings.appValue("IntroVideo", "Stop_On_Keypress") === "true")
         {
-            videoPlayer.source = "";
+            videoPlayer.stop();
         }
     }
 
     VideoOutput2 {
         id: introOutput
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
         source: videoPlayer
+        opengl: true
+        fillMode: VideoOutput.Stretch
         orientation: 0
     }
 }

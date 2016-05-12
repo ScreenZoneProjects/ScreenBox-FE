@@ -1,16 +1,31 @@
 <RCC>
     <qresource prefix="/qml">
         <file>qml/main.qml</file>
-        <file>qml/IntroScene.qml</file>
-        <file>qml/Theme.qml</file>
-        <file>qml/MenuScene.qml</file>
-        <file>qml/Wheel.qml</file>
-        <file>qml/ExitMenu.qml</file>
-        <file>qml/Special.qml</file>
-        <file>qml/Utils.js</file>
+        <file>qml/CoverFlow/CoverflowScene.qml</file>
+        <file>qml/Exit/ExitMenu.qml</file>
+        <file>qml/Grid/GridScene.qml</file>
+        <file>qml/Intro/IntroScene.qml</file>
+        <file>qml/Scripts/Utils.js</file>
+        <file>qml/Wheel/Special.qml</file>
+        <file>qml/Wheel/Theme.qml</file>
+        <file>qml/Wheel/Wheel.qml</file>
+        <file>qml/Wheel/WheelScene.qml</file>
+        <file>qml/CoverFlow/qmldir</file>
+        <file>qml/Exit/qmldir</file>
+        <file>qml/Grid/qmldir</file>
+        <file>qml/Intro/qmldir</file>
+        <file>qml/Scripts/qmldir</file>
+        <file>qml/Wheel/qmldir</file>
     </qresource>
     <qresource prefix="/xsd">
         <file>xsd/mainMenu.xsd</file>
         <file>xsd/systemMenu.xsd</file>
+    </qresource>
+    <qresource prefix="/ttf">
+        <file>ttf/style4.ttf</file>
+        <file>ttf/style2.ttf</file>
+        <file>ttf/style3-bold.ttf</file>
+        <file>ttf/style3.ttf</file>
+        <file>ttf/style1.ttf</file>
     </qresource>
 </RCC>

@@ -22,7 +22,7 @@ if (WIN32)
     set(EXECUTABLE_OUTPUT_PATH "build/Windows/")
 endif()
 if (APPLE)
-    set(CMAKE_PREFIX_PATH "/Applications/Qt/Qt5.6.0/5.6/clang_64/")
+    set(CMAKE_PREFIX_PATH "/Users/mickaelb/Qt/5.6/clang_64/")
     set(EXECUTABLE_OUTPUT_PATH "build/MacOSX/")
 endif()
 
@@ -47,20 +47,14 @@ add_definitions(-DOSX_DIR_SUFFIX=\"/${PROJECT_NAME}.app/Contents/MacOS\")
 qt5_add_resources(RESOURCES resources/resources.qrc)
 
 set(SOURCE_FILES
-    src/databases/GameDatabase.cpp
-    src/databases/GameDatabase.h
-    src/databases/SystemDatabase.cpp
-    src/databases/SystemDatabase.h
     src/qml/QuickFrontend.cpp
     src/qml/QuickFrontend.h
     src/qml/QuickProcess.cpp
     src/qml/QuickProcess.h
     src/qml/QuickScene.cpp
     src/qml/QuickScene.h
-    src/qml/quicksettings.cpp
+    src/qml/quickSettings.cpp
     src/qml/QuickSettings.h
-    src/qml/QuickWheel.cpp
-    src/qml/QuickWheel.h
     src/settings/AppSettings.cpp
     src/settings/AppSettings.h
     src/settings/MenuSettings.cpp
@@ -74,7 +68,7 @@ set(SOURCE_FILES
     src/main.cpp)
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCE_FILES})
-qt5_use_modules(${PROJECT_NAME} Widgets Qml Quick)
+qt5_use_modules(${PROJECT_NAME} Widgets Qml Quick Websockets Xmlpatterns)
 
 if (APPLE)
     ADD_OSX_FRAMEWORK(QtAV ${PROJECT_NAME})
