@@ -10,6 +10,12 @@
         <file>qml/Wheel/Theme.qml</file>
         <file>qml/Wheel/Wheel.qml</file>
         <file>qml/Wheel/WheelScene.qml</file>
+        <file>qml/CoverFlow/qmldir</file>
+        <file>qml/Exit/qmldir</file>
+        <file>qml/Grid/qmldir</file>
+        <file>qml/Intro/qmldir</file>
+        <file>qml/Scripts/qmldir</file>
+        <file>qml/Wheel/qmldir</file>
     </qresource>
     <qresource prefix="/xsd">
         <file>xsd/mainMenu.xsd</file>

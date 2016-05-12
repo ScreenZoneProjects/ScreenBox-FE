@@ -13,7 +13,7 @@ QuickScene {
     signal switchScene();
 
     Keys.onPressed: {
-        console.log(frontend.dataPath);
+
         switch (event.key) {
         case Qt.Key_Up:
             wheel.up();

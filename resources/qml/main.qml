@@ -13,7 +13,6 @@ import Wheel 1.0
 import Intro 1.0
 
 ApplicationWindow {
-    property var dataPath: []
     id: mainWindow
     visible: true
     height: settings.appValue("Resolution", "Height");
@@ -25,6 +24,7 @@ ApplicationWindow {
     title: Qt.application.name + " v" + Qt.application.version
     contentOrientation: Qt.Horizontal
     color: "#000000"
+
 
     QuickProcess { id: process }
     QuickSettings { id: settings }
@@ -67,6 +67,8 @@ ApplicationWindow {
         currentDataName: (settings.appValue("Main","Menu_Mode") === "multi") ? "Main Menu" : (settings.appValue("Main","Single_Mode_Name"))
         currentDataType: QuickFrontend.MenuType
         currentScene: introScene
+        dataPath: [(settings.appValue("Main", "Menu_Mode") === "multi") ?
+                "Main Menu" : settings.appValue("Main", "Last_System")]
         function notFound(fn) {
             notFound.fileName = fn;
             notFound.visible = true;

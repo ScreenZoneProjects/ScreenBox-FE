@@ -5,7 +5,9 @@ CONFIG += c++11
 
 TARGET = ScreenBox
 
-VERSION = 0.0.0.1
+
+
+VERSION = 1.0.0
 DEFINES += VERSION_STRING=\\\"$$VERSION\\\"
 DEFINES += APPLICATION_NAME_STRING=\\\"$${TARGET}\\\"
 DEFINES += ORGANIZATION_NAME_STRING=\\\"ScreenZone\\\"
@@ -26,10 +28,6 @@ SOURCES += \
     src/qml/QuickSettings.cpp
 
 RESOURCES += $$_PRO_FILE_PWD_/resources/resources.qrc
-
-QML_IMPORT_PATH = $$_PRO_FILE_PWD_/resources/qml
-
-QML2_IMPORT_PATH = $$_PRO_FILE_PWD_/resources/qml
 
 RC_FILE = $${_PRO_FILE_PWD_}/resources/win32/$${TARGET}.rc
 ICON = $${_PRO_FILE_PWD_}/resources/osx/logo.icns
@@ -52,6 +50,7 @@ macx {
 }
 
 CONFIG(debug, debug|release) {
+    QML_IMPORT_TRACE = 1
     DESTDIR = $${OUT_PWD}/debug
 } else {
     DESTDIR = $${OUT_PWD}/release

@@ -49,8 +49,13 @@ Item {
     property QuickSettings s;
     property string pointedItem :
         (settings.appValue("Main", "Menu_Mode") === "multi") ?
+            settings.appValue("Main", "Last_System") : ""
+    property string currentData:
+        (settings.appValue("Main", "Menu_Mode") === "multi") ?
             "Main Menu" : settings.appValue("Main", "Last_System")
-    property string delegateMenuName: f.currentDataName
+    property string delegateMenuName:
+        (settings.appValue("Main", "Menu_Mode") === "multi") ?
+            "Main Menu" : settings.appValue("Main", "Last_System")
 
     /* Signals */
     signal movedUp();
@@ -72,13 +77,13 @@ Item {
 
     function up () {
         alphaFade();
-        wheelPathView.decrementCurrentIndex();
+        wheelPathView.incrementCurrentIndex();
         movedUp();
     }
 
     function down () {
         alphaFade();
-        wheelPathView.incrementCurrentIndex();
+        wheelPathView.decrementCurrentIndex();
         movedDown();
     }
 
@@ -115,19 +120,21 @@ Item {
                 Qt.quit();
             }
         } else {
+            f.dataPath.pop();
             /* NEED TO HANDLE MULTIWHEEL TO GO BACK */
-            pointedItem = "Main Menu"
+            pointedItem = f.dataPath[f.dataPath.length-1];
             select();
         }
         exiting();
     }
 
     function select () {
+        alphaFade();
         if (f.isValidMenuData(pointedItem)) {
-            f.nextDataType = QuickFrontend.MenuType
+            f.currentDataType = QuickFrontend.MenuType
             enter();
         } else if (f.isValidSystemData(pointedItem)) {
-            f.nextDataType = QuickFrontend.SystemType
+            f.currentDataType = QuickFrontend.SystemType
             enter();
         } else {
             f.notFound(pointedItem);
@@ -137,7 +144,6 @@ Item {
 
     function enter () {
         f.nextDataName = pointedItem
-        wheelPathView.enabled = false
         if (vert_wheel_position === "left")
             anchors.horizontalCenterOffset = -parent.width;
         else if (vert_wheel_position === "right")
@@ -167,48 +173,45 @@ Item {
         id: offsetTimer
         running: false
         interval: 300
-        property bool lastPhase: false
+        property bool firstPhase: true
 
         onTriggered: {
-            if (!lastPhase) {
-                f.currentDataName = f.nextDataName;
-                f.currentDataType = f.nextDataType;
-                f.dataPath.push(f.currentDataName)
-                f.nextDataType = 0
-                f.nextDataName = ""
+            if (firstPhase) {
+                f.currentDataName = pointedItem;
+                f.dataPath.push(f.currentDataName);
+                firstPhase = false;
+                currentData = f.currentDataName;
                 start();
-                lastPhase = true;
                 return;
             }
             if (database.progress === XmlListModel.Loading) {
                 start();
                 return
             }
-
             alphaFade();
             if (vert_wheel_position === "left")
-                anchors.horizontalCenterOffset = -parent.width/4;
+                wheel.anchors.horizontalCenterOffset = -wheel.parent.width/4;
             else if (vert_wheel_position === "right")
-                anchors.horizontalCenterOffset = parent.width/4;
+                wheel.anchors.horizontalCenterOffset = wheel.parent.width/4;
             else
-                anchors.verticalCenterOffset = 0;
-            wheelPathView.enabled = true;
-            lastPhase = false;
+                wheel.anchors.verticalCenterOffset = 0;
+            firstPhase = true;
         }
     }
 
 
     XmlListModel {
         id: database
-        source: "file://" + _APP_DIR_ + "/Databases/" +
-                f.currentDataName + "/" + f.currentDataName + ".xml"
+        source: "file://" + _APP_DIR_ + "/Databases/" + currentData + "/" + currentData + ".xml"
         query: "/menu/game"
 
         XmlRole { name: "gameName"; query: "@name/string()"; }
 
         onStatusChanged: {
             if (status === XmlListModel.Ready)
-                delegateMenuName = f.currentDataName;
+            {
+                delegateMenuName = currentData;
+            }
         }
     }
 
@@ -221,6 +224,7 @@ Item {
             width: PathView.isCurrentItem ? norm_large : norm_small
             height: 100
             scale: 0.75            
+            z: PathView.isCurrentItem ? 1 : 0
 
             Behavior on width { PropertyAnimation { duration: 150 } }
 
@@ -237,7 +241,6 @@ Item {
                 fontSizeMode: Text.HorizontalFit
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                style: Text.Outline
                 styleColor: text_stroke_color
                 font.family: {
                     if (text_font === "Style4")
@@ -271,8 +274,7 @@ Item {
 
             Image {
                 id: wheelItemImage
-                source: "file://" + _APP_DIR_ + "/Media/" + delegateMenuName +
-                        "/Images/Wheel/" + gameName + ".png"
+                source: "file://" + _APP_DIR_ + "/Media/" + delegateMenuName + "/Images/Wheel/" + gameName + ".png"
                 width: parent.width
                 anchors.centerIn: wrapper
                 fillMode: Qt.KeepAspectRatio
@@ -305,54 +307,88 @@ Item {
 
     Path {
         id: wheelPath
-        startX: (vert_wheel_position === "right") ? width : 0
+        startX: {
+            if (vert_wheel_position === "right") return width;
+            else if (vert_wheel_position === "left") return 0;
+            else return width*0.15;
+        }
         startY: {
             if (vert_wheel_position === "right") return height;
             else if (vert_wheel_position === "left") return 0;
-            else return horz_wheel_y;
+            else return height*.75;
         }
 
         PathAttribute {
             name: "wheelItemRotation";
-            value: {
-                if (vert_wheel_position === "left") return 0;
-                else if (vert_wheel_position === "right") return -90;
-                else return 0;
+            value: -90
+            Component.onCompleted: {
+                if (vert_wheel_position === "left")
+                    value = -91;
+                else if (vert_wheel_position === "right")
+                    value = -90;
+                else
+                    value = 0;
             }
         }
 
         PathArc {
             x: width*0.5;
-            y: (vert_wheel_position === "right" || vert_wheel_position === "left") ? height*0.5 : horz_wheel_y-height/2 ;
+            y: height*0.5;
             radiusX: width/2;
             radiusY: height/2;
+
+            Component.onCompleted: {
+                if (vert_wheel_position === "right" || vert_wheel_position === "left")
+                    y = height*0.5;
+                else
+                    y = height*0.65;
+            }
         }
+
         PathAttribute {
             name: "wheelItemRotation";
-            value: {
-                if (vert_wheel_position === "left") return 0;
-                else if (vert_wheel_position === "right") return 0;
-                else return 0;
+            value: 0
+            Component.onCompleted: {
+                if (vert_wheel_position === "left")
+                    value = 0;
+                else if (vert_wheel_position === "right")
+                    value = 0;
+                else
+                    value = 0;
             }
         }
 
         PathArc {
-            x: (vert_wheel_position === "left") ? 0 : width;
-            y: {
-                if (vert_wheel_position === "left") return height;
-                else if (vert_wheel_position === "right") return 0;
-                else return horz_wheel_y;
-            }
+            x: width;
+            y: 0;
             radiusX: width*0.5;
             radiusY: height*0.5;
+            Component.onCompleted: {
+                if (vert_wheel_position === "left") {
+                    x = 0;
+                    y = height;
+                }
+                else if (vert_wheel_position === "right") {
+                    x = width;
+                    y = 0;
+                }
+                else {
+                    x = width*.85;
+                    y = height*.75;
+                }
+            }
         }
 
         PathAttribute {
             name: "wheelItemRotation";
-            value: {
-                if (vert_wheel_position === "left") return 0;
-                else if (vert_wheel_position === "right") return 90;
-                else return 0;
+            value: 90
+            Component.onCompleted: {
+                if (vert_wheel_position === "left")
+                    value = 89;
+                else if (vert_wheel_position === "right")
+                    value = 90;
+                else
+                    value = 0;
             }
         }
 
@@ -362,7 +398,7 @@ Item {
         id: wheelPathView
         anchors.fill: parent
         model: database
-        pathItemCount: 22
+        pathItemCount: (vert_wheel_position === "right" || vert_wheel_position === "left") ? 22 : 5
         cacheItemCount: 2
         delegate: delegate
         preferredHighlightBegin: 0.5
